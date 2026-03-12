@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grille de Conformité — BTS Photographie</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#D0021B;--dr:#96281B;--bk:#0A0A0A;--wh:#FFFFFF;--gl:#F5F5F5;--gm:#E0E0E0;--gd:#888888;--gn:#1a7a1a;--or:#E67E22;--fd:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--wh);color:var(--bk);font-size:14px;line-height:1.5}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;padding:0 40px;height:64px;background:var(--wh);border-bottom:1px solid var(--gm);gap:32px}
+.logo{display:flex;align-items:center;gap:2px;text-decoration:none;flex-shrink:0}
+.logo-box{background:var(--red);color:white;font-family:var(--fd);font-weight:900;font-size:11px;letter-spacing:.05em;padding:4px 5px;line-height:1.1;text-transform:uppercase}
+.logo-photo{font-family:var(--fd);font-weight:900;font-size:18px;letter-spacing:.08em;color:var(--bk);margin-left:6px;text-transform:uppercase}
+.nav-label{font-family:var(--fd);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);margin-left:auto}
+.progress-bar{height:3px;background:var(--gm);position:sticky;top:64px;z-index:99}
+.progress-fill{height:100%;background:var(--red);width:0%;transition:width .3s}
+.hero{background:var(--bk);padding:60px 40px 50px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:40px}
+.hero-eyebrow{font-family:var(--fd);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:12px}
+.hero h1{font-family:var(--fd);font-weight:900;font-size:clamp(36px,5vw,64px);line-height:.92;color:var(--wh);text-transform:uppercase}
+.hero h1 span{color:var(--red)}
+.hero-sub{margin-top:16px;font-size:14px;font-weight:300;color:rgba(255,255,255,.5);max-width:480px}
+.hero-badge{font-family:var(--fd);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.3);text-align:right;line-height:1.8}
+.wrapper{max-width:1100px;margin:0 auto;padding:0 40px 80px}
+.section{margin-top:56px;animation:fadeUp .5s ease both}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--bk)}
+.section-num{font-family:var(--fd);font-weight:900;font-size:11px;letter-spacing:.15em;color:var(--red);text-transform:uppercase}
+.section-title{font-family:var(--fd);font-weight:700;font-size:22px;letter-spacing:.05em;text-transform:uppercase}
+.field-grid{display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--gm)}
+.field-grid .field{padding:14px 18px;border-right:1px solid var(--gm);border-bottom:1px solid var(--gm)}
+.field-grid .field:nth-child(2n){border-right:none}
+.field-grid .field:nth-last-child(-n+2){border-bottom:none}
+.field label{display:block;font-family:var(--fd);font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gd);margin-bottom:6px}
+.field input{width:100%;border:none;border-bottom:1px solid var(--gm);background:transparent;font-family:var(--fb);font-size:14px;color:var(--bk);padding:4px 0;outline:none;transition:border-color .2s}
+.field input:focus{border-bottom-color:var(--red)}
+.table-wrap{border:1px solid var(--gm);overflow:hidden;margin-bottom:0}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--bk)}
+thead th{font-family:var(--fd);font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--wh);padding:11px 14px;text-align:left;border-right:1px solid rgba(255,255,255,.1)}
+thead th:last-child{border-right:none}
+tbody tr:nth-child(even){background:var(--gl)}
+tbody tr:hover{background:#fff5f5}
+tbody td{padding:9px 14px;border-right:1px solid var(--gm);border-bottom:1px solid var(--gm);vertical-align:middle;font-size:13px}
+tbody td:last-child{border-right:none}
+tbody tr:last-child td{border-bottom:none}
+.td-label{font-weight:500}
+.td-code{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--red);white-space:nowrap}
+.td-indicator{font-size:11px;color:var(--gd);font-style:italic}
+
+/* OUI / NON radio toggle */
+.yn-wrap{display:flex;gap:6px;justify-content:center}
+.yn-label{display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 0;width:44px;border:1.5px solid var(--gm);transition:all .15s;user-select:none}
+.yn-label input{display:none}
+.yn-label.oui-lbl:has(input:checked){background:#D5F5E3;border-color:var(--gn);color:var(--gn)}
+.yn-label.non-lbl:has(input:checked){background:#FADBD8;border-color:var(--red);color:var(--red)}
+.yn-label:not(:has(input:checked)){color:var(--gd)}
+
+/* Bloc header */
+.bloc-header{background:var(--red);padding:10px 14px;display:flex;align-items:center;gap:12px}
+.bloc-code{font-family:var(--fd);font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--wh);background:rgba(0,0,0,.25);padding:2px 8px;white-space:nowrap}
+.bloc-name{font-family:var(--fd);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--wh)}
+.bloc-meta{margin-left:auto;display:flex;align-items:center;gap:12px}
+.bloc-weight-pill{font-family:var(--fd);font-size:11px;color:rgba(255,255,255,.75);letter-spacing:.05em;background:rgba(0,0,0,.2);padding:2px 10px}
+.bloc-critical-pill{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--wh);background:rgba(255,255,255,.2);padding:2px 8px}
+.bloc-score-bar{height:3px;background:rgba(255,255,255,.15)}
+.bloc-score-fill{height:100%;width:0%;transition:width .5s ease}
+
+/* Notation justification box */
+.notation-explain{border:1px solid var(--gm);margin-bottom:24px;overflow:hidden}
+.notation-explain-header{background:var(--bk);padding:12px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.notation-explain-header span{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--wh)}
+.notation-explain-header .toggle-icon{color:rgba(255,255,255,.5);font-size:14px;transition:transform .2s}
+.notation-explain-body{padding:0;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s}
+.notation-explain-body.open{max-height:900px;padding:20px}
+.notation-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--gm)}
+.notation-row{display:contents}
+.nc{padding:10px 14px;border-right:1px solid var(--gm);border-bottom:1px solid var(--gm);font-size:12px}
+.nc:nth-child(4n){border-right:none}
+.nc-head{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);background:var(--gl)}
+.nc-code{font-family:var(--fd);font-weight:900;font-size:13px;color:var(--red)}
+.nc-pts{font-family:var(--fd);font-weight:900;font-size:16px;color:var(--bk)}
+.nc-why{color:#444;line-height:1.4;font-size:11px}
+.nc-flag{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;margin-top:4px;display:inline-block}
+.flag-block{background:#FADBD8;color:var(--red)}
+.flag-high{background:#D5F5E3;color:var(--gn)}
+.note{font-size:11px;color:var(--gd);margin-top:6px;font-style:italic}
+
+/* Scoring */
+.scoring-panel{margin-top:48px;border:2px solid var(--bk)}
+.scoring-header{background:var(--bk);padding:18px 24px;display:flex;align-items:center;gap:16px}
+.scoring-header h2{font-family:var(--fd);font-size:20px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--wh)}
+.scoring-header .sub{font-family:var(--fd);font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-left:auto}
+.scoring-body{padding:24px}
+.score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.score-card{border:1px solid var(--gm);padding:14px;position:relative;overflow:hidden}
+.score-card-code{font-family:var(--fd);font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.score-card-name{font-family:var(--fd);font-size:12px;font-weight:600;line-height:1.2;margin:2px 0 8px}
+.score-card-bar{height:5px;background:var(--gm);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.score-card-fill{height:100%;border-radius:3px;transition:width .6s ease;background:var(--gm)}
+.score-card-val{font-family:var(--fd);font-weight:900;font-size:22px}
+.score-card-max{font-family:var(--fd);font-size:11px;color:var(--gd)}
+.score-card-tag{position:absolute;top:8px;right:8px;font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px}
+.tag-ok{background:#D5F5E3;color:var(--gn)}.tag-warn{background:#FEF9E7;color:#d68910}.tag-ko{background:#FADBD8;color:var(--red)}.tag-block{background:var(--red);color:white}
+.total-score{display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px;padding:20px 24px;background:var(--bk);margin-bottom:24px}
+.total-score-label{font-family:var(--fd);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.total-score-bar{height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;margin-top:8px}
+.total-score-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.total-score-num{font-family:var(--fd);font-weight:900;font-size:48px;color:var(--wh);line-height:1}
+.total-score-num span{font-size:20px;color:rgba(255,255,255,.35)}
+.verdict-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;font-family:var(--fd);font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-top:10px;display:none}
+.bareme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--gm);margin-bottom:20px}
+.bareme-cell{padding:10px 14px;border-right:1px solid var(--gm);font-size:11px}
+.bareme-cell:last-child{border-right:none}
+.bareme-pts{font-family:var(--fd);font-size:12px;font-weight:900;letter-spacing:.06em}
+.bareme-label{font-family:var(--fd);font-size:10px;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+.rules-alert{background:#FADBD8;border-left:3px solid var(--red);padding:12px 16px;margin-top:16px;font-size:13px;display:none}
+.rules-alert strong{font-family:var(--fd);font-size:11px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px;color:var(--red)}
+.synthesis{padding:24px;border-top:1px solid var(--gm)}
+.synthesis h3{font-family:var(--fd);font-size:16px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;border-bottom:1px solid var(--gm);padding-bottom:8px}
+.synth-verdict{font-size:14px;line-height:1.8;margin-bottom:16px;color:var(--gd);font-style:italic}
+.synth-points{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;display:none}
+.synth-col h4{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.synth-col.ok h4{color:var(--gn)}.synth-col.ko h4{color:var(--red)}
+.synth-item{display:flex;gap:8px;font-size:12px;margin-bottom:8px;line-height:1.4;padding:8px;background:var(--gl)}
+.synth-item .icon{flex-shrink:0;font-size:14px}
+
+/* Tripartite */
+.tripartite{display:none}
+.tripartite.visible{display:block}
+.tripartite-header{background:var(--dr);padding:16px 24px}
+.tripartite-header h2{font-family:var(--fd);font-weight:900;font-size:20px;letter-spacing:.06em;text-transform:uppercase;color:var(--wh)}
+.tripartite-header p{color:rgba(255,255,255,.55);font-size:12px;margin-top:4px}
+.tripartite-body{border:1px solid var(--gm);border-top:none;padding:24px}
+
+/* Legal text box */
+.legal-box{background:var(--gl);border-left:3px solid var(--gd);padding:16px 20px;margin-bottom:24px;font-size:12px;line-height:1.8;color:#333}
+.legal-box strong{font-family:var(--fd);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--gd);display:block;margin-bottom:8px}
+.legal-box blockquote{border-left:2px solid var(--gm);padding-left:14px;margin-top:10px;color:#555;font-style:italic;font-size:11.5px;line-height:1.7}
+
+.parties-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--gm);margin-bottom:24px}
+.party-block{padding:20px;border-right:1px solid var(--gm)}
+.party-block:last-child{border-right:none}
+.party-label{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gd);margin-bottom:12px;border-bottom:2px solid var(--red);padding-bottom:6px}
+.party-field{margin-bottom:10px}
+.party-field label{font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);display:block;margin-bottom:4px}
+.party-field input{width:100%;border:none;border-bottom:1px solid var(--gm);background:transparent;font-family:var(--fb);font-size:13px;outline:none;padding:3px 0}
+.party-field input:focus{border-bottom-color:var(--red)}
+.missing-mission-row{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:10px;align-items:center;padding:10px 14px;border:1px solid var(--gm);border-bottom:none;background:var(--gl)}
+.missing-mission-row:last-child{border-bottom:1px solid var(--gm)}
+.missing-mission-row input{border:none;border-bottom:1px solid var(--gm);background:transparent;font-family:var(--fb);font-size:13px;outline:none;padding:2px 0;width:100%}
+.del-btn{background:none;border:none;color:var(--gd);cursor:pointer;font-size:16px;padding:2px 6px}
+.del-btn:hover{color:var(--red)}
+.mission-add-btn{display:flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);padding:10px 0;border:none;background:none}
+.engagement-box{border:1px solid var(--gm);margin-bottom:12px}
+.engagement-title{background:var(--gl);padding:10px 16px;font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gd)}
+.engagement-body{padding:16px}
+.engagement-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;line-height:1.5}
+.cb-label{display:flex;align-items:center;gap:5px;cursor:pointer}
+.cb-label input[type="checkbox"]{appearance:none;width:15px;height:15px;border:1.5px solid var(--gm);background:white;cursor:pointer;position:relative;flex-shrink:0;transition:all .15s}
+.cb-label input[type="checkbox"]:checked{background:var(--red);border-color:var(--red)}
+.cb-label input[type="checkbox"]:checked::after{content:'';position:absolute;left:4px;top:1px;width:4px;height:8px;border:2px solid white;border-top:none;border-left:none;transform:rotate(45deg)}
+.freq-select{border:1px solid var(--gm);border-radius:2px;padding:3px 8px;font-family:var(--fd);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;background:white;color:var(--bk);cursor:pointer;outline:none;width:100%}
+.freq-select:focus{border-color:var(--red)}
+.inline-input{width:100%;border:none;border-bottom:1px solid #ddd;outline:none;font-family:var(--fb);font-size:13px;padding:2px 0;background:transparent}
+.inline-input:focus{border-bottom-color:var(--red)}
+.sig3-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--gm);margin-top:24px}
+.sig3-box{padding:16px 20px 50px;border-right:1px solid var(--gm)}
+.sig3-box:last-child{border-right:none}
+.sig3-label{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gd);margin-bottom:10px}
+.sig3-line{border-bottom:1px solid var(--bk);margin-top:4px}
+.actions{display:flex;gap:12px;margin-top:40px;padding-top:32px;border-top:1px solid var(--gm)}
+.btn{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:14px 28px;border:none;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--bk);color:var(--wh)}.btn-primary:hover{background:var(--red)}
+.btn-outline{background:transparent;color:var(--bk);border:1.5px solid var(--bk)}.btn-outline:hover{background:var(--bk);color:var(--wh)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media print{nav,.progress-bar,.actions,.notation-explain-header{display:none!important}.notation-explain-body{max-height:none!important;padding:20px!important}.wrapper{padding:0 30px 40px}.hero{padding:30px}thead tr,.bloc-header,.scoring-header,.tripartite-header{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" style="display:flex;align-items:center;flex-shrink:0">
+    <img src="logo-color.png" alt="SUP-PHOTO" style="height:36px;display:block">
+  </a>
+  <span class="nav-label">BTS Photographie · Grille de conformité entreprise</span>
+  <a href="index.html" style="margin-left:auto;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gd);text-decoration:none;display:flex;align-items:center;gap:6px;border:1px solid var(--gm);padding:8px 14px;transition:all .2s" onmouseover="this.style.background='#1A1A1A';this.style.color='white'" onmouseout="this.style.background='';this.style.color=''">← Tableau de bord</a>
+</nav>
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">BTS Photographie — Alternance / Apprentissage</div>
+    <h1>Grille de<br><span>Conformité</span><br>Entreprise</h1>
+    <p class="hero-sub">Contrôle de l'adéquation de l'activité en entreprise avec les contextes professionnels du référentiel de formation — Campus des Arts</p>
+  </div>
+  <div class="hero-badge">Référentiel officiel<br>BTS Photographie<br>Éducation Nationale</div>
+</div>
+
+<div class="wrapper">
+<form id="mainForm" onsubmit="return false">
+
+<!-- 00. IDENTIFICATION -->
+<div class="section">
+  <div class="section-header"><span class="section-num">00</span><span class="section-title">Identification des parties</span></div>
+  <div class="field-grid">
+    <div class="field"><label>Nom de l'entreprise</label><input type="text" id="f_entreprise" placeholder="Raison sociale"></div>
+    <div class="field"><label>N° SIRET</label><input type="text" placeholder="000 000 000 00000"></div>
+    <div class="field"><label>Adresse</label><input type="text" placeholder="Rue, ville, code postal"></div>
+    <div class="field"><label>Contexte professionnel</label><input type="text" placeholder="Studio, agence, presse, laboratoire..."></div>
+    <div class="field"><label>Tuteur / Maître d'apprentissage</label><input type="text" id="f_tuteur" placeholder="Prénom Nom"></div>
+    <div class="field"><label>Fonction du tuteur</label><input type="text" placeholder="Photographe, DA, directeur..."></div>
+    <div class="field"><label>Nom de l'alternant(e)</label><input type="text" id="f_alternant" placeholder="Prénom Nom"></div>
+    <div class="field"><label>Période concernée</label><input type="text" id="f_periode" placeholder="Sept. 2025 — Juin 2027"></div>
+  </div>
+  <p class="note">Le référentiel BTS Photographie ne définit pas de « secteur cible » mais des <strong>contextes professionnels</strong> dans lesquels les compétences peuvent être exercées : artisan photographe indépendant, studio de prise de vue, agence / organe de presse, service communication d'entreprise ou administration, photothèque / laboratoire. L'entreprise doit correspondre à au moins l'un de ces contextes.</p>
+</div>
+
+<!-- 01. CONTEXTE -->
+<div class="section">
+  <div class="section-header"><span class="section-num">01</span><span class="section-title">Contexte professionnel de l'entreprise</span></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:65%">Contexte professionnel (référentiel BTS Photographie)</th><th style="width:9%;text-align:center">Coché</th><th>Commentaires</th></tr></thead>
+      <tbody id="secteurTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 02. MISSIONS -->
+<div class="section">
+  <div class="section-header"><span class="section-num">02</span><span class="section-title">Fiche de poste — Missions confiées</span></div>
+  <p class="note" style="margin-bottom:16px">R = Régulière · O = Occasionnelle · Ra = Rare &nbsp;|&nbsp; G = Guidée · P = Partielle · T = Totale (autonomie)</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:42%">Mission / Activité confiée</th><th style="width:13%">Fréquence</th><th style="width:13%">Autonomie</th><th>Compétences</th></tr></thead>
+      <tbody id="missionsTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 03. COMPÉTENCES -->
+<div class="section">
+  <div class="section-header"><span class="section-num">03</span><span class="section-title">Mise en œuvre des compétences du référentiel</span></div>
+
+  <!-- Notation justification -->
+  <div class="notation-explain">
+    <div class="notation-explain-header" onclick="toggleNotation()">
+      <span>📊 Justification détaillée des pondérations — Grille de notation</span>
+      <span class="toggle-icon" id="toggleIcon">▼ Afficher</span>
+    </div>
+    <div class="notation-explain-body" id="notationBody">
+      <p style="font-size:13px;margin-bottom:16px;line-height:1.7;color:#333">
+        Chaque bloc de compétences (C1 à C8) est pondéré selon son <strong>poids réel dans le référentiel officiel</strong> et dans les épreuves du BTS Photographie (E4 Production photographique professionnelle et E5 Communication et culture photographique). 
+        La pondération reflète également la <strong>difficulté à trouver une entreprise tierce capable de compenser</strong> un manque : plus un bloc est critique et spécifique au métier de photographe, plus son poids est élevé.
+      </p>
+      <div class="notation-grid" id="notationGrid"></div>
+      <div style="margin-top:16px;padding:14px;background:#FFF8F8;border-left:3px solid var(--red)">
+        <p style="font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:6px">⛔ Règles de blocage automatique</p>
+        <p style="font-size:12px;line-height:1.7;color:#333">
+          Deux blocs sont <strong>obligatoires</strong> et soumis à un seuil minimal, indépendamment du score global :<br>
+          · <strong>C4 — Réaliser des prises de vues</strong> : minimum <strong>12/25 pts</strong> requis. La prise de vue est l'activité centrale et non négociable du BTS Photographie. Sans pratique régulière de la prise de vue, l'alternance ne correspond pas au métier.<br>
+          · <strong>C3 — Organiser les moyens</strong> : minimum <strong>8/15 pts</strong> requis. La préparation et l'organisation des prises de vue sont indissociables de leur réalisation. Un score insuffisant signale une entreprise où l'alternant(e) n'est pas impliqué(e) dans le processus complet.
+        </p>
+      </div>
+      <div style="margin-top:12px;padding:12px 16px;background:var(--gl);border:1px solid var(--gm)">
+        <p style="font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gd);margin-bottom:6px">Barème de décision</p>
+        <div class="bareme-grid" style="margin-bottom:0">
+          <div class="bareme-cell" style="background:#D5F5E3"><div class="bareme-pts" style="color:var(--gn)">75–100</div><div class="bareme-label" style="color:var(--gn)">✅ Conforme</div><div style="font-size:11px;color:#2e7d32;margin-top:4px">Toutes les compétences essentielles sont couvertes.</div></div>
+          <div class="bareme-cell" style="background:#FEF9E7"><div class="bareme-pts" style="color:#d68910">50–74</div><div class="bareme-label" style="color:#d68910">⚠️ Réserves</div><div style="font-size:11px;color:#7d5a00;margin-top:4px">Tripartite recommandée pour combler les manques.</div></div>
+          <div class="bareme-cell" style="background:#FDF2E9"><div class="bareme-pts" style="color:var(--or)">25–49</div><div class="bareme-label" style="color:var(--or)">🔶 Non conforme</div><div style="font-size:11px;color:#7d3c00;margin-top:4px">Convention tripartite obligatoire.</div></div>
+          <div class="bareme-cell" style="background:#FADBD8"><div class="bareme-pts" style="color:var(--red)">0–24</div><div class="bareme-label" style="color:var(--red)">❌ Inadaptée</div><div style="font-size:11px;color:var(--dr);margin-top:4px">Refus d'agrément recommandé.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="note" style="margin-bottom:16px">Pour chaque tâche du référentiel, indiquer si elle est mise en œuvre dans l'entreprise (<strong>OUI</strong> = pratiquée régulièrement ou ponctuellement / <strong>NON</strong> = absente ou non prévue). Le score est calculé automatiquement.</p>
+  <div id="competencesContainer"></div>
+</div>
+
+<!-- 04. SYNTHÈSE -->
+<div class="scoring-panel section">
+  <div class="scoring-header">
+    <h2>Synthèse & Score de conformité</h2>
+    <span class="sub">Calcul automatique en temps réel</span>
+  </div>
+  <div class="scoring-body">
+    <div class="score-grid" id="scoreGrid"></div>
+    <div class="total-score">
+      <div>
+        <div class="total-score-label">Score global de conformité</div>
+        <div class="total-score-bar"><div class="total-score-fill" id="totalFill"></div></div>
+        <div id="verdictBadge" class="verdict-badge"></div>
+      </div>
+      <div class="total-score-num"><span id="totalVal">—</span><span> / 100</span></div>
+    </div>
+    <div id="blockingAlert" class="rules-alert">
+      <strong>⛔ Blocage automatique — Seuil minimal non atteint sur bloc(s) obligatoire(s)</strong>
+      <span id="blockingText"></span>
+    </div>
+    <div id="hardStop" style="display:none;margin-top:16px;background:var(--bk);border-left:4px solid var(--red);padding:20px 24px">
+      <div style="font-family:var(--fd);font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:8px">⛔ ARRÊT — Refus d'agrément</div>
+      <p class="hs-msg" style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.7">Les blocs C4 (Réaliser des prises de vues) et/ou C3 (Organiser les moyens) sont en dessous du seuil minimal requis. Ces compétences constituent le cœur irréductible du métier de photographe professionnel. Aucune convention tripartite ne peut compenser leur absence. <strong style="color:var(--wh)">L'agrément de cette entreprise doit être refusé.</strong></p>
+      <div style="margin-top:14px;padding:12px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.5)">La procédure s'arrête ici. Informer l'alternant(e) et engager une recherche d'entreprise compatible avec le référentiel BTS Photographie.</div>
+    </div>
+  </div>
+  <div class="synthesis">
+    <h3>Analyse détaillée</h3>
+    <div class="synth-verdict" id="synthVerdict">Répondez OUI/NON aux compétences (section 03) pour générer l'analyse automatique.</div>
+    <div class="synth-points" id="synthPoints">
+      <div class="synth-col ok"><h4>✅ Points forts</h4><div id="synthOk"></div></div>
+      <div class="synth-col ko"><h4>⚠️ Lacunes identifiées</h4><div id="synthKo"></div></div>
+    </div>
+    <div style="margin-top:24px;border-top:1px solid var(--gm);padding-top:20px">
+      <div style="font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);margin-bottom:10px">Observations du CRE / Référent pédagogique</div>
+      <textarea rows="4" style="width:100%;border:1px solid var(--gm);padding:12px;font-family:var(--fb);font-size:13px;resize:vertical;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--gm)'" placeholder="Consigner ici les observations issues de la visite en entreprise, les échanges avec le tuteur et les points d'attention pour le suivi pédagogique..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- 05. CONVENTION TRIPARTITE -->
+<div class="tripartite section" id="tripartiteSection">
+  <div class="tripartite-header">
+    <h2>Convention de mise à disposition tripartite</h2>
+    <p>Conclue en application des articles R.6223-10 à R.6223-16 du Code du Travail</p>
+  </div>
+  <div class="tripartite-body">
+
+    <!-- Texte de loi — onglet ouvrant -->
+    <div class="notation-explain" style="margin-bottom:20px">
+      <div class="notation-explain-header" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.toggle-icon').textContent=this.nextElementSibling.classList.contains('open')?'▲ Réduire':'▼ Afficher'">
+        <span>📜 Fondement juridique — Art. R.6223-10 à R.6223-16 du Code du Travail</span>
+        <span class="toggle-icon">▼ Afficher</span>
+      </div>
+      <div class="notation-explain-body">
+        <p style="font-size:13px;margin-bottom:12px;color:#333"><strong>Décret n° 2012-627 du 2 mai 2012</strong> relatif à l'accueil des apprenti(e)s dans plusieurs entreprises, codifié aux articles R.6223-10 à R.6223-16 du Code du Travail (version consolidée en vigueur).</p>
+        <div style="border:1px solid var(--gm);overflow:hidden">
+          <div style="background:var(--bk);padding:8px 14px;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5)">Code du Travail — Section mise à disposition des apprentis</div>
+          <div style="padding:16px 20px;display:flex;flex-direction:column;gap:14px;font-size:12.5px;line-height:1.75;color:#222">
+            <div style="padding:12px 16px;background:var(--gl);border-left:3px solid var(--bk)">
+              <p><strong style="font-family:var(--fd);font-size:11px;letter-spacing:.06em">Art. R.6223-10</strong> — Un apprenti peut être mis à disposition d'une ou plusieurs entreprises utilisatrices par l'employeur qui l'a engagé, dès lors que cette mise à disposition présente un caractère formateur en rapport avec la formation de l'apprenti.</p>
+            </div>
+            <div style="padding:12px 16px;background:var(--gl);border-left:3px solid var(--bk)">
+              <p><strong style="font-family:var(--fd);font-size:11px;letter-spacing:.06em">Art. R.6223-11</strong> — Cette mise à disposition fait l'objet d'une convention conclue entre l'employeur, l'entreprise utilisatrice et le centre de formation des apprentis. Elle précise la durée de la mise à disposition, les tâches confiées à l'apprenti et le nom du tuteur dans l'entreprise utilisatrice.</p>
+            </div>
+            <div style="padding:12px 16px;background:var(--gl);border-left:3px solid var(--bk)">
+              <p><strong style="font-family:var(--fd);font-size:11px;letter-spacing:.06em">Art. R.6223-12</strong> — Pendant la mise à disposition, l'employeur demeure responsable de l'exécution du contrat d'apprentissage. L'apprenti reste lié par le contrat d'apprentissage à l'employeur qui l'a engagé. La rémunération est à la charge de l'employeur.</p>
+            </div>
+            <div style="padding:12px 16px;background:var(--gl);border-left:3px solid var(--bk)">
+              <p><strong style="font-family:var(--fd);font-size:11px;letter-spacing:.06em">Art. R.6223-13</strong> — L'entreprise utilisatrice est responsable des conditions d'exécution du travail de l'apprenti telles qu'elles sont déterminées par les dispositions légales et conventionnelles applicables au lieu de travail, notamment en matière de santé et de sécurité au travail.</p>
+            </div>
+            <div style="padding:12px 16px;background:var(--gl);border-left:3px solid var(--bk)">
+              <p><strong style="font-family:var(--fd);font-size:11px;letter-spacing:.06em">Art. R.6223-14</strong> — Le centre de formation des apprentis est informé de la mise à disposition et s'assure qu'elle s'inscrit dans le parcours de formation de l'apprenti. Il peut s'opposer à la mise à disposition si elle ne répond pas à cet objectif.</p>
+            </div>
+            <div style="padding:12px 16px;background:var(--gl);border-left:3px solid var(--bk)">
+              <p><strong style="font-family:var(--fd);font-size:11px;letter-spacing:.06em">Art. R.6223-15</strong> — La convention de mise à disposition est établie avant le début de celle-ci. Elle est signée par l'employeur, le représentant de l'entreprise utilisatrice et le directeur du centre de formation des apprentis. Un exemplaire est remis à l'apprenti.</p>
+            </div>
+            <div style="padding:12px 16px;background:#FFF5F5;border-left:3px solid var(--red)">
+              <p><strong style="font-family:var(--fd);font-size:11px;letter-spacing:.06em;color:var(--red)">Art. R.6223-16</strong> — En cas de faute grave de l'apprenti ou en cas de force majeure, la mise à disposition peut être interrompue avant son terme. L'employeur en informe sans délai le centre de formation des apprentis. L'apprenti reprend alors son activité chez son employeur ou dans une autre entreprise utilisatrice désignée par convention.</p>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--gd);margin-top:10px;font-style:italic">Source : Code du Travail, version consolidée. Décret n° 2012-627 du 2 mai 2012 (JORF du 4 mai 2012). Legifrance.gouv.fr</p>
+      </div>
+    </div>
+
+    <div style="background:#FEF9E7;border-left:3px solid var(--or);padding:14px 18px;margin-bottom:24px;font-size:13px;line-height:1.7">
+      <strong style="font-family:var(--fd);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--or);display:block;margin-bottom:4px">Motif de la convention</strong>
+      L'analyse de conformité (section 04) révèle que certaines compétences du référentiel BTS Photographie ne peuvent pas être mises en œuvre dans l'entreprise d'accueil principale. La présente convention définit les modalités de mise à disposition de l'alternant(e) dans une entreprise tierce afin de compléter la couverture du référentiel, conformément aux textes cités ci-dessus.
+    </div>
+
+    <!-- Les 3 parties -->
+    <div style="font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gd);margin-bottom:10px">Entre les trois parties soussignées</div>
+    <div class="parties-grid">
+      <div class="party-block">
+        <div class="party-label">Partie 1 — Employeur (entreprise principale)</div>
+        <div class="party-field"><label>Raison sociale</label><input type="text" class="inline-input" placeholder="Nom de l'entreprise"></div>
+        <div class="party-field"><label>N° SIRET</label><input type="text" class="inline-input" placeholder="000 000 000 00000"></div>
+        <div class="party-field"><label>Représentant légal</label><input type="text" class="inline-input" placeholder="Prénom Nom, Qualité"></div>
+        <div class="party-field"><label>Maître d'apprentissage</label><input type="text" class="inline-input" placeholder="Prénom Nom"></div>
+      </div>
+      <div class="party-block">
+        <div class="party-label">Partie 2 — Entreprise utilisatrice (tierce)</div>
+        <div class="party-field"><label>Raison sociale</label><input type="text" class="inline-input" placeholder="Nom de l'entreprise"></div>
+        <div class="party-field"><label>N° SIRET</label><input type="text" class="inline-input" placeholder="000 000 000 00000"></div>
+        <div class="party-field"><label>Représentant légal</label><input type="text" class="inline-input" placeholder="Prénom Nom, Qualité"></div>
+        <div class="party-field"><label>Tuteur désigné</label><input type="text" class="inline-input" placeholder="Prénom Nom"></div>
+      </div>
+      <div class="party-block" style="border-right:none">
+        <div class="party-label">Partie 3 — Centre de formation (CFA)</div>
+        <div class="party-field"><label>Établissement</label><input type="text" class="inline-input" value="Campus des Arts — SUP PHOTO"></div>
+        <div class="party-field"><label>Référent pédagogique</label><input type="text" class="inline-input" placeholder="Prénom Nom"></div>
+        <div class="party-field"><label>Coordonnées</label><input type="text" class="inline-input" placeholder="Email · Téléphone"></div>
+        <div class="party-field"><label>N° de déclaration d'activité</label><input type="text" class="inline-input" placeholder="DA-XXXXXXXXXX"></div>
+      </div>
+    </div>
+
+    <!-- Compétences manquantes -->
+    <div style="font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gd);margin:20px 0 10px">Art. R.6223-11 — Tâches confiées dans l'entreprise tierce</div>
+    <div class="table-wrap" style="margin-bottom:8px">
+      <table>
+        <thead><tr><th style="width:12%">Bloc</th><th style="width:40%">Compétence manquante</th><th>Activités à développer dans l'entreprise tierce</th></tr></thead>
+        <tbody id="missingMissions"></tbody>
+      </table>
+    </div>
+    <button type="button" class="mission-add-btn" onclick="addMissingMission()"><span style="font-size:18px">＋</span> Ajouter une ligne</button>
+
+    <!-- Modalités -->
+    <div style="font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gd);margin:20px 0 10px">Art. R.6223-11 — Durée et modalités de la mise à disposition</div>
+    <div style="border:1px solid var(--gm)">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--gm)">
+        <div style="padding:12px 16px;border-right:1px solid var(--gm)"><label style="font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);display:block;margin-bottom:6px">Date de début</label><input type="date" class="inline-input"></div>
+        <div style="padding:12px 16px;border-right:1px solid var(--gm)"><label style="font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);display:block;margin-bottom:6px">Date de fin</label><input type="date" class="inline-input"></div>
+        <div style="padding:12px 16px"><label style="font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);display:block;margin-bottom:6px">Volume horaire (h/semaine)</label><input type="text" class="inline-input" placeholder="ex. 8h/semaine"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--gm)">
+        <div style="padding:12px 16px;border-right:1px solid var(--gm)">
+          <label style="font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);display:block;margin-bottom:6px">Rythme de mise à disposition</label>
+          <select class="freq-select">
+            <option>— Sélectionner —</option><option>Jours fixes par semaine</option><option>Semaines entières alternées</option>
+            <option>Par missions / projets spécifiques</option><option>Périodes définies dans l'année</option>
+          </select>
+        </div>
+        <div style="padding:12px 16px"><label style="font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);display:block;margin-bottom:6px">Précisions</label><input type="text" class="inline-input" placeholder="ex. Lundi et mardi, ou 1 semaine par mois..."></div>
+      </div>
+      <div style="padding:12px 16px">
+        <label style="font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);display:block;margin-bottom:6px">Art. R.6223-12 — Prise en charge de la rémunération et des frais</label>
+        <input type="text" class="inline-input" placeholder="La rémunération reste à la charge de l'employeur. Préciser les modalités de remboursement des frais de déplacement, restauration...">
+      </div>
+    </div>
+
+    <!-- Engagements -->
+    <div style="font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gd);margin:20px 0 10px">Engagements des parties (art. R.6223-12 à R.6223-14)</div>
+    <div class="engagement-box">
+      <div class="engagement-title">L'employeur (entreprise principale) s'engage à — Art. R.6223-12</div>
+      <div class="engagement-body">
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> Maintenir l'apprenti(e) en contrat et assurer l'intégralité de sa rémunération pendant la mise à disposition.</div>
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> Coordonner avec l'entreprise tierce la progression des compétences et le suivi pédagogique.</div>
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> Informer le CFA de tout changement dans l'organisation ou la durée de la mise à disposition.</div>
+      </div>
+    </div>
+    <div class="engagement-box">
+      <div class="engagement-title">L'entreprise utilisatrice (tierce) s'engage à — Art. R.6223-13</div>
+      <div class="engagement-body">
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> Accueillir l'apprenti(e) dans les conditions définies par la convention, conformément au référentiel BTS Photographie.</div>
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> Désigner un tuteur qualifié capable de former et d'évaluer les compétences listées à la section précédente.</div>
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> Assurer les conditions légales de travail et les règles d'hygiène et de sécurité applicables à son lieu de travail.</div>
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> Participer aux bilans organisés par le CFA et renseigner les outils de suivi pédagogique.</div>
+      </div>
+    </div>
+    <div class="engagement-box">
+      <div class="engagement-title">Le CFA s'engage à — Art. R.6223-14</div>
+      <div class="engagement-body">
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> S'assurer que la mise à disposition s'inscrit dans le parcours de formation et complète effectivement le référentiel.</div>
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> Assurer le suivi pédagogique de l'alternant(e) dans les deux entreprises et coordonner la progression.</div>
+        <div class="engagement-item"><label class="cb-label"><input type="checkbox"></label> Organiser au moins une visite en entreprise tierce par semestre de convention.</div>
+      </div>
+    </div>
+
+    <!-- Signatures tripartites -->
+    <div style="margin-top:20px;font-size:13px">
+      Fait en trois exemplaires originaux à <input type="text" style="border:none;border-bottom:1px solid #ccc;outline:none;font-family:var(--fb);font-size:13px;width:160px;padding:2px 4px">
+      , le <input type="date" style="border:none;border-bottom:1px solid #ccc;outline:none;font-family:var(--fb);font-size:13px;padding:2px 4px">
+    </div>
+    <div class="sig3-grid">
+      <div class="sig3-box"><div class="sig3-label">L'employeur — Entreprise principale<br>Signature & Cachet</div><div style="height:65px"></div><div class="sig3-line"></div><div style="font-size:11px;color:var(--gd);margin-top:6px">Nom & Qualité :</div></div>
+      <div class="sig3-box"><div class="sig3-label">L'entreprise utilisatrice — Tierce<br>Signature & Cachet</div><div style="height:65px"></div><div class="sig3-line"></div><div style="font-size:11px;color:var(--gd);margin-top:6px">Nom & Qualité :</div></div>
+      <div class="sig3-box" style="border-right:none"><div class="sig3-label">Le CFA — Campus des Arts / SUP PHOTO<br>Signature & Cachet</div><div style="height:65px"></div><div class="sig3-line"></div><div style="font-size:11px;color:var(--gd);margin-top:6px">Nom & Qualité :</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="actions">
+  <button class="btn btn-primary" onclick="window.print()">Imprimer / Exporter PDF</button>
+  <button class="btn btn-outline" onclick="resetForm()">Réinitialiser</button>
+</div>
+</form>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const secteurs = [
+  "Artisan photographe indépendant (auteur, praticien libéral)",
+  "Studio de prise de vue (publicité, mode, portrait, packshot, mariage)",
+  "Agence / Collectif de photographes / Agence de presse",
+  "Service communication d'une entreprise ou d'une administration",
+  "Photothèque / Banque d'images / Archivage professionnel",
+  "Laboratoire professionnel / Structure de retouche et finition",
+  "Presse spécialisée / Distributeur et revendeur de matériel photo",
+  "Autre contexte professionnel — préciser :",
+];
+
+const missions = [
+  ["Prise de vue studio (portrait, pub, packshot, produit)","C3,C4"],
+  ["Prise de vue extérieur (reportage, événementiel, architecture)","C3,C4"],
+  ["Construction et gestion de l'éclairage","C4"],
+  ["Composition, cadrage, direction de modèles","C4"],
+  ["Tri, sélection, développement RAW","C5"],
+  ["Corrections chromatiques et retouche","C5"],
+  ["Gestion couleurs, épreuvage, préparation sortie","C5"],
+  ["Gestion et archivage de la photothèque","C6"],
+  ["Relation client, devis, facturation, cession de droits","C1,C7"],
+  ["Veille technologique et tests matériel / logiciel","C8"],
+  ["Autre mission — préciser :",""],
+];
+
+// Flag for "autre" row needing a textarea
+const AUTRE_MISSION_IDX = missions.length - 1;
+
+// Blocs avec poids pondérés et justification
+const blocs = [
+  { code:"C4", name:"Réaliser des prises de vues", weight:25, critical:true, criticalMin:12,
+    why:"C4 représente la compétence centrale du BTS Photographie. C'est la seule qui soit évaluée dans les deux épreuves certificatives (E4 et E5). Sans pratique régulière de la prise de vue, l'entreprise ne peut pas être agréée : l'alternance ne correspond pas au métier de photographe.",
+    flag:"Obligatoire — seuil minimal 12/25",
+    rows:[
+      ["T2-T9","Installer matériel et éclairages en sécurité","Règles de sécurité appliquées, poste opérationnel","CP4.1"],
+      ["T2-T9","Composer la prise de vue (cadrage, point de vue)","Composition conforme aux attentes client","CP4.2"],
+      ["T2-T9","Construire l'éclairage (sources, ratio, mesure)","Éclairage pertinent, diaphragme défini selon PDC","CP4.3"],
+      ["T6,T9","Paramétrer l'appareil (vitesse, diaph, sensibilité, BdB)","Paramètres maîtrisés, histogramme contrôlé","CP4.4"],
+      ["T5,T7,T25","Gérer les intervenants sur plateau ou en extérieur","Coordination efficace, résultat atteint","CP4.5"],
+      ["T9,T12","Réaliser les PDV et exercer un regard critique","PDV réalisées, premier choix effectué","CP4.6-4.8"],
+    ]},
+  { code:"C3", name:"Organiser les moyens pour une PDV", weight:15, critical:true, criticalMin:8,
+    why:"C3 est le prérequis direct à C4 : on ne peut pas réaliser une prise de vue professionnelle sans l'avoir organisée. L'absence de C3 signale une entreprise où l'alternant(e) est simple exécutant, sans accès au processus complet du métier.",
+    flag:"Obligatoire — seuil minimal 8/15",
+    rows:[
+      ["T2-T4","Analyser la demande client (brief, cahier des charges)","Informations suffisantes pour définir la réponse","CP3.1"],
+      ["T3,T4","Préparer la séance (lieu, autorisations, planning, stylisme)","Séance planifiée, logistique maîtrisée","CP3.2"],
+      ["T7,T23","Rédiger un devis (coût, durée, conditions de cession)","Devis complet, signé, conditions précisées","CP3.3"],
+      ["T3,T4","Choisir et préparer le matériel","Matériel adapté, fonctionnement vérifié avant la séance","CP3.4"],
+    ]},
+  { code:"C5", name:"Traiter les images photographiques", weight:15, critical:false,
+    why:"C5 est indissociable de C4 dans la photographie numérique : toute image réalisée doit être traitée. C'est également la compétence la plus représentée dans les productions techniques évaluées à l'examen. Son absence totale signale un poste de simple opérateur de prise de vue sans maîtrise de la chaîne complète.",
+    rows:[
+      ["T10,T14","Gestion des couleurs (calibration écran, profils ICC, SGC)","Calibration optimum, SGC cohérent et documenté","CP5.2"],
+      ["T12,T13","Trier et développer les fichiers natifs RAW","Classement rationnel, métadonnées renseignées","CP5.3-5.4"],
+      ["T15,T17","Corrections chromatiques globales et locales (calques, masques)","Chromie ajustée sur calques éditables","CP5.5"],
+      ["T17","Retoucher une image (nettoyage, détourage, retouche pub)","Image sans défauts, tracé plume maîtrisé","CP5.6"],
+      ["T15-T19","Préparer la sortie et tirer une épreuve (num. / argentique)","Fichier optimisé, simulation écran cohérente","CP5.7-5.8"],
+    ]},
+  { code:"C7", name:"Diffuser, céder — Juridique & rentabilité", weight:15, critical:false,
+    why:"C7 est indispensable à l'exercice du métier de photographe professionnel : un photographe qui ignore le droit à l'image, la cession de droits ou la gestion commerciale ne peut pas exercer légalement. Cette compétence est également évaluée dans l'épreuve E5.",
+    rows:[
+      ["T2,T8,T21","Obtenir autorisations, élaborer devis selon CC","Autorisations obtenues, devis adapté au commanditaire","CP7.1"],
+      ["T7,T10","Contractualiser les intervenants (mannequins, mineurs)","Contrats conformes au cadre légal","CP7.2-7.3"],
+      ["T2,T8,T21","Gérer la protection juridique (droit auteur, cession)","Note de cession rédigée, recours contrefaçon maîtrisé","CP7.4"],
+      ["T2,T22,T23","Gestion administrative et comptable (coût, rentabilité)","Budget respecté, documents collectés","CP7.6"],
+    ]},
+  { code:"C1", name:"Communiquer et s'informer", weight:10, critical:false,
+    why:"C1 est une compétence transversale présente dans toutes les activités professionnelles. Elle peut partiellement être développée en CFA (rédaction, communication écrite), mais l'entreprise doit permettre la communication orale et professionnelle avec des clients ou prestataires.",
+    rows:[
+      ["T7,T18,T23","Communiquer et négocier avec clients et intervenants","Message clair, adapté, outils professionnels maîtrisés","CP1.1"],
+      ["T7,T18,T23","Collecter et classer l'information technique et juridique","Infos synthétisées et utilisables","CP1.2"],
+      ["T7,T10,T24","Créer et diffuser documents professionnels (devis, contrats)","Documents conformes au cadre légal","CP1.3"],
+    ]},
+  { code:"C6", name:"Gérer, conserver et archiver", weight:10, critical:false,
+    why:"C6 dépend fortement du type d'entreprise : une agence photo ou une photothèque la développera naturellement, un studio de portrait moins. Son poids modéré (10 pts) reflète le fait qu'une compensation en CFA est envisageable, contrairement à C4 ou C3.",
+    rows:[
+      ["T14,T16","Choisir matériels et logiciels pour stocker les images","Conservation optimale garantie dans le temps","CP6.1"],
+      ["T16,T19","Définir et appliquer procédures de stockage sécurisé","Procédures documentées, images protégées","CP6.2-6.3"],
+      ["T18,T20","Gérer la photothèque numérique et archiver les originaux","Accès rapide aux données, normes appliquées","CP6.4-6.6"],
+    ]},
+  { code:"C2", name:"Lire et interpréter des images", weight:5, critical:false,
+    why:"C2 relève davantage de la culture photographique et peut être développée en cours au CFA. Son faible poids (5 pts) reflète le fait que rares sont les entreprises où cette compétence fait l'objet d'une mission explicite. Elle est néanmoins présente en filigrane dans toute activité de commande.",
+    rows:[
+      ["T1,T3,T18","Analyser une image (dénotation, connotation, contexte historique)","Éléments porteurs de sens identifiés, liens historiques établis","CP2.1"],
+      ["T1,T3,T18","Évaluer la pertinence d'un projet photographique","Regard critique argumenté sur sa propre production","CP2.2"],
+    ]},
+  { code:"C8", name:"Veille technologique", weight:5, critical:false,
+    why:"C8 est une compétence d'enrichissement professionnel qui peut être initiée en CFA (travaux sur le matériel, comparatifs). Son faible poids (5 pts) est justifié par son caractère non discriminant : presque toute entreprise permet une forme minimale de veille. Elle ne peut pas à elle seule compenser des lacunes sur C4 ou C5.",
+    rows:[
+      ["T2,T5,T16","S'informer sur nouveaux produits et technologies photographiques","Documentation fiable, potentialités assimilées","CP8.1-8.3"],
+      ["T5,T19,T20","Tester, choisir et mettre en service un équipement, former","Protocole significatif, personnel autonome","CP8.4-8.7"],
+    ]},
+];
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function mkYN(blocCode) {
+  const wrap = document.createElement('div');
+  wrap.className = 'yn-wrap';
+  const rname = `yn_${blocCode}_${Math.random().toString(36).slice(2,6)}`;
+  ['OUI','NON'].forEach(v => {
+    const lbl = document.createElement('label');
+    lbl.className = `yn-label ${v==='OUI'?'oui-lbl':'non-lbl'}`;
+    const inp = document.createElement('input');
+    inp.type='radio'; inp.name=rname; inp.value=v;
+    inp.addEventListener('change', updateScore);
+    lbl.appendChild(inp);
+    lbl.appendChild(document.createTextNode(v));
+    wrap.appendChild(lbl);
+  });
+  return {wrap, name: rname};
+}
+
+function mkSelect(opts) {
+  const s = document.createElement('select'); s.className='freq-select';
+  opts.forEach(o => { const op=document.createElement('option'); op.textContent=o; s.appendChild(op); });
+  return s;
+}
+function mkCb() {
+  const lbl=document.createElement('label'); lbl.className='cb-label';
+  const inp=document.createElement('input'); inp.type='checkbox';
+  lbl.appendChild(inp); return lbl;
+}
+function td(html,cls=''){const c=document.createElement('td');if(cls)c.className=cls;c.innerHTML=html;return c;}
+function tdEl(el,cls=''){const c=document.createElement('td');if(cls)c.className=cls;c.style.textAlign='center';c.appendChild(el);return c;}
+
+function renderSecteur(){
+  const tb=document.getElementById('secteurTable');
+  secteurs.forEach(s=>{
+    const tr=document.createElement('tr');
+    const cbCell=document.createElement('td'); cbCell.style.textAlign='center'; cbCell.appendChild(mkCb());
+    tr.appendChild(td(s,'td-label')); tr.appendChild(cbCell);
+    const inp=document.createElement('input'); inp.type='text'; inp.className='inline-input';
+    const last=document.createElement('td'); last.appendChild(inp); tr.appendChild(last);
+    tb.appendChild(tr);
+  });
+}
+
+function renderMissions(){
+  const tb=document.getElementById('missionsTable');
+  missions.forEach(([label,cp], idx)=>{
+    const tr=document.createElement('tr');
+    const labelCell=document.createElement('td'); labelCell.className='td-label';
+    if(idx===AUTRE_MISSION_IDX){
+      // Label + textarea for custom mission description
+      labelCell.innerHTML=`<div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:12px;color:var(--gd);font-style:italic">Autre mission</span>
+        <textarea placeholder="Décrire la mission spécifique confiée à l'alternant(e)..." rows="2" style="width:100%;border:1px solid var(--gm);border-radius:2px;padding:6px 8px;font-family:var(--fb);font-size:12px;resize:vertical;outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--gm)'"></textarea>
+      </div>`;
+    } else {
+      labelCell.textContent=label;
+    }
+    tr.appendChild(labelCell);
+    const f=document.createElement('td'); f.appendChild(mkSelect(['—','R','O','Ra'])); tr.appendChild(f);
+    const a=document.createElement('td'); a.appendChild(mkSelect(['—','G','P','T'])); tr.appendChild(a);
+    const cpCell=document.createElement('td'); cpCell.className='td-code'; cpCell.textContent=cp; tr.appendChild(cpCell);
+    tb.appendChild(tr);
+  });
+}
+
+const ynNames = []; // store radio group names per row for scoring
+
+function renderBlocs(){
+  const container=document.getElementById('competencesContainer');
+  blocs.forEach(bloc=>{
+    const header=document.createElement('div'); header.className='bloc-header';
+    header.innerHTML=`<span class="bloc-code">${bloc.code}</span><span class="bloc-name">${bloc.name}</span>
+      <div class="bloc-meta"><span class="bloc-weight-pill">${bloc.weight} pts</span>${bloc.critical?'<span class="bloc-critical-pill">🔑 Seuil obligatoire</span>':''}</div>`;
+    const barWrap=document.createElement('div'); barWrap.className='bloc-score-bar';
+    const barFill=document.createElement('div'); barFill.className='bloc-score-fill'; barFill.id=`bar_${bloc.code}`;
+    barWrap.appendChild(barFill);
+
+    const wrap=document.createElement('div'); wrap.className='table-wrap'; wrap.style.marginBottom='20px';
+    const tbl=document.createElement('table');
+    tbl.innerHTML=`<thead><tr>
+      <th style="width:9%">Tâches</th><th style="width:28%">Activité / compétence</th>
+      <th style="width:35%">Indicateur de performance attendu</th><th style="width:10%">CP</th>
+      <th style="width:9%;text-align:center">OUI</th><th style="width:9%;text-align:center">NON</th>
+    </tr></thead>`;
+    const tbody=document.createElement('tbody');
+    bloc.rows.forEach(([taches,activite,indicateur,cp])=>{
+      const tr=document.createElement('tr');
+      tr.appendChild(td(taches,'td-code')).style.fontSize='10px';
+      tr.appendChild(td(activite,'td-label'));
+      tr.appendChild(td(indicateur,'td-indicator'));
+      tr.appendChild(td(cp,'td-code'));
+      const {wrap:yn, name} = mkYN(bloc.code);
+      ynNames.push({name, bloc: bloc.code});
+      // OUI cell
+      const ouiCell=document.createElement('td'); ouiCell.style.textAlign='center';
+      const nonCell=document.createElement('td'); nonCell.style.textAlign='center';
+      ouiCell.appendChild(yn);
+      // We'll re-style to show inline. Actually keep yn-wrap as is, span both cols via inner labels
+      tr.appendChild(ouiCell);
+      tr.appendChild(nonCell);
+      // Move NON label to nonCell
+      const labels=[...yn.querySelectorAll('.yn-label')];
+      if(labels[1]) nonCell.appendChild(labels[1]);
+      tbody.appendChild(tr);
+    });
+    tbl.appendChild(tbody); wrap.appendChild(tbl);
+    container.appendChild(header); container.appendChild(barWrap); container.appendChild(wrap);
+  });
+  renderScoreCards();
+  renderNotationGrid();
+}
+
+function renderScoreCards(){
+  const grid=document.getElementById('scoreGrid');
+  blocs.forEach(bloc=>{
+    const card=document.createElement('div'); card.className='score-card'; card.id=`card_${bloc.code}`;
+    card.innerHTML=`<div class="score-card-code">${bloc.code}</div>
+      <div class="score-card-name">${bloc.name}</div>
+      <div class="score-card-bar"><div class="score-card-fill" id="cfill_${bloc.code}"></div></div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px">
+        <span class="score-card-val" id="cval_${bloc.code}">—</span>
+        <span class="score-card-max"> / ${bloc.weight} pts</span>
+      </div>
+      <span class="score-card-tag" id="ctag_${bloc.code}"></span>`;
+    grid.appendChild(card);
+  });
+}
+
+function renderNotationGrid(){
+  const grid=document.getElementById('notationGrid');
+  // Headers
+  ['Bloc','Pondération','Justification','Statut'].forEach(h=>{
+    const d=document.createElement('div'); d.className='nc nc-head'; d.textContent=h; grid.appendChild(d);
+  });
+  blocs.forEach(bloc=>{
+    const c1=document.createElement('div'); c1.className='nc'; c1.innerHTML=`<div class="nc-code">${bloc.code}</div><div style="font-size:11px;font-weight:600;margin-top:2px">${bloc.name}</div>`; grid.appendChild(c1);
+    const c2=document.createElement('div'); c2.className='nc'; c2.innerHTML=`<div class="nc-pts">${bloc.weight}</div><div style="font-size:11px;color:var(--gd)">points / 100</div>`; grid.appendChild(c2);
+    const c3=document.createElement('div'); c3.className='nc nc-why'; c3.textContent=bloc.why; grid.appendChild(c3);
+    const c4=document.createElement('div'); c4.className='nc'; c4.innerHTML=bloc.critical?`<span class="nc-flag flag-block">${bloc.flag}</span>`:`<span class="nc-flag flag-high">Pondération standard</span>`; grid.appendChild(c4);
+  });
+}
+
+// ── SCORING ──────────────────────────────────────────────────────────────────
+function updateScore(){
+  let total=0; const blocking=[], okBlocs=[], koBlocs=[];
+  blocs.forEach(bloc=>{
+    const radios=document.querySelectorAll(`input[name^="yn_${bloc.code}_"]`);
+    const groups={};
+    radios.forEach(r=>{ if(!groups[r.name])groups[r.name]=[]; groups[r.name].push(r); });
+    const groupList=Object.values(groups);
+    const nbOui=groupList.filter(g=>g.find(r=>r.value==='OUI'&&r.checked)).length;
+    const nb=groupList.length;
+    const ratio=nb?nbOui/nb:0;
+    const pts=Math.round(ratio*bloc.weight);
+    total+=pts;
+
+    const pct=ratio*100;
+    const fill=document.getElementById(`cfill_${bloc.code}`);
+    const val=document.getElementById(`cval_${bloc.code}`);
+    const tag=document.getElementById(`ctag_${bloc.code}`);
+    const bar=document.getElementById(`bar_${bloc.code}`);
+    const color=pct>=80?'#27ae60':pct>=50?'#e67e22':'#D0021B';
+    if(fill){fill.style.width=pct+'%';fill.style.background=color;}
+    if(val)val.textContent=pts;
+    if(bar){bar.style.width=pct+'%';bar.style.background=pct>=80?'rgba(255,255,255,.8)':pct>=50?'rgba(255,200,0,.6)':'rgba(255,100,100,.8)';}
+
+    let tagClass, tagTxt;
+    if(bloc.critical && pts<bloc.criticalMin){tagClass='tag-block';tagTxt='⛔ Bloquant';blocking.push(`${bloc.code} — ${bloc.name} : ${pts}/${bloc.weight} pts (seuil minimal : ${bloc.criticalMin} pts)`);}
+    else if(pct>=80){tagClass='tag-ok';tagTxt='Couvert';}
+    else if(pct>=50){tagClass='tag-warn';tagTxt='Partiel';}
+    else{tagClass='tag-ko';tagTxt='Insuffisant';}
+    if(tag){tag.className='score-card-tag '+tagClass;tag.textContent=tagTxt;}
+
+    if(pct>=70) okBlocs.push({bloc,pts,pct});
+    else koBlocs.push({bloc,pts,pct});
+  });
+
+  const isBlocked=blocking.length>0;
+  const tf=document.getElementById('totalFill');
+  const tv=document.getElementById('totalVal');
+  if(tf){tf.style.width=total+'%';tf.style.background=total>=75?'#27ae60':total>=50?'#f39c12':total>=25?'#e67e22':'#D0021B';}
+  if(tv)tv.textContent=total;
+
+  const vb=document.getElementById('verdictBadge');
+  let vTxt='', vColor='', needsTrip=false;
+  if(isBlocked){vTxt='⛔ REFUS D\'AGRÉMENT — Entreprise incompatible avec le référentiel';vColor='#D0021B';needsTrip=false;}
+  else if(total>=75){vTxt='✅ CONFORME';vColor='#1a7a1a';}
+  else if(total>=50){vTxt='⚠️ CONFORME AVEC RÉSERVES';vColor='#d68910';needsTrip=true;}
+  else if(total>=25){vTxt='🔶 NON CONFORME — Tripartite obligatoire';vColor='#e67e22';needsTrip=true;}
+  else{vTxt='❌ ENTREPRISE INADAPTÉE — Refus d\'agrément recommandé';vColor='#D0021B';needsTrip=false;}
+  if(vb){vb.style.display='inline-flex';vb.style.background=vColor+'22';vb.style.color=vColor;vb.style.border=`1.5px solid ${vColor}`;vb.textContent=vTxt;}
+
+  const ba=document.getElementById('blockingAlert');
+  const bt=document.getElementById('blockingText');
+  if(ba&&bt){ba.style.display=isBlocked?'block':'none';bt.textContent=isBlocked?' La prise de vue (C4) et/ou l\'organisation des moyens (C3) sont en dessous du seuil minimal requis. Ces compétences constituent le cœur du métier de photographe professionnel et ne peuvent pas être compensées par une entreprise tierce. L\'agrément de cette entreprise doit être refusé. Blocs concernés : '+blocking.join(' · '):'';}
+
+  // Hard stop banner
+  const hs=document.getElementById('hardStop');
+  if(hs){
+    if(isBlocked){
+      hs.style.display='block';
+    } else if(total<25){
+      hs.style.display='block';
+      hs.querySelector('.hs-msg').textContent="Score de "+total+"/100 : l'entreprise ne couvre quasiment aucune compétence du référentiel. Aucune convention tripartite ne peut compenser un écart aussi important. L'agrément doit être refusé.";
+    } else {
+      hs.style.display='none';
+    }
+  }
+  generateSynthesis(total,isBlocked,needsTrip,okBlocs,koBlocs);
+  document.getElementById('tripartiteSection').classList.toggle('visible',needsTrip);
+  if(needsTrip) autoFillMissing(koBlocs);
+
+  // ── Sync vers le dashboard ─────────────────────────────────────────────────
+  const entreprise = document.getElementById('f_entreprise')?.value || '';
+  const alternant  = document.getElementById('f_alternant')?.value  || '';
+  const periode    = document.getElementById('f_periode')?.value    || '';
+  const anyChecked = document.querySelectorAll('input[type="radio"]:checked').length > 0;
+  if(anyChecked) {
+    localStorage.setItem('bts_photo_conformite', JSON.stringify({
+      done: true,
+      score: total,
+      verdict: vTxt,
+      bloque: isBlocked,
+      alternant, entreprise, periode
+    }));
+  }
+}
+
+function generateSynthesis(total,isBlocked,needsTrip,okBlocs,koBlocs){
+  const vd=document.getElementById('synthVerdict');
+  const sp=document.getElementById('synthPoints');
+  const ok=document.getElementById('synthOk');
+  const ko=document.getElementById('synthKo');
+  const ent=document.getElementById('f_entreprise')?.value||"L'entreprise";
+  if(total===0){vd.textContent="Répondez OUI/NON aux compétences (section 03) pour générer l'analyse automatique.";vd.style.fontStyle='italic';sp.style.display='none';return;}
+  sp.style.display='grid'; vd.style.fontStyle='normal';
+  let txt='';
+  if(isBlocked) txt=`<strong>⛔ Refus d'agrément.</strong> ${ent} ne permet pas d'atteindre le seuil minimal sur les blocs obligatoires du référentiel (C4 et/ou C3). Ces compétences — prise de vue et organisation des moyens — constituent le cœur irréductible du métier de photographe professionnel. Aucune convention tripartite ne peut compenser leur absence : sans prise de vue régulière, il n'y a pas d'alternance en BTS Photographie. <strong>L'agrément de cette entreprise doit être refusé.</strong>`;
+  else if(total>=75) txt=`${ent} présente une <strong>couverture excellente du référentiel</strong> BTS Photographie (${total}/100). L'ensemble des compétences essentielles — prise de vue (C4), organisation (C3), traitement (C5) et gestion juridique (C7) — sont mises en œuvre de manière satisfaisante. L'alternant(e) bénéficiera d'un cadre de formation pleinement conforme aux exigences du référentiel officiel.`;
+  else if(total>=50) txt=`${ent} offre une <strong>couverture globalement satisfaisante</strong> du référentiel (${total}/100). Les compétences essentielles sont partiellement couvertes, mais l'alternant(e) ne pourra pas développer l'intégralité du référentiel dans cette seule entreprise. Une <strong>convention tripartite est recommandée</strong> pour compléter les compétences identifiées comme insuffisantes.`;
+  else if(total>=25) txt=`Avec ${total}/100, ${ent} <strong>ne couvre pas suffisamment le référentiel</strong>. Des pans entiers de compétences sont absents. Une <strong>convention tripartite obligatoire</strong> doit être mise en place pour garantir la conformité de la formation à l'examen.`;
+  else txt=`Le score de ${total}/100 révèle que ${ent} <strong>n'est pas adaptée à l'accueil d'un(e) apprenti(e) en BTS Photographie</strong>. La couverture du référentiel est trop faible pour envisager une quelconque compensation. <strong>L'agrément doit être refusé.</strong>`;
+  vd.innerHTML=txt; vd.style.color='var(--bk)';
+  ok.innerHTML=''; if(!okBlocs.length)ok.innerHTML='<div class="synth-item"><span class="icon">—</span><div>Aucun bloc suffisamment couvert</div></div>';
+  okBlocs.forEach(({bloc,pts,pct})=>{const d=document.createElement('div');d.className='synth-item';d.innerHTML=`<span class="icon">✅</span><div><strong>${bloc.code} — ${bloc.name}</strong><br>${pts}/${bloc.weight} pts (${Math.round(pct)}%)</div>`;ok.appendChild(d);});
+  ko.innerHTML=''; if(!koBlocs.length)ko.innerHTML='<div class="synth-item"><span class="icon">—</span><div>Aucune lacune majeure</div></div>';
+  koBlocs.forEach(({bloc,pts,pct})=>{const isBlock=bloc.critical&&pts<bloc.criticalMin;const d=document.createElement('div');d.className='synth-item';d.innerHTML=`<span class="icon">${isBlock?'⛔':'⚠️'}</span><div><strong>${bloc.code} — ${bloc.name}</strong>${isBlock?' <span style="color:var(--red);font-size:11px;font-weight:bold">BLOQUANT</span>':''}<br>${pts}/${bloc.weight} pts — à compléter en entreprise tierce</div>`;ko.appendChild(d);});
+}
+
+let missingCount=0, autoFilled=false;
+function autoFillMissing(koBlocs){
+  if(autoFilled) return; autoFilled=true;
+  const container=document.getElementById('missingMissions');
+  if(!container||container.children.length>0) return;
+  koBlocs.forEach(({bloc})=>addMissingMission(bloc.code, bloc.name));
+}
+function addMissingMission(code='',name=''){
+  const container=document.getElementById('missingMissions');
+  if(!container) return;
+  const idx=missingCount++;
+  const tr=document.createElement('tr');
+  tr.id=`mr_${idx}`;
+  tr.innerHTML=`<td class="td-code" style="font-size:11px;white-space:nowrap">${code||'—'}</td>
+    <td><input type="text" class="inline-input" value="${name}" placeholder="Compétence manquante"></td>
+    <td><input type="text" class="inline-input" placeholder="Activités à développer dans l'entreprise tierce"></td>
+    <td style="text-align:center"><button type="button" class="del-btn" onclick="document.getElementById('mr_${idx}').remove()">✕</button></td>`;
+  container.appendChild(tr);
+}
+
+function toggleNotation(){
+  const body=document.getElementById('notationBody');
+  const icon=document.getElementById('toggleIcon');
+  body.classList.toggle('open');
+  icon.textContent=body.classList.contains('open')?'▲ Réduire':'▼ Afficher';
+}
+window.addEventListener('scroll',()=>{
+  const d=document.body.scrollHeight-window.innerHeight;
+  document.getElementById('progress').style.width=Math.min(100,(window.scrollY/d)*100)+'%';
+});
+function resetForm(){
+  if(confirm('Réinitialiser tous les champs ?')){
+    document.getElementById('mainForm').reset();
+    document.getElementById('tripartiteSection').classList.remove('visible');
+    document.getElementById('missingMissions').innerHTML='';
+    missingCount=0; autoFilled=false;
+    updateScore();
+  }
+}
+
+renderSecteur(); renderMissions(); renderBlocs();
+document.addEventListener('change',e=>{if(e.target.type==='radio')updateScore();});
+</script>
+</body>
+</html>
