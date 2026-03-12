@@ -288,19 +288,19 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
     <div class="contacts-grid">
       <div class="contact-card">
         <div class="contact-card-title">Contact Relation Entreprise</div>
-        <p><strong>LUSLEY Rémi</strong><br>Chargé des relations entreprises et étudiants<br>📞 07 60 20 34 02<br>✉ r.lusley@campusdes11arts.com</p>
+        <p><strong>LUSLEY Rémi</strong><br>Chargé des relations entreprises et étudiants<br>📞 07 60 20 34 02<br>✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1f6d31736a6c737a665f7c7e726f6a6c7b7a6c2e2e7e6d6b6c317c7072">[email&#160;protected]</a></p>
       </div>
       <div class="contact-card">
         <div class="contact-card-title">Contact Pédagogie</div>
-        <p><strong>CHERPAK Galit</strong><br>Directrice Pédagogique Campus Nice<br>📞 06 19 17 27 23<br>✉ g.cherpak@campusdes11arts.com</p>
+        <p><strong>CHERPAK Galit</strong><br>Directrice Pédagogique Campus Nice<br>📞 06 19 17 27 23<br>✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="771059141f120507161c3714161a0702041312044646160503045914181a">[email&#160;protected]</a></p>
       </div>
       <div class="contact-card">
         <div class="contact-card-title">Contact Direction</div>
-        <p><strong>JULIEN Patricia</strong><br>Directrice Campus Nice<br>📞 06 72 28 84 43<br>✉ p.julien@campusdes11arts.com</p>
+        <p><strong>JULIEN Patricia</strong><br>Directrice Campus Nice<br>📞 06 72 28 84 43<br>✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="50207e3a253c39353e1033313d2025233435236161312224237e333f3d">[email&#160;protected]</a></p>
       </div>
       <div class="contact-card">
         <div class="contact-card-title">Service Handicap</div>
-        <p><strong>HIDIER Bruno</strong><br>Référent Handicap SUP-PHOTO Nice<br>📞 06 48 07 83 08<br>✉ b.hidier@campusdes11arts.com</p>
+        <p><strong>HIDIER Bruno</strong><br>Référent Handicap SUP-PHOTO Nice<br>📞 06 48 07 83 08<br>✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="12703c7a7b767b77605271737f6267617677612323736066613c717d7f">[email&#160;protected]</a></p>
       </div>
     </div>
 
@@ -310,7 +310,7 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
       <p>Accueil téléphonique : 04 92 93 88 72<br>
       53 Avenue Cap-de-Croix, 06181 Nice<br>
       Mission de contrôle pédagogique des formations par apprentissage :<br>
-      controle-pedagogique-apprentissage@region-paca.fr</p>
+      <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="51323e3f25233e3d347c21343530363e36382024347c30212123343f2538222230363411233436383e3f7c213032307f3723">[email&#160;protected]</a></p>
     </div>
   </div>
 </div>
@@ -561,7 +561,7 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
 
 </main>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const STORE_KEY = 'supphoto_fdr_v3';
 const $ = id => document.getElementById(id);
 
@@ -602,7 +602,6 @@ const REQUIRED_FIELDS = [
   ['mailEntreprise','E-mail entreprise'],['siret','N° SIRET'],['codeNaf','Code NAF'],
   ['codeIdcc','Code IDCC'],['nbSalaries','Nombre de salariés'],['convCollective','Convention collective'],
   ['activitePrincipale','Activité principale'],['caisseRetraite','Caisse de retraite'],
-  ['opcoNom','OPCO'],['opcoContact','Contact OPCO'],
   ['presentationEntreprise','Présentation entreprise'],['secteurActivite','Secteur d\'activité'],
   ['presentationService','Présentation du service'],['orgService','Organisation du service'],
   ['tuteurNom','NOM maître d\'apprentissage'],['tuteurPrenom','Prénom maître d\'apprentissage'],
@@ -743,30 +742,4 @@ function initSig(n){
   function end(){ sigStates[n].drawing=false; }
 
   canvas.addEventListener('mousedown',start); canvas.addEventListener('mousemove',draw); canvas.addEventListener('mouseup',end); canvas.addEventListener('mouseleave',end);
-  canvas.addEventListener('touchstart',start,{passive:false}); canvas.addEventListener('touchmove',draw,{passive:false}); canvas.addEventListener('touchend',end);
-}
-
-function clearSig(n){
-  const canvas=$(`sigCanvas${n}`);
-  const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height);
-  sigStates[n].signed=false; $(`sigLabel${n}`).style.display='block';
-}
-
-function resizeCanvases(){
-  [1,2,3].forEach(n=>{
-    const canvas=$(`sigCanvas${n}`), box=$(`sigBox${n}`);
-    if(!canvas||!box) return;
-    canvas.width=box.offsetWidth; canvas.height=box.offsetHeight;
-  });
-}
-
-/* ═══════════ INIT ═══════════ */
-document.addEventListener('DOMContentLoaded',()=>{
-  loadData();
-  resizeCanvases();
-  [1,2,3].forEach(initSig);
-  window.addEventListener('resize',()=>{ resizeCanvases(); });
-});
-</script>
-</body>
-</html>
+  canvas.addEventListener('touchstart',start,{passive:false}); canvas.addEventListener('touch
