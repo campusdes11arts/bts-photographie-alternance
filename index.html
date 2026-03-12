@@ -154,7 +154,8 @@ nav{
 .cl{margin-bottom:24px}
 .ci{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--gm);font-size:12px}
 .ci:first-child{border-top:1px solid var(--gm)}
-.ci-i{font-size:13px;flex-shrink:0;width:18px}
+.ci-link{color:var(--bk);text-decoration:none;border-bottom:1px solid var(--gm);transition:color .15s,border-color .15s}
+.ci-link:hover{color:var(--red);border-color:var(--red)}
 .ci-l{flex:1;font-weight:600;color:var(--bk)}
 .ci-t{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;white-space:nowrap}
 .t-ok{background:#D5F5E3;color:var(--gn)}
@@ -346,17 +347,17 @@ footer{
         <div class="sc-title">Dossier<br>Administratif</div>
         <p class="sc-desc">Collecte et signature de l'ensemble des documents nécessaires au montage du contrat d'apprentissage.</p>
         <div class="cl">
-          <div class="ci"><span class="ci-i">📄</span><span class="ci-l">Fiche de renseignements</span><span class="ci-t t-todo" id="a0">À SIGNER</span></div>
-          <div class="ci"><span class="ci-i">📝</span><span class="ci-l">Contrat d'apprentissage</span><span class="ci-t t-todo" id="a1">À SIGNER</span></div>
-          <div class="ci"><span class="ci-i">🤝</span><span class="ci-l">Convention de formation CFA ↔ Entreprise</span><span class="ci-t t-todo" id="a2">À SIGNER</span></div>
-          <div class="ci"><span class="ci-i">📓</span><span class="ci-l">Livret d'apprentissage / carnet de liaison</span><span class="ci-t t-todo" id="a3">À SIGNER</span></div>
+          <div class="ci"><span class="ci-i">📄</span><a href="BTS_Photo_FDR.html" class="ci-l ci-link">Fiche de renseignements</a><span class="ci-t t-todo" id="a0">À SIGNER</span></div>
+          <div class="ci"><span class="ci-i">📝</span><a href="BTS_Photo_Contrat.html" class="ci-l ci-link">Contrat d'apprentissage</a><span class="ci-t t-todo" id="a1">À SIGNER</span></div>
+          <div class="ci"><span class="ci-i">🤝</span><a href="BTS_Photo_Convention.html" class="ci-l ci-link">Convention de formation CFA ↔ Entreprise</a><span class="ci-t t-todo" id="a2">À SIGNER</span></div>
+          <div class="ci"><span class="ci-i">📓</span><a href="BTS_Photo_Livret.html" class="ci-l ci-link">Livret d'apprentissage / carnet de liaison</a><span class="ci-t t-todo" id="a3">À SIGNER</span></div>
         </div>
         <div class="sc-foot">
-          <a href="administratif.html" class="btn-c bc-primary" id="btnA">Ouvrir le dossier →</a>
+          <a href="administratif.html" class="btn-c bc-locked" id="btnA">Ouvrir le dossier →</a>
           <span class="sc-pct" id="p2">—</span>
         </div>
       </div>
-      <div class="ov" id="ov2">
+      <div class="ov on" id="ov2">
         <div class="ov-inner">
           <div class="ov-ico">🔒</div>
           <div class="ov-msg">Disponible après<br>validation de la<br>grille de conformité</div>
@@ -381,11 +382,11 @@ footer{
           <div class="ci"><span class="ci-i">📍</span><span class="ci-l">Visite 4 — Bilan final</span><span class="ci-t t-todo" id="v4">À VENIR</span></div>
         </div>
         <div class="sc-foot">
-          <a href="visites.html" class="btn-c bc-primary" id="btnV">Ouvrir le suivi →</a>
+          <a href="visites.html" class="btn-c bc-locked" id="btnV">Ouvrir le suivi →</a>
           <span class="sc-pct" id="p3">—</span>
         </div>
       </div>
-      <div class="ov" id="ov3">
+      <div class="ov on" id="ov3">
         <div class="ov-inner">
           <div class="ov-ico">🔒</div>
           <div class="ov-msg">Disponible après<br>signature de tous<br>les documents</div>
@@ -405,25 +406,25 @@ footer{
       <div class="vc-n">Visite 01</div>
       <div class="vc-t">Diagnostic<br>d'environnement</div>
       <div class="vc-w">~45 jours après l'entrée</div>
-      <a href="visite1.html" class="btn-v">Ouvrir →</a>
+      <a href="BTS_Photo_Form_Visite1.html" class="btn-v">Ouvrir →</a>
     </div>
     <div class="vc">
       <div class="vc-n">Visite 02</div>
       <div class="vc-t">Bilan intermédiaire<br>An 1</div>
       <div class="vc-w">Fin de première année</div>
-      <div id="vc2"><div class="vc-lock">🔒 Après V1 complétée</div></div>
+      <div id="vc2"><a href="BTS_Photo_Form_Visite2.html" class="btn-v">Ouvrir →</a></div>
     </div>
     <div class="vc">
       <div class="vc-n">Visite 03</div>
       <div class="vc-t">Bilan intermédiaire<br>An 2</div>
       <div class="vc-w">Milieu de deuxième année</div>
-      <div id="vc3"><div class="vc-lock">🔒 Après V2 complétée</div></div>
+      <div id="vc3"><a href="BTS_Photo_Form_Visite3.html" class="btn-v">Ouvrir →</a></div>
     </div>
     <div class="vc" style="border-right:none">
       <div class="vc-n">Visite 04</div>
       <div class="vc-t">Bilan final &<br>préparation examen</div>
       <div class="vc-w">Dernier semestre</div>
-      <div id="vc4"><div class="vc-lock">🔒 Après V3 complétée</div></div>
+      <div id="vc4"><a href="BTS_Photo_Form_Visite4.html" class="btn-v">Ouvrir →</a></div>
     </div>
   </div>
 </div>
@@ -495,24 +496,17 @@ function render(){
     tag('c1a','t-todo','À FAIRE');tag('c1b','t-todo','EN ATTENTE');pct('p1','—','');
   }
 
-  // Étape 2
-  ov('ov2', false);
+  // Étape 2 — statut uniquement, pas de verrou
   badge('b2',s2?'b-done':aN>0?'b-active':'b-active',s2?'✅ Complété':aN>0?`● ${aN}/4 signés`:'● En attente');
   a.signed.forEach((ok,i)=>tag('a'+i,ok?'t-ok':'t-wait',ok?'SIGNÉ':'À SIGNER'));
   document.getElementById('btnA').className='btn-c '+(s2?'bc-done':'bc-primary');
   const pp2=Math.round(aN/4*100);pct('p2',aN>0?pp2+'%':'—',pp2===100?'cg':pp2>0?'co':'');
 
-  // Étape 3
-  ov('ov3', false);
-  document.getElementById('visSection').classList.add('show');
+  // Étape 3 — statut uniquement, pas de verrou
   badge('b3',vN===4?'b-done':vN>0?'b-active':'b-active',vN===4?'✅ Complété':vN>0?`● ${vN}/4 visites`:'● En attente');
   v.done.forEach((ok,i)=>tag('v'+(i+1),ok?'t-ok':'t-todo',ok?'FAITE':'À VENIR'));
   document.getElementById('btnV').className='btn-c '+(vN===4?'bc-done':'bc-primary');
   const pp3=Math.round(vN/4*100);pct('p3',vN>0?pp3+'%':'—',pp3===100?'cg':pp3>0?'co':'');
-  for(let i=2;i<=4;i++){
-    const w=document.getElementById('vc'+i);if(!w)continue;
-    w.innerHTML=`<a href="visite${i}.html" class="btn-v">Ouvrir →</a>`;
-  }
 }
 
 function confirmReset(){
