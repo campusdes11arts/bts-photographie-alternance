@@ -226,7 +226,7 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
 
 <nav>
   <a class="nav-logo" href="index.html">
-    <img src="LOGOSPBASELINEROUGE__1_.png" alt="SUP-PHOTO">
+    <img src="LOGOSPBASELINEROUGE__1_.png" alt="SUP-PHOTO" onerror="this.onerror=null;this.src='LOGOSPBASELINE__2_.png'">
   </a>
   <span class="nav-label">FDR — Montage Contrat d'Apprentissage</span>
 </nav>
@@ -373,10 +373,7 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
         <label>NOM de l'OPCO <span class="req">*</span></label>
         <input type="text" name="opcoNom" data-section="1" required placeholder="Ex : AFDAS, ATLAS, OPCO EP…">
       </div>
-      <div class="field field-full">
-        <label>Coordonnées du contact OPCO (NOM, e-mail, téléphone) <span class="req">*</span></label>
-        <input type="text" name="opcoContact" data-section="1" required placeholder="Ex : DUPONT Marie – m.dupont@opco.fr – 01 23 45 67 89">
-      </div>
+
     </div>
 
     <div class="sub-section">
@@ -902,7 +899,7 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
 
       <!-- GRILLE OFFICIELLE -->
       <div class="remu-explainer">
-        <div class="remu-explainer-head">📊 Grille légale minimale (% du SMIC brut mensuel = 1 801,80 €) — plancher obligatoire</div>
+        <div class="remu-explainer-head">📊 Grille légale minimale (% du SMIC brut mensuel = 1 823,03 €) — plancher obligatoire</div>
         <div class="remu-explainer-note">Ces montants sont les <strong>minimums légaux</strong>. Un employeur peut toujours proposer une rémunération supérieure (convention collective plus favorable, accord d'entreprise, contrat précédent mieux rémunéré, volonté de l'employeur…). Il n'existe pas de plafond.</div>
         <table class="remu-grid-table">
           <thead>
@@ -921,22 +918,22 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
             <tr data-tranche="16-17">
               <td><span class="tranche-badge">16–17 ans</span></td>
               <td>27%</td><td class="montant">492,22 €</td>
-              <td>39%</td><td class="montant">710,99 €</td>
+              <td>39%</td><td class="montant">710,98 €</td>
             </tr>
             <tr data-tranche="18-20">
               <td><span class="tranche-badge">18–20 ans</span></td>
-              <td>43%</td><td class="montant">783,91 €</td>
+              <td>43%</td><td class="montant">783,90 €</td>
               <td>51%</td><td class="montant">929,75 €</td>
             </tr>
             <tr data-tranche="21-25">
               <td><span class="tranche-badge">21–25 ans</span></td>
-              <td>53%</td><td class="montant">966,22 €</td>
-              <td>61%</td><td class="montant">1 112,06 €</td>
+              <td>53%</td><td class="montant">966,21 €</td>
+              <td>61%</td><td class="montant">1 112,05 €</td>
             </tr>
             <tr data-tranche="26+">
               <td><span class="tranche-badge">26 ans et +</span></td>
-              <td>100%</td><td class="montant">1 801,80 €</td>
-              <td>100%</td><td class="montant">1 801,80 €</td>
+              <td>100%</td><td class="montant">1 823,03 €</td>
+              <td>100%</td><td class="montant">1 823,03 €</td>
             </tr>
           </tbody>
         </table>
@@ -1134,7 +1131,7 @@ function bindAll(){
 
 /* ═══════════ COMPLETION LOGIC ═══════════ */
 const REQUIRED = {
-  1:['typeEmployeur','formeJuridique','raisonSociale','representantNom','representantFonction','adresseSiege','telEntreprise','mailEntreprise','siret','codeNaf','codeIdcc','nbSalaries','convCollective','activitePrincipale','caisseRetraite','opcoNom','opcoContact'],
+  1:['typeEmployeur','formeJuridique','raisonSociale','representantNom','representantFonction','adresseSiege','telEntreprise','mailEntreprise','siret','codeNaf','codeIdcc','nbSalaries','convCollective','activitePrincipale','caisseRetraite','opcoNom'],
   2:['presentationEntreprise','secteurActivite','presentationService','orgService'],
   3:['tuteurNom','tuteurPrenom','tuteurFonction','tuteurDdn','tuteurSecu','tuteurTel','tuteurMail','tuteurDiplome','tuteurNiveau'],
   4:['altNom','altPrenom','altPoste','altDdn','altLieuNaissance','altDepNaissance','altSecu','altRegimeSocial','altAdresse','altTel','altMail','altDiplomeObtenu','altDiplomePrepare','altDiplomePrecis','altDerniereClasse','nationalite','rqth','altSexe','altSportifHN','altProjetEntreprise','statutAvant'],
@@ -1380,21 +1377,21 @@ function computeRemuAuto(){
   const t2 = getTrancheAge(ageA2);
   const g1 = GRILLE[t1], g2 = GRILLE[t2];
   const m1a1 = SMIC * g1.a1;
-  const m2a1 = SMIC * g2.a1;
+  const m2a1 = SMIC * g2.a2;
 
   const p1a1 = $('remu1a1'), p1a2 = $('remu1a2'), p2a1 = $('remu2a1'), p2a2 = $('remu2a2');
   const pct  = $('pctSmicInput');
 
   if(p1a1){ p1a1.value = fmtEuro(m1a1); markFilled(p1a1); }
   if(p2a1){ p2a1.value = fmtEuro(m2a1); markFilled(p2a1); }
-  if(pct){  pct.value  = (g1.a1*100)+'% (A1) — '+(g2.a1*100)+'% (A2)'; markFilled(pct); }
+  if(pct){  pct.value  = (g1.a1*100)+'% (A1) — '+(g2.a2*100)+'% (A2)'; markFilled(pct); }
 
   const sal = $('salaireEmbaucheBrut');
   if(sal && !sal.dataset.manual){ sal.value = fmtEuro(m1a1); markFilled(sal); }
 
   const changementTranche = t1 !== t2;
   if(changementTranche){
-    if(p1a2){ p1a2.value = fmtEuro(SMIC * g2.a1); markFilled(p1a2); }
+    if(p1a2){ p1a2.value = fmtEuro(SMIC * g2.a2); markFilled(p1a2); }
   } else {
     if(p1a2){ p1a2.value = ''; }
   }
@@ -1416,7 +1413,7 @@ function computeRemuAuto(){
       <div class="rcb-year">
         <div class="rcb-year-title">2ème Année de formation</div>
         <div class="rcb-year-age">Âge en 2ème année : <strong>${ageA2} ans</strong> → <em>${trancheLabel(t2)}</em></div>
-        <div class="rcb-year-pct">${g2.a1*100}% du SMIC</div>
+        <div class="rcb-year-pct">${g2.a2*100}% du SMIC</div>
         <div class="rcb-year-montant">${fmtEuro(m2a1)} brut / mois</div>
         <div class="rcb-year-annuel">${fmtAnnuel(m2a1)}</div>
         ${m2a1 <= SMIC*0.79 ? '<div class="rcb-note">✓ ≤ 79% SMIC → exonéré de charges salariales</div>' : '<div class="rcb-note">⚠ > 79% SMIC → cotisations salariales sur la partie excédentaire</div>'}
@@ -1438,7 +1435,7 @@ function computeRemu(){
   if(el) el.addEventListener('input', checkBelowMinimum);
 });
 
-const SMIC = 1801.80;
+const SMIC = 1823.03;
 const GRILLE = {
   '16-17': { a1: 0.27, a2: 0.39 },
   '18-20': { a1: 0.43, a2: 0.51 },
