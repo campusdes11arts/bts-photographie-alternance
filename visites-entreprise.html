@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTS Photographie — Suivi des visites en entreprise — SUP-PHOTO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+:root{
+  --white:   #FFFFFF;
+  --bg:      #F7F6F3;
+  --bg2:     #EFEFEC;
+  --border:  #E0DDD8;
+  --text:    #1A1A1A;
+  --mid:     #555550;
+  --grey:    #888885;
+  --red:     #E8003D;
+  --red-dark:#C0002F;
+  --red-bg:  #FFF0F4;
+
+  --v1: #1A6FA8;
+  --v2: #1A7A43;
+  --v3: #C96B00;
+  --v4: #7B2D8B;
+
+  --sans: 'Open Sans', sans-serif;
+  --max: 1160px;
+  --pad: clamp(20px, 5vw, 72px);
+}
+
+body{
+  background: var(--white);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav{
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 var(--pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  height: 64px;
+  box-shadow: 0 1px 0 var(--border);
+}
+.nav-logo img{ height: 34px; width: auto; display: block; }
+.nav-links{ display: flex; gap: 32px; list-style: none; }
+.nav-links a{
+  font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-decoration: none;
+  color: var(--grey); text-transform: uppercase;
+  transition: color .2s;
+}
+.nav-links a:hover{ color: var(--red); }
+.nav-cta{
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--white); background: var(--red);
+  padding: 9px 20px; text-decoration: none;
+  transition: background .2s;
+}
+.nav-cta:hover{ background: var(--red-dark); }
+
+/* ── HERO ── */
+.hero{
+  background: var(--bg);
+  border-bottom: 3px solid var(--red);
+}
+.hero-inner{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(56px,9vw,110px) var(--pad) clamp(44px,7vw,88px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.hero-tag{
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--red);
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px;
+}
+.hero-tag::before{
+  content:''; display:inline-block;
+  width:24px; height:2px; background:var(--red);
+}
+h1{
+  font-family: var(--sans);
+  font-size: clamp(40px, 5.5vw, 76px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--text);
+}
+h1 span{ color: var(--red); }
+.hero-sub{
+  font-size: 14px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--grey); margin-top: 14px;
+}
+.hero-desc{
+  font-size: 15px; font-weight: 300;
+  color: var(--mid); line-height: 1.8;
+  margin-bottom: 28px;
+}
+.hero-meta{
+  margin-bottom: 32px;
+  display: flex; flex-direction: column; gap: 9px;
+}
+.hero-meta-item{
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; font-weight: 400; color: var(--mid);
+}
+.meta-dot{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red); flex-shrink: 0;
+}
+.cta-row{ display: flex; gap: 12px; flex-wrap: wrap; }
+.btn{
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 22px;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  text-decoration: none; transition: all .2s;
+}
+.btn-red{ background: var(--red); color: var(--white); }
+.btn-red:hover{ background: var(--red-dark); }
+.btn-outline{ background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-outline:hover{ border-color: var(--text); }
+
+/* ── STATS ── */
+.stats{ background: var(--red); }
+.stats-inner{
+  max-width: var(--max); margin: 0 auto;
+  display: grid; grid-template-columns: repeat(5,1fr);
+  border-left: 1px solid rgba(255,255,255,.2);
+}
+.stat{
+  padding: 22px 16px;
+  border-right: 1px solid rgba(255,255,255,.2);
+  text-align: center;
+}
+.stat-num{
+  font-size: 36px; font-weight: 800;
+  color: var(--white); line-height: 1; margin-bottom: 2px;
+}
+.stat-label{
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.7);
+}
+
+/* ── SECTION ── */
+.section{
+  max-width: var(--max); margin: 0 auto;
+  padding: clamp(44px,7vw,88px) var(--pad);
+}
+.section-head{
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 36px; padding-bottom: 14px;
+  border-bottom: 2px solid var(--text);
+}
+.section-title{
+  font-size: clamp(22px,3vw,34px); font-weight: 800;
+  letter-spacing: -.01em; line-height: 1.1;
+  text-transform: uppercase;
+}
+.section-title span{ color: var(--red); }
+.section-num{
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--grey);
+}
+
+/* ── VISIT CARDS ── */
+.visits-grid{
+  display: grid; grid-template-columns: repeat(2,1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+}
+.visit-card{
+  display: block; text-decoration: none; color: var(--text);
+  background: var(--white); padding: 36px 32px;
+  position: relative; overflow: hidden; transition: background .2s;
+}
+.visit-card:hover{ background: var(--bg); }
+.visit-card:hover .card-arrow{ opacity:1; transform:translateX(0); }
+.visit-card:hover .card-bar{ transform:scaleX(1); }
+
+.card-top{
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.card-visit-num{
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--grey);
+}
+.card-badge{
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--white);
+  background: var(--accent-color, var(--red));
+  padding: 4px 10px;
+}
+.card-title{
+  font-size: 26px; font-weight: 800;
+  letter-spacing: -.01em; line-height: 1.1;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.card-when{
+  font-size: 11px; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent-color, var(--grey)); margin-bottom: 14px;
+}
+.card-desc{
+  font-size: 13px; font-weight: 300;
+  color: var(--mid); line-height: 1.7; margin-bottom: 18px;
+}
+.card-tags{
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px;
+}
+.tag{
+  font-size: 10px; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--grey); border: 1px solid var(--border); padding: 3px 8px;
+}
+.card-arrow{
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent-color, var(--red));
+  display: flex; align-items: center; gap: 6px;
+  opacity: 0; transform: translateX(-8px); transition: all .25s;
+}
+.card-bar{
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; background: var(--accent-color, var(--red));
+  transform: scaleX(0); transform-origin: left; transition: transform .3s;
+}
+
+/* ── HOW ── */
+.how-wrap{
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.steps-grid{
+  display: grid; grid-template-columns: repeat(5,1fr);
+  border-left: 1px solid var(--border);
+}
+.step{
+  padding: 30px 22px;
+  border-right: 1px solid var(--border);
+}
+.step-num{
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 12px;
+}
+.step-title{
+  font-size: 13px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .04em;
+  margin-bottom: 8px; color: var(--text);
+}
+.step-text{ font-size: 12px; font-weight: 300; color: var(--mid); line-height: 1.65; }
+
+/* ── SCALE ── */
+.scale-grid{
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border: 1px solid var(--border); border-top: none;
+}
+.scale-item{
+  padding: 30px 26px;
+  border-right: 1px solid var(--border);
+  border-top: 3px solid transparent;
+}
+.scale-item:last-child{ border-right: none; }
+.scale-big{
+  font-size: 64px; font-weight: 800;
+  line-height: 1; margin-bottom: 8px;
+}
+.scale-word{
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px;
+}
+.scale-desc{ font-size: 12px; font-weight: 300; color: var(--mid); line-height: 1.6; }
+
+/* ── REFERENTIEL ── */
+.ref-wrap{
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+.blocks-grid{
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border: 1px solid var(--border); border-top: none;
+}
+.block-item{
+  padding: 20px 18px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background .15s; position: relative;
+}
+.block-item:last-child:nth-child(4n){ border-right: none; }
+.block-item:hover{ background: var(--white); }
+.block-item::before{
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%; background: var(--red);
+  transform: scaleY(0); transform-origin: top; transition: transform .2s;
+}
+.block-item:hover::before{ transform: scaleY(1); }
+.block-code{
+  font-size: 28px; font-weight: 800; color: var(--red);
+  line-height: 1; margin-bottom: 6px;
+}
+.block-name{ font-size: 12px; font-weight: 300; color: var(--mid); line-height: 1.5; }
+
+/* ── FOOTER ── */
+footer{
+  background: var(--text);
+  border-top: 3px solid var(--red);
+  padding: 28px var(--pad);
+}
+.footer-inner{
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-logo img{ height: 28px; width: auto; opacity: .85; }
+.footer-info{
+  font-size: 11px; font-weight: 400;
+  letter-spacing: .06em; text-transform: uppercase; color: #888;
+}
+.footer-info a{ color: var(--red); text-decoration: none; }
+
+/* ── REVEAL ── */
+.reveal{ opacity:0; transform:translateY(16px); transition:opacity .55s ease,transform .55s ease; }
+.reveal.visible{ opacity:1; transform:translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero-inner{ grid-template-columns:1fr; gap:32px; }
+  .visits-grid{ grid-template-columns:1fr; }
+  .steps-grid{ grid-template-columns:1fr 1fr; }
+  .scale-grid{ grid-template-columns:1fr 1fr; }
+  .blocks-grid{ grid-template-columns:1fr 1fr; }
+  .stats-inner{ grid-template-columns:repeat(3,1fr); }
+  .nav-links{ display:none; }
+}
+@media(max-width:560px){
+  .steps-grid{ grid-template-columns:1fr; }
+  .stats-inner{ grid-template-columns:1fr 1fr; }
+  .nav-cta{ display:none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://sup-photo.com" class="nav-logo" target="_blank">
+    <img src="LOGO-SP-BASELINE-ROUGE__1_.png" alt="SUP-PHOTO — image & stratégie">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#visites">Formulaires</a></li>
+    <li><a href="#methode">Méthode</a></li>
+    <li><a href="#referentiel">Référentiel</a></li>
+  </ul>
+  <a href="#visites" class="nav-cta">Accéder aux formulaires →</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner reveal">
+    <div class="hero-left">
+      <div class="hero-tag">Outil CRE — Alternance</div>
+      <h1>Visites<br>en <span>entreprise</span></h1>
+      <div class="hero-sub">BTS Photographie</div>
+    </div>
+    <div class="hero-right">
+      <p class="hero-desc">Dispositif d'évaluation des visites en entreprise pour la formation BTS Photographie en alternance. Conforme au référentiel officiel Éducation Nationale.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item"><span class="meta-dot"></span>4 visites sur 2 ans de formation</div>
+        <div class="hero-meta-item"><span class="meta-dot"></span>25 questions couvrant l'ensemble du référentiel</div>
+        <div class="hero-meta-item"><span class="meta-dot"></span>46 compétences tracées — CP1.1 à CP8.7</div>
+        <div class="hero-meta-item"><span class="meta-dot"></span>3 évaluateurs : apprenti·e, MA, référent CFA</div>
+      </div>
+      <div class="cta-row">
+        <a href="#visites" class="btn btn-red">Accéder aux formulaires</a>
+        <a href="#referentiel" class="btn btn-outline">Référentiel C1–C8</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Visites</div></div>
+    <div class="stat"><div class="stat-num">25</div><div class="stat-label">Questions</div></div>
+    <div class="stat"><div class="stat-num">46</div><div class="stat-label">Compétences</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Évaluateurs</div></div>
+    <div class="stat"><div class="stat-num">C1–C8</div><div class="stat-label">Référentiel</div></div>
+  </div>
+</div>
+
+<div id="visites">
+  <div class="section">
+    <div class="section-head reveal">
+      <h2 class="section-title">Les quatre visites<br><span>en entreprise</span></h2>
+      <span class="section-num">Formulaires interactifs</span>
+    </div>
+    <div class="visits-grid">
+
+      <a class="visit-card reveal" href="BTS_Photo_Form_Visite1.html" style="--accent-color:var(--v1)">
+        <div class="card-top"><span class="card-visit-num">Visite 01</span><span class="card-badge" style="background:var(--v1)">Diagnostic</span></div>
+        <div class="card-title">Diagnostic<br>d'environnement</div>
+        <div class="card-when">≈ 45 jours après le début</div>
+        <p class="card-desc">Questions ouvertes pour cartographier l'entreprise d'accueil. Couverture du référentiel C1–C8. Cases à cocher, pas de notation 1–4 à ce stade.</p>
+        <div class="card-tags"><span class="tag">Exploration</span><span class="tag">Q1 – Q8</span><span class="tag">C1 à C8</span></div>
+        <span class="card-arrow">Ouvrir le formulaire →</span>
+        <div class="card-bar"></div>
+      </a>
+
+      <a class="visit-card reveal" href="BTS_Photo_Form_Visite2.html" style="--accent-color:var(--v2)">
+        <div class="card-top"><span class="card-visit-num">Visite 02</span><span class="card-badge" style="background:var(--v2)">Progression</span></div>
+        <div class="card-title">Suivi de<br>progression</div>
+        <div class="card-when">Mi-première année</div>
+        <p class="card-desc">Évaluation 1–4 par trois évaluateurs sur les premières compétences mobilisées. Calcul automatique des moyennes et écarts.</p>
+        <div class="card-tags"><span class="tag">Évaluation 1–4</span><span class="tag">Q9 – Q14</span><span class="tag">C2, C3, C4, C5</span></div>
+        <span class="card-arrow">Ouvrir le formulaire →</span>
+        <div class="card-bar"></div>
+      </a>
+
+      <a class="visit-card reveal" href="BTS_Photo_Form_Visite3.html" style="--accent-color:var(--v3)">
+        <div class="card-top"><span class="card-visit-num">Visite 03</span><span class="card-badge" style="background:var(--v3)">Consolidation</span></div>
+        <div class="card-title">Consolidation<br>& autonomie</div>
+        <div class="card-when">Début de deuxième année</div>
+        <p class="card-desc">Montée en autonomie, compétences juridiques, photothèque, veille technologique. Analyse des écarts inter-évaluateurs.</p>
+        <div class="card-tags"><span class="tag">Consolidation</span><span class="tag">Q15 – Q19</span><span class="tag">C1, C6, C7, C8</span></div>
+        <span class="card-arrow">Ouvrir le formulaire →</span>
+        <div class="card-bar"></div>
+      </a>
+
+      <a class="visit-card reveal" href="BTS_Photo_Form_Visite4.html" style="--accent-color:var(--v4)">
+        <div class="card-top"><span class="card-visit-num">Visite 04</span><span class="card-badge" style="background:var(--v4)">Bilan</span></div>
+        <div class="card-title">Bilan<br>final</div>
+        <div class="card-when">Fin de deuxième année</div>
+        <p class="card-desc">Vérification de la mobilisation de l'ensemble du référentiel. Bilan transversal C1–C8. Positionnement avant l'examen.</p>
+        <div class="card-tags"><span class="tag">Bilan global</span><span class="tag">Q20 – Q25</span><span class="tag">C1 à C8</span></div>
+        <span class="card-arrow">Ouvrir le formulaire →</span>
+        <div class="card-bar"></div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<div class="how-wrap" id="methode">
+  <div class="section">
+    <div class="section-head reveal">
+      <h2 class="section-title">Mode d'<span>emploi</span></h2>
+      <span class="section-num">5 étapes</span>
+    </div>
+    <div class="steps-grid reveal">
+      <div class="step"><div class="step-num">— 01</div><div class="step-title">Avant la visite</div><p class="step-text">L'apprenti·e remplit sa colonne auto-évaluation (V2, V3, V4). Le maître d'apprentissage prépare ses observations.</p></div>
+      <div class="step"><div class="step-num">— 02</div><div class="step-title">Pendant la visite</div><p class="step-text">Le référent CFA anime les échanges. Les trois évaluateurs renseignent leurs notes 1–4 en temps réel.</p></div>
+      <div class="step"><div class="step-num">— 03</div><div class="step-title">Résultats auto</div><p class="step-text">Moyennes et statuts s'affichent instantanément. Alertes sur les écarts supérieurs à 1 point.</p></div>
+      <div class="step"><div class="step-num">— 04</div><div class="step-title">Synthèse</div><p class="step-text">Compétences à risque et ajustements pédagogiques CFA. Impression ou export PDF en un clic.</p></div>
+      <div class="step"><div class="step-num">— 05</div><div class="step-title">Signatures</div><p class="step-text">Les trois parties signent. Une copie pour l'apprenti·e, le MA, et le CFA.</p></div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="section">
+    <div class="section-head reveal">
+      <h2 class="section-title">Échelle d'<span>évaluation</span></h2>
+      <span class="section-num">4 niveaux</span>
+    </div>
+    <div class="scale-grid reveal">
+      <div class="scale-item" style="border-top-color:#C0392B">
+        <div class="scale-big" style="color:#C0392B">1</div>
+        <div class="scale-word" style="color:#C0392B">Non acquis</div>
+        <p class="scale-desc">La compétence n'est pas encore mobilisable en situation professionnelle.</p>
+      </div>
+      <div class="scale-item" style="border-top-color:#E67E22">
+        <div class="scale-big" style="color:#E67E22">2</div>
+        <div class="scale-word" style="color:#E67E22">En cours</div>
+        <p class="scale-desc">Partiellement mobilisée — un soutien régulier reste nécessaire.</p>
+      </div>
+      <div class="scale-item" style="border-top-color:#1A7A43">
+        <div class="scale-big" style="color:#1A7A43">3</div>
+        <div class="scale-word" style="color:#1A7A43">Acquis</div>
+        <p class="scale-desc">Mobilisable de manière autonome dans les situations courantes.</p>
+      </div>
+      <div class="scale-item" style="border-top-color:var(--red)">
+        <div class="scale-big" style="color:var(--red)">4</div>
+        <div class="scale-word" style="color:var(--red)">Maîtrise</div>
+        <p class="scale-desc">Pleinement intégrée, transférable, mobilisable en situations complexes.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-wrap" id="referentiel">
+  <div class="section">
+    <div class="section-head reveal">
+      <h2 class="section-title">Référentiel <span>officiel</span> C1–C8</h2>
+      <span class="section-num">46 compétences tracées</span>
+    </div>
+    <div class="blocks-grid reveal">
+      <div class="block-item"><div class="block-code">C1</div><div class="block-name">Communiquer et s'informer</div></div>
+      <div class="block-item"><div class="block-code">C2</div><div class="block-name">Lire, interpréter des images et évaluer la pertinence d'un projet</div></div>
+      <div class="block-item"><div class="block-code">C3</div><div class="block-name">Choisir et organiser les moyens pour une prise de vue</div></div>
+      <div class="block-item"><div class="block-code">C4</div><div class="block-name">Réaliser des prises de vues</div></div>
+      <div class="block-item"><div class="block-code">C5</div><div class="block-name">Traiter les images photographiques</div></div>
+      <div class="block-item"><div class="block-code">C6</div><div class="block-name">Gérer, conserver et archiver les photographies</div></div>
+      <div class="block-item"><div class="block-code">C7</div><div class="block-name">Diffuser, reproduire et céder en assurant la protection juridique</div></div>
+      <div class="block-item"><div class="block-code">C8</div><div class="block-name">Exercer une veille technologique et apporter une expertise</div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="https://sup-photo.com" class="footer-logo" target="_blank">
+      <img src="LOGO-SP-BASELINE-BLANC.png" alt="SUP-PHOTO">
+    </a>
+    <div class="footer-info">
+      Outil CRE — Usage pédagogique interne &nbsp;·&nbsp; BTS Photographie &nbsp;·&nbsp; Référentiel CP1.1 → CP8.7
+    </div>
+    <div class="footer-info">
+      <a href="https://sup-photo.com">sup-photo.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -24px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
