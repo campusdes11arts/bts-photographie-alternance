@@ -174,6 +174,75 @@ tbody tr:last-child td{border-bottom:none}
 .btn-primary{background:var(--bk);color:var(--wh)}.btn-primary:hover{background:var(--red)}
 .btn-outline{background:transparent;color:var(--bk);border:1.5px solid var(--bk)}.btn-outline:hover{background:var(--bk);color:var(--wh)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){
+  /* Nav */
+  nav{padding:0 16px;height:56px;gap:10px}
+  nav img{height:28px!important}
+  .nav-label{display:none}
+
+  /* Hero */
+  .hero{padding:28px 16px 24px}
+  .hero h1{font-size:22px}
+  .hero-sub{font-size:12px}
+  .progress-bar{padding:0 16px}
+
+  /* Wrapper */
+  .wrapper{padding:0 16px 48px}
+  .section{margin-top:36px}
+
+  /* Section title */
+  .section h2{font-size:16px}
+
+  /* Field grid : 1 colonne */
+  .field-grid{grid-template-columns:1fr}
+  .field-grid .field{border-right:none!important}
+  .field-grid .field:nth-last-child(-n+2){border-bottom:1px solid var(--gm)}
+  .field-grid .field:last-child{border-bottom:none}
+
+  /* Tables : scroll horizontal */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:500px}
+
+  /* Compétences table : cacher la colonne indicateur sur mobile */
+  .td-indicator{display:none}
+  thead th.th-indicator{display:none}
+  td.td-indicator-cell{display:none}
+
+  /* OUI/NON : plus compact */
+  .yn-wrap{gap:4px}
+  .yn-label{width:38px;font-size:10px;padding:3px 0}
+
+  /* Notation grid : 2 colonnes */
+  .notation-grid{grid-template-columns:repeat(2,1fr)}
+  .nc:nth-child(4n){border-right:1px solid var(--gm)}
+  .nc:nth-child(2n){border-right:none}
+
+  /* Score grid : 2 colonnes */
+  .score-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+
+  /* Synthèse points : 1 colonne */
+  .synth-points{grid-template-columns:1fr!important}
+
+  /* Scoring panel */
+  .scoring-body{padding:14px}
+  .scoring-header{padding:14px 16px;flex-wrap:wrap;gap:8px}
+  .scoring-header h2{font-size:16px}
+
+  /* Tripartite */
+  .tripartite-header{padding:14px 16px;flex-wrap:wrap}
+  .party-grid{grid-template-columns:1fr!important}
+  .party-col{border-right:none!important;border-bottom:1px solid var(--gm);padding:14px 16px}
+  .party-col:last-child{border-bottom:none}
+
+  /* Boutons actions */
+  .actions{padding:14px 16px;flex-wrap:wrap;gap:8px}
+  .btn{font-size:10px;padding:10px 14px}
+
+  /* Bloc header */
+  .bloc-header{flex-wrap:wrap;gap:8px;padding:10px 12px}
+  .bloc-meta{margin-left:0;flex-wrap:wrap}
+}
+
 @media print{nav,.progress-bar,.actions,.notation-explain-header{display:none!important}.notation-explain-body{max-height:none!important;padding:20px!important}.wrapper{padding:0 30px 40px}.hero{padding:30px}thead tr,.bloc-header,.scoring-header,.tripartite-header{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
@@ -656,7 +725,7 @@ function renderBlocs(){
     const tbl=document.createElement('table');
     tbl.innerHTML=`<thead><tr>
       <th style="width:9%">Tâches</th><th style="width:28%">Activité / compétence</th>
-      <th style="width:35%">Indicateur de performance attendu</th><th style="width:10%">CP</th>
+      <th style="width:35%" class="th-indicator">Indicateur de performance attendu</th><th style="width:10%">CP</th>
       <th style="width:9%;text-align:center">OUI</th><th style="width:9%;text-align:center">NON</th>
     </tr></thead>`;
     const tbody=document.createElement('tbody');
@@ -664,7 +733,7 @@ function renderBlocs(){
       const tr=document.createElement('tr');
       tr.appendChild(td(taches,'td-code')).style.fontSize='10px';
       tr.appendChild(td(activite,'td-label'));
-      tr.appendChild(td(indicateur,'td-indicator'));
+      tr.appendChild(td(indicateur,'td-indicator td-indicator-cell'));
       tr.appendChild(td(cp,'td-code'));
       const {wrap:yn, name} = mkYN(bloc.code);
       ynNames.push({name, bloc: bloc.code});
