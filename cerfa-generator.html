@@ -195,13 +195,17 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
   .sig-canvas-wrap{cursor:default}
   .sec-wrap{page-break-inside:avoid}
 }
+
+.btn-menu{background:none;border:1.5px solid #E0DDD8;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#555550;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background .15s,color .15s}
+.btn-menu:hover{background:#1A1A1A;color:#fff;border-color:#1A1A1A}
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo"><img src="LOGOSPBASELINE__2_.png" alt="SUP-PHOTO" onerror="this.style.display='none'"></div>
+  <div class="nav-logo"><img src="LOGOSPBASELINE__2_.png" alt="SUP-PHOTO" onerror="this.onerror=null;this.src='LOGOSPBASELINEROUGE__1_.png'"></div>
   <div class="nav-actions">
+    <a href="index.html" class="btn-menu">← Menu</a>
     <a href="fdr-complete.html" class="btn-back">← Retour FDR</a>
     <button class="btn-print" onclick="window.print()">🖨 Imprimer / PDF</button>
   </div>

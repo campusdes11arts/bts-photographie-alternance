@@ -244,16 +244,19 @@ tbody tr:last-child td{border-bottom:none}
 }
 
 @media print{nav,.progress-bar,.actions,.notation-explain-header{display:none!important}.notation-explain-body{max-height:none!important;padding:20px!important}.wrapper{padding:0 30px 40px}.hero{padding:30px}thead tr,.bloc-header,.scoring-header,.tripartite-header{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+.btn-menu{background:none;border:1.5px solid #E0DDD8;padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#555550;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:background .15s,color .15s}
+.btn-menu:hover{background:#1A1A1A;color:#fff;border-color:#1A1A1A}
 </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" style="display:flex;align-items:center;flex-shrink:0">
-    <img src="logo-color.png" alt="SUP-PHOTO" style="height:36px;display:block">
+    <img src="LOGOSPBASELINE__2_.png" onerror="this.onerror=null;this.src='LOGOSPBASELINEROUGE__1_.png'" alt="SUP-PHOTO" style="height:36px;display:block">
   </a>
   <span class="nav-label">BTS Photographie · Grille de conformité entreprise</span>
-  <a href="index.html" style="margin-left:auto;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gd);text-decoration:none;display:flex;align-items:center;gap:6px;border:1px solid var(--gm);padding:8px 14px;transition:all .2s" onmouseover="this.style.background='#1A1A1A';this.style.color='white'" onmouseout="this.style.background='';this.style.color=''">← Tableau de bord</a>
+  <a href="index.html" class="btn-menu">← Menu</a>
 </nav>
 <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
 
