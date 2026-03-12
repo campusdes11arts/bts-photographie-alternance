@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTS Photographie — Visite 3</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F4F8;color:#222;font-size:14px;}
+.header{background:#B7770D;color:white;padding:24px 32px;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.header h1{font-size:22px;font-weight:700;margin-bottom:6px;}
+.header p{font-size:14px;opacity:.9;}
+.badge{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 14px;font-size:12px;margin-top:8px;}
+.container{max-width:900px;margin:24px auto;padding:0 16px;}
+.info-card{background:white;border-radius:8px;padding:20px 24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.1);display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.info-card h3{grid-column:1/-1;color:#B7770D;font-size:15px;margin-bottom:8px;border-bottom:2px solid #B7770D33;padding-bottom:6px;}
+.info-field{display:flex;flex-direction:column;gap:4px;}
+.info-field label{font-size:12px;font-weight:600;color:#666;}
+.info-field input{border:1px solid #DDD;border-radius:4px;padding:8px 10px;font-size:14px;}
+.info-field input:focus{outline:none;border-color:#B7770D;box-shadow:0 0 0 2px #B7770D33;}
+.section-title{font-size:16px;font-weight:700;color:#B7770D;padding:12px 0 8px;border-bottom:2px solid #B7770D;margin:24px 0 16px;}
+.question-card{background:white;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.q-header{padding:12px 14px;border-radius:6px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start;}
+.q-num{font-size:18px;font-weight:800;white-space:nowrap;min-width:36px;}
+.q-text{font-size:14px;font-weight:600;line-height:1.5;}
+.q-comp{font-size:12px;color:#666;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.comp-badge{background:#B7770D11;color:#B7770D;border-radius:12px;padding:3px 10px;font-weight:600;border:1px solid #B7770D33;}
+.comp-detail{color:#999;}
+.q-criteria{font-size:13px;color:#444;background:#F8F9FA;padding:10px 14px;border-radius:6px;margin-bottom:12px;border-left:3px solid #DDD;line-height:1.5;}
+.v1-options{display:flex;flex-direction:column;gap:8px;margin:12px 0;}
+.opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:6px;cursor:pointer;transition:background .15s;font-size:14px;}
+.opt:hover{background:#F0F4F8;}
+.opt input{width:16px;height:16px;cursor:pointer;}
+.opt-yes{background:#EAFAF1;}
+.opt-partial{background:#FEF9E7;}
+.opt-partial2{background:#FEF5EC;}
+.opt-no{background:#FDEDEC;}
+.eval-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+.eval-table th{background:#2E4057;color:white;padding:8px 10px;text-align:center;font-size:12px;}
+.eval-table td{padding:8px 10px;border-bottom:1px solid #EEE;text-align:center;}
+.eval-table td:first-child{text-align:left;font-weight:500;background:#F8F9FA;width:220px;}
+.eval-table label{display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;padding:6px;border-radius:4px;transition:background .1s;}
+.eval-table label:hover{background:#EEF2FF;}
+.eval-table input[type=radio]{width:16px;height:16px;cursor:pointer;}
+.q-notes{margin-top:12px;}
+.q-notes label{font-size:12px;font-weight:600;color:#666;display:block;margin-bottom:4px;}
+.q-notes textarea{width:100%;border:1px solid #DDD;border-radius:4px;padding:8px 10px;font-size:13px;resize:vertical;font-family:inherit;}
+.q-notes textarea:focus{outline:none;border-color:#B7770D;box-shadow:0 0 0 2px #B7770D22;}
+.synth-card{background:white;border-radius:8px;padding:24px;margin-top:24px;box-shadow:0 2px 8px rgba(0,0,0,.1);border-top:4px solid #4A235A;}
+.synth-card h2{margin-bottom:20px;}
+.coverage-table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px;}
+.coverage-table th{background:#2C3E50;color:white;padding:8px 12px;text-align:left;}
+.coverage-table td{padding:8px 12px;border-bottom:1px solid #EEE;vertical-align:top;}
+.coverage-table td:first-child{font-weight:600;width:280px;}
+.coverage-table select{border:1px solid #DDD;border-radius:4px;padding:5px 8px;font-size:13px;width:100%;}
+.coverage-table textarea{width:100%;border:1px solid #DDD;border-radius:4px;padding:5px 8px;font-size:12px;resize:vertical;}
+.score-table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px;}
+.score-table th{background:#2E4057;color:white;padding:8px 10px;text-align:center;font-size:12px;}
+.score-table td{padding:8px 10px;border-bottom:1px solid #EEE;text-align:center;}
+.score-table td:nth-child(2){text-align:left;font-size:12px;}
+.score-cell{font-size:16px;font-weight:700;}
+.avg-cell{background:#F5EEF8;}
+.synth-text{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
+.synth-text label{font-size:13px;font-weight:700;color:#4A235A;}
+.synth-text textarea{border:1px solid #DDD;border-radius:4px;padding:8px 12px;font-size:13px;resize:vertical;font-family:inherit;}
+.sig-section{background:white;border-radius:8px;padding:20px;margin-top:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.sig-block label{font-size:12px;font-weight:700;color:#4A235A;display:block;margin-bottom:8px;}
+.sig-line{border-bottom:2px solid #DDD;height:40px;margin-top:8px;}
+.print-btn{display:block;width:fit-content;margin:24px auto;background:#B7770D;color:white;border:none;padding:14px 32px;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);}
+.print-btn:hover{opacity:.9;}
+.scale-legend{background:white;border-radius:8px;padding:14px 20px;margin-bottom:20px;display:flex;gap:24px;align-items:center;flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.scale-legend span{font-size:13px;font-weight:600;}
+@media print{body{background:white;}.print-btn{display:none;}.header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.question-card,.synth-card,.info-card,.sig-section{box-shadow:none;border:1px solid #DDD;}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>BTS Photographie — Visite 3</h1>
+  <p>Consolidation — Développement de l'autonomie</p>
+  <span class="badge">Référentiel officiel — Outil CRE / MA / Référent tuteur CFA</span>
+</div>
+<div class="container">
+  <div class="info-card">
+    <h3>Informations de visite</h3>
+    <div class="info-field"><label>Date de visite</label><input type="date" id="date_visite"></div>
+    <div class="info-field"><label>Prénom et Nom de l'apprenti·e</label><input type="text" id="apprenti" placeholder="Prénom NOM"></div>
+    <div class="info-field"><label>Entreprise d'accueil</label><input type="text" id="entreprise" placeholder="Nom de l'entreprise"></div>
+    <div class="info-field"><label>Maître d'apprentissage</label><input type="text" id="ma" placeholder="Prénom NOM"></div>
+    <div class="info-field"><label>Référent tuteur CFA</label><input type="text" id="cfa_ref" placeholder="Prénom NOM"></div>
+    <div class="info-field"><label>Année de formation</label><input type="text" id="annee" placeholder="ex: 2024-2026"></div>
+    <h4 style="grid-column:1/-1;color:#555;font-size:13px;font-weight:600;margin-top:8px;padding-top:8px;border-top:1px dashed #DDD;">📧 Adresses e-mail (pour envoi de la copie)</h4>
+    <div class="info-field"><label>E-mail de l'apprenti·e</label><input type="email" id="email_apprenti" placeholder="prenom.nom@etudiant.fr" style="border-color:#B7770D55;"></div>
+    <div class="info-field"><label>E-mail du maître d'apprentissage</label><input type="email" id="email_ma" placeholder="contact@entreprise.fr" style="border-color:#B7770D55;"></div>
+    <div class="info-field" style="grid-column:1/-1"><label>E-mail du responsable CFA</label><input type="email" id="email_cfa" placeholder="responsable@sup-photo.fr" style="border-color:#B7770D55;"></div>
+  </div>
+  <div class="scale-legend"><strong>Échelle d'évaluation :</strong><span style="color:#C0392B">1 = Non acquis</span><span style="color:#E67E22">2 = En cours d'acquisition</span><span style="color:#27AE60">3 = Acquis</span><span style="color:#1A5276">4 = Maîtrise</span></div>
+  <div class="section-title">Questions — Visite 3</div>
+  
+    <div class="question-card" id="qcard-15">
+      <div class="q-header" style="background:#B7770D22; border-left:4px solid #B7770D">
+        <span class="q-num" style="color:#B7770D">Q15</span>
+        <span class="q-text">Évaluez le niveau d'autonomie global de l'apprenti·e sur une commande photographique complète : de l'analyse du brief à la livraison finale, sans supervision constante.</span>
+      </div>
+      <div class="q-comp">
+        <span class="comp-badge">📋 C1, C3, C4, C5, C7</span>
+        <span class="comp-detail">CP1.1, CP1.3 · CP3.1-CP3.4 · CP4.1-CP4.8 · CP5.3-CP5.9 · CP7.1, CP7.6</span>
+      </div>
+      <div class="q-criteria">
+        <strong>Critères :</strong> L'apprenti·e gère la commande de bout en bout. La chaîne complète (brief → devis → PdV → traitement → livraison) est maîtrisée. Les délais sont respectés. Les documents contractuels sont en ordre (CP3.1 à CP3.4, CP4.1 à CP4.8, CP5.3 à CP5.9).
+      </div>
+      
+      <table class="eval-table" id="etable-15">
+        <thead><tr>
+          <th>Évaluateur</th>
+          <th style="color:#C0392B">1 — Non acquis</th>
+          <th style="color:#E67E22">2 — En cours</th>
+          <th style="color:#27AE60">3 — Acquis</th>
+          <th style="color:#1A5276">4 — Maîtrise</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>🎓 Auto-évaluation (Apprenti·e)</td>
+            <td><label><input type="radio" name="q15_app" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q15_app" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q15_app" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q15_app" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏭 Maître d'apprentissage</td>
+            <td><label><input type="radio" name="q15_ma" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q15_ma" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q15_ma" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q15_ma" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏫 Référent tuteur CFA</td>
+            <td><label><input type="radio" name="q15_cfa" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q15_cfa" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q15_cfa" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q15_cfa" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="q-notes">
+        <label>💬 Commentaires / Observations :</label>
+        <textarea id="notes_15" rows="2" placeholder="Observations, exemples concrets, preuves notées..."></textarea>
+      </div>
+    </div>
+    <div class="question-card" id="qcard-16">
+      <div class="q-header" style="background:#B7770D22; border-left:4px solid #B7770D">
+        <span class="q-num" style="color:#B7770D">Q16</span>
+        <span class="q-text">Évaluez l'application par l'apprenti·e des règles juridiques dans son travail quotidien : autorisations de prise de vue, droits des personnes photographiées, cessions de droits d'auteur.</span>
+      </div>
+      <div class="q-comp">
+        <span class="comp-badge">📋 C7</span>
+        <span class="comp-detail">CP7.1 Autorisations/devis · CP7.2 Contractualiser · CP7.3 Droits des personnes · CP7.4 Protection juridique · CP7.5 Cadre juridique</span>
+      </div>
+      <div class="q-criteria">
+        <strong>Critères :</strong> Toutes les autorisations nécessaires sont identifiées et obtenues. Les notes de cession de droits sont rédigées conformément au cadre légal. L'apprenti·e connaît les conséquences juridiques des situations rencontrées (CP7.1 à CP7.5).
+      </div>
+      
+      <table class="eval-table" id="etable-16">
+        <thead><tr>
+          <th>Évaluateur</th>
+          <th style="color:#C0392B">1 — Non acquis</th>
+          <th style="color:#E67E22">2 — En cours</th>
+          <th style="color:#27AE60">3 — Acquis</th>
+          <th style="color:#1A5276">4 — Maîtrise</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>🎓 Auto-évaluation (Apprenti·e)</td>
+            <td><label><input type="radio" name="q16_app" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q16_app" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q16_app" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q16_app" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏭 Maître d'apprentissage</td>
+            <td><label><input type="radio" name="q16_ma" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q16_ma" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q16_ma" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q16_ma" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏫 Référent tuteur CFA</td>
+            <td><label><input type="radio" name="q16_cfa" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q16_cfa" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q16_cfa" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q16_cfa" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="q-notes">
+        <label>💬 Commentaires / Observations :</label>
+        <textarea id="notes_16" rows="2" placeholder="Observations, exemples concrets, preuves notées..."></textarea>
+      </div>
+    </div>
+    <div class="question-card" id="qcard-17">
+      <div class="q-header" style="background:#B7770D22; border-left:4px solid #B7770D">
+        <span class="q-num" style="color:#B7770D">Q17</span>
+        <span class="q-text">Évaluez la maîtrise des outils et procédures de gestion de la photothèque : classement, indexation, sauvegarde sécurisée et archivage des images numériques et argentiques.</span>
+      </div>
+      <div class="q-comp">
+        <span class="comp-badge">📋 C6</span>
+        <span class="comp-detail">CP6.1 Choisir matériels/logiciels · CP6.2 Numériser originaux · CP6.3 Stockage sécurisé · CP6.4 Indexation · CP6.5 Photothèque · CP6.6 Archiver</span>
+      </div>
+      <div class="q-criteria">
+        <strong>Critères :</strong> L'arborescence est cohérente et documentée. Les sauvegardes sont régulières et sécurisées. Les métadonnées (IPTC, mots-clés) sont renseignées. Les originaux argentiques sont conservés selon les normes (CP6.1 à CP6.6).
+      </div>
+      
+      <table class="eval-table" id="etable-17">
+        <thead><tr>
+          <th>Évaluateur</th>
+          <th style="color:#C0392B">1 — Non acquis</th>
+          <th style="color:#E67E22">2 — En cours</th>
+          <th style="color:#27AE60">3 — Acquis</th>
+          <th style="color:#1A5276">4 — Maîtrise</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>🎓 Auto-évaluation (Apprenti·e)</td>
+            <td><label><input type="radio" name="q17_app" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q17_app" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q17_app" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q17_app" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏭 Maître d'apprentissage</td>
+            <td><label><input type="radio" name="q17_ma" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q17_ma" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q17_ma" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q17_ma" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏫 Référent tuteur CFA</td>
+            <td><label><input type="radio" name="q17_cfa" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q17_cfa" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q17_cfa" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q17_cfa" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="q-notes">
+        <label>💬 Commentaires / Observations :</label>
+        <textarea id="notes_17" rows="2" placeholder="Observations, exemples concrets, preuves notées..."></textarea>
+      </div>
+    </div>
+    <div class="question-card" id="qcard-18">
+      <div class="q-header" style="background:#B7770D22; border-left:4px solid #B7770D">
+        <span class="q-num" style="color:#B7770D">Q18</span>
+        <span class="q-text">Évaluez la démarche de veille technologique de l'apprenti·e : collecte d'information fiable, analyse des potentialités, test ou évaluation d'un produit, restitution à l'équipe.</span>
+      </div>
+      <div class="q-comp">
+        <span class="comp-badge">📋 C8</span>
+        <span class="comp-detail">CP8.1 S'informer · CP8.2 Analyser · CP8.3 Identifier les avantages · CP8.4 Protocole de test · CP8.5 Choisir · CP8.6 Mettre en service · CP8.7 Former</span>
+      </div>
+      <div class="q-criteria">
+        <strong>Critères :</strong> Une documentation fiable a été réunie. Un protocole de test a été élaboré. L'argumentaire est structuré et présenté à l'équipe. Si mise en service : le personnel est autonome sur le nouveau produit (CP8.1 à CP8.7).
+      </div>
+      
+      <table class="eval-table" id="etable-18">
+        <thead><tr>
+          <th>Évaluateur</th>
+          <th style="color:#C0392B">1 — Non acquis</th>
+          <th style="color:#E67E22">2 — En cours</th>
+          <th style="color:#27AE60">3 — Acquis</th>
+          <th style="color:#1A5276">4 — Maîtrise</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>🎓 Auto-évaluation (Apprenti·e)</td>
+            <td><label><input type="radio" name="q18_app" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q18_app" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q18_app" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q18_app" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏭 Maître d'apprentissage</td>
+            <td><label><input type="radio" name="q18_ma" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q18_ma" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q18_ma" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q18_ma" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏫 Référent tuteur CFA</td>
+            <td><label><input type="radio" name="q18_cfa" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q18_cfa" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q18_cfa" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q18_cfa" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="q-notes">
+        <label>💬 Commentaires / Observations :</label>
+        <textarea id="notes_18" rows="2" placeholder="Observations, exemples concrets, preuves notées..."></textarea>
+      </div>
+    </div>
+    <div class="question-card" id="qcard-19">
+      <div class="q-header" style="background:#B7770D22; border-left:4px solid #B7770D">
+        <span class="q-num" style="color:#B7770D">Q19</span>
+        <span class="q-text">Évaluez la capacité de l'apprenti·e à gérer les intervenants extérieurs (modèles, stylistes, assistants, commanditaires) : communication, coordination, contractualisation, gestion des imprévus.</span>
+      </div>
+      <div class="q-comp">
+        <span class="comp-badge">📋 C1, C4, C7</span>
+        <span class="comp-detail">CP1.1 Communiquer et négocier · CP4.5 Gérer les intervenants · CP7.2 Contractualiser</span>
+      </div>
+      <div class="q-criteria">
+        <strong>Critères :</strong> Les intervenants sont identifiés et leur rôle précisé. Un dialogue constant et adapté permet d'atteindre le résultat escompté. Les contrats ou engagements sont formalisés. Les imprévus sont gérés efficacement (CP1.1, CP4.5, CP7.2).
+      </div>
+      
+      <table class="eval-table" id="etable-19">
+        <thead><tr>
+          <th>Évaluateur</th>
+          <th style="color:#C0392B">1 — Non acquis</th>
+          <th style="color:#E67E22">2 — En cours</th>
+          <th style="color:#27AE60">3 — Acquis</th>
+          <th style="color:#1A5276">4 — Maîtrise</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>🎓 Auto-évaluation (Apprenti·e)</td>
+            <td><label><input type="radio" name="q19_app" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q19_app" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q19_app" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q19_app" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏭 Maître d'apprentissage</td>
+            <td><label><input type="radio" name="q19_ma" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q19_ma" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q19_ma" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q19_ma" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+          <tr><td>🏫 Référent tuteur CFA</td>
+            <td><label><input type="radio" name="q19_cfa" value="1" onchange="updateScores()"> 1</label></td>
+            <td><label><input type="radio" name="q19_cfa" value="2" onchange="updateScores()"> 2</label></td>
+            <td><label><input type="radio" name="q19_cfa" value="3" onchange="updateScores()"> 3</label></td>
+            <td><label><input type="radio" name="q19_cfa" value="4" onchange="updateScores()"> 4</label></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="q-notes">
+        <label>💬 Commentaires / Observations :</label>
+        <textarea id="notes_19" rows="2" placeholder="Observations, exemples concrets, preuves notées..."></textarea>
+      </div>
+    </div>
+  
+    <div class="synth-card">
+      <h2 style="color:#B7770D">📊 Résultats chiffrés — Visite 3</h2>
+      <div id="score-results">
+        <table class="score-table" id="score-grid">
+          <thead>
+            <tr>
+              <th>Q</th><th>Compétences</th>
+              <th style="color:#C0392B">Auto-éval.</th>
+              <th style="color:#27AE60">MA</th>
+              <th style="color:#1A5276">CFA</th>
+              <th style="background:#4A235A;color:white">Moy.</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody id="score-tbody">
+            <tr id="srow-15">
+              <td><strong style="color:#B7770D">Q15</strong></td>
+              <td style="font-size:12px">C1, C3, C4, C5, C7</td>
+              <td id="s-app-15" class="score-cell">—</td>
+              <td id="s-ma-15" class="score-cell">—</td>
+              <td id="s-cfa-15" class="score-cell">—</td>
+              <td id="s-avg-15" class="score-cell avg-cell">—</td>
+              <td id="s-status-15">—</td>
+            </tr><tr id="srow-16">
+              <td><strong style="color:#B7770D">Q16</strong></td>
+              <td style="font-size:12px">C7</td>
+              <td id="s-app-16" class="score-cell">—</td>
+              <td id="s-ma-16" class="score-cell">—</td>
+              <td id="s-cfa-16" class="score-cell">—</td>
+              <td id="s-avg-16" class="score-cell avg-cell">—</td>
+              <td id="s-status-16">—</td>
+            </tr><tr id="srow-17">
+              <td><strong style="color:#B7770D">Q17</strong></td>
+              <td style="font-size:12px">C6</td>
+              <td id="s-app-17" class="score-cell">—</td>
+              <td id="s-ma-17" class="score-cell">—</td>
+              <td id="s-cfa-17" class="score-cell">—</td>
+              <td id="s-avg-17" class="score-cell avg-cell">—</td>
+              <td id="s-status-17">—</td>
+            </tr><tr id="srow-18">
+              <td><strong style="color:#B7770D">Q18</strong></td>
+              <td style="font-size:12px">C8</td>
+              <td id="s-app-18" class="score-cell">—</td>
+              <td id="s-ma-18" class="score-cell">—</td>
+              <td id="s-cfa-18" class="score-cell">—</td>
+              <td id="s-avg-18" class="score-cell avg-cell">—</td>
+              <td id="s-status-18">—</td>
+            </tr><tr id="srow-19">
+              <td><strong style="color:#B7770D">Q19</strong></td>
+              <td style="font-size:12px">C1, C4, C7</td>
+              <td id="s-app-19" class="score-cell">—</td>
+              <td id="s-ma-19" class="score-cell">—</td>
+              <td id="s-cfa-19" class="score-cell">—</td>
+              <td id="s-avg-19" class="score-cell avg-cell">—</td>
+              <td id="s-status-19">—</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr style="background:#2E4057;color:white;font-weight:bold">
+              <td colspan="2">MOYENNE GÉNÉRALE</td>
+              <td id="tot-app">—</td>
+              <td id="tot-ma">—</td>
+              <td id="tot-cfa">—</td>
+              <td id="tot-avg" style="background:#4A235A">—</td>
+              <td id="tot-status">—</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="synth-text">
+        <label><strong>✅ Compétences bien maîtrisées (score ≥ 3) :</strong></label>
+        <textarea rows="3" id="strengths" placeholder="Identifiées automatiquement ci-dessus — compléter avec observations..."></textarea>
+        <label><strong>⚠️ Compétences insuffisantes ou à risque (score ≤ 2) :</strong></label>
+        <textarea rows="3" id="risks" placeholder="Identifiées automatiquement ci-dessus — décrire les actions correctives..."></textarea>
+        <label><strong>🏫 Ajustements pédagogiques recommandés au CFA :</strong></label>
+        <textarea rows="3" id="cfa_actions" placeholder="Modules, exercices, séances à prévoir..."></textarea>
+        <label><strong>📝 Observations particulières :</strong></label>
+        <textarea rows="3" id="notes_synth" placeholder="Contexte entreprise, situations à signaler..."></textarea>
+      </div>
+    </div>
+  <div class="sig-section">
+    <div class="sig-block"><label>Signature Apprenti·e</label><div class="sig-line"></div></div>
+    <div class="sig-block"><label>Signature Maître d'apprentissage</label><div class="sig-line"></div></div>
+    <div class="sig-block"><label>Signature Référent tuteur CFA</label><div class="sig-line"></div></div>
+  </div>
+  <div style="display:flex;gap:12px;justify-content:center;margin:24px 0;flex-wrap:wrap;">
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimer / PDF</button>
+    <button style="background:#7D3C98;color:white;border:none;padding:14px 32px;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);" onclick="sendEmail()">📧 Envoyer par e-mail</button>
+  </div>
+</div>
+<script>
+  function getRadio(name){const el=document.querySelector('input[name="'+name+'"]:checked');return el?el.value:'—';}
+  function getFieldVal(id){const el=document.getElementById(id);if(!el)return'—';return el.value||'—';}
+  function getVal(name) {
+    const el = document.querySelector('input[name="'+name+'"]:checked');
+    return el ? parseInt(el.value) : null;
+  }
+  function sendEmail(){
+    const emails=[getFieldVal('email_apprenti'),getFieldVal('email_ma'),getFieldVal('email_cfa')].filter(e=>e&&e!=='—');
+    if(emails.length===0){alert('Veuillez renseigner au moins une adresse e-mail dans les coordonnées.');return;}
+    const apprenti=getFieldVal('apprenti'),entreprise=getFieldVal('entreprise'),dateV=getFieldVal('date_visite');
+    const subject=encodeURIComponent('BTS Photo — Visite 3 — '+apprenti+' — '+entreprise+' — '+dateV);
+    let body='BTS PHOTOGRAPHIE — COMPTE RENDU DE VISITE 3\n'+'='.repeat(50)+'\n\n';
+    body+='Apprenti·e : '+apprenti+'\nEntreprise : '+entreprise+'\nMA : '+getFieldVal('ma')+'\nCFA : '+getFieldVal('cfa_ref')+'\nDate : '+dateV+'\nAnnée : '+getFieldVal('annee')+'\n\n';
+    body+='ÉVALUATIONS (1=Non acquis, 2=En cours, 3=Acquis, 4=Maîtrise)\n'+'-'.repeat(40)+'\n';
+    [15,16,17,18,19].forEach(n=>{
+      body+='Q'+n+' — App:'+getRadio('q'+n+'_app')+' MA:'+getRadio('q'+n+'_ma')+' CFA:'+getRadio('q'+n+'_cfa')+'\n';
+      const note=getFieldVal('notes_'+n);if(note&&note!=='—')body+='  → '+note+'\n';
+    });
+    body+='\nSYNTHÈSE\n'+'-'.repeat(40)+'\n';
+    body+='Points forts : '+getFieldVal('strengths')+'\nPoints de vigilance : '+getFieldVal('risks')+'\nAjustements CFA : '+getFieldVal('cfa_actions')+'\nObservations : '+getFieldVal('notes_synth')+'\n';
+    body+='\n---\nDocument généré — BTS Photographie SUP-PHOTO\n';
+    const to=emails[0],cc=emails.slice(1).join(',');
+    let mailto='mailto:'+encodeURIComponent(to)+'?subject='+subject+'&body='+encodeURIComponent(body);
+    if(cc)mailto+='&cc='+encodeURIComponent(cc);
+    window.location.href=mailto;
+  }
+  function colorScore(val) {
+    if(!val) return '#999';
+    return ['','#C0392B','#E67E22','#27AE60','#1A5276'][val];
+  }
+  function statusBadge(avg) {
+    if(avg===null) return '—';
+    if(avg<2) return '<span style="color:#C0392B;font-weight:bold">⚠ Non acquis</span>';
+    if(avg<3) return '<span style="color:#E67E22;font-weight:bold">🔄 En cours</span>';
+    if(avg<4) return '<span style="color:#27AE60;font-weight:bold">✅ Acquis</span>';
+    return '<span style="color:#1A5276;font-weight:bold">⭐ Maîtrise</span>';
+  }
+  function updateScores() {
+    const qNums = [15,16,17,18,19];
+    let totApp=[], totMa=[], totCfa=[], totAll=[];
+    for(const n of qNums) {
+      const app=getVal('q'+n+'_app'), ma=getVal('q'+n+'_ma'), cfa=getVal('q'+n+'_cfa');
+      const vals=[app,ma,cfa].filter(v=>v!==null);
+      const avg=vals.length?Math.round((vals.reduce((a,b)=>a+b,0)/vals.length)*10)/10:null;
+      document.getElementById('s-app-'+n).innerHTML=app?'<strong style="color:'+colorScore(app)+'">'+app+'</strong>':'—';
+      document.getElementById('s-ma-'+n).innerHTML=ma?'<strong style="color:'+colorScore(ma)+'">'+ma+'</strong>':'—';
+      document.getElementById('s-cfa-'+n).innerHTML=cfa?'<strong style="color:'+colorScore(cfa)+'">'+cfa+'</strong>':'—';
+      document.getElementById('s-avg-'+n).innerHTML=avg!==null?'<strong style="color:'+colorScore(Math.round(avg))+'">'+avg.toFixed(1)+'</strong>':'—';
+      document.getElementById('s-status-'+n).innerHTML=statusBadge(avg);
+      if(app!==null) totApp.push(app);
+      if(ma!==null) totMa.push(ma);
+      if(cfa!==null) totCfa.push(cfa);
+      if(avg!==null) totAll.push(avg);
+    }
+    const avg = arr=>arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2):null;
+    const gApp=avg(totApp), gMa=avg(totMa), gCfa=avg(totCfa), gAll=avg(totAll);
+    document.getElementById('tot-app').innerHTML=gApp?'<strong style="color:'+colorScore(Math.round(parseFloat(gApp)))+'">'+gApp+'</strong>':'—';
+    document.getElementById('tot-ma').innerHTML=gMa?'<strong style="color:'+colorScore(Math.round(parseFloat(gMa)))+'">'+gMa+'</strong>':'—';
+    document.getElementById('tot-cfa').innerHTML=gCfa?'<strong style="color:'+colorScore(Math.round(parseFloat(gCfa)))+'">'+gCfa+'</strong>':'—';
+    document.getElementById('tot-avg').innerHTML=gAll?'<strong style="font-size:16px">'+gAll+'</strong>':'—';
+    document.getElementById('tot-status').innerHTML=gAll?statusBadge(parseFloat(gAll)):'—';
+  }
+</script>
+</body>
+</html>

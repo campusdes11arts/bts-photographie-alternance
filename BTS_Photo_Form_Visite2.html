@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTS Photographie — Visite 2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F4F8;color:#222;font-size:14px;}
+.header{background:#1E8449;color:white;padding:24px 32px;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.header h1{font-size:22px;font-weight:700;margin-bottom:6px;}
+.header p{font-size:14px;opacity:.9;}
+.badge{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 14px;font-size:12px;margin-top:8px;}
+.container{max-width:900px;margin:24px auto;padding:0 16px;}
+.info-card{background:white;border-radius:8px;padding:20px 24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.1);display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.info-card h3{grid-column:1/-1;color:#1E8449;font-size:15px;margin-bottom:8px;border-bottom:2px solid #1E844933;padding-bottom:6px;}
+.info-card h4{grid-column:1/-1;color:#555;font-size:13px;font-weight:600;margin-top:8px;padding-top:8px;border-top:1px dashed #DDD;}
+.info-field{display:flex;flex-direction:column;gap:4px;}
+.info-field label{font-size:12px;font-weight:600;color:#666;}
+.info-field input{border:1px solid #DDD;border-radius:4px;padding:8px 10px;font-size:14px;}
+.info-field input[type=email]{border-color:#1E844955;}
+.info-field input:focus{outline:none;border-color:#1E8449;box-shadow:0 0 0 2px #1E844933;}
+.section-title{font-size:16px;font-weight:700;color:#1E8449;padding:12px 0 8px;border-bottom:2px solid #1E8449;margin:24px 0 16px;}
+.question-card{background:white;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.q-header{padding:12px 14px;border-radius:6px;margin-bottom:12px;display:flex;gap:12px;align-items:flex-start;}
+.q-num{font-size:18px;font-weight:800;white-space:nowrap;min-width:36px;}
+.q-text{font-size:14px;font-weight:600;line-height:1.5;}
+.q-comp{font-size:12px;color:#666;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.comp-badge{background:#1E844911;color:#1E8449;border-radius:12px;padding:3px 10px;font-weight:600;border:1px solid #1E844933;}
+.comp-detail{color:#999;}
+.q-criteria{font-size:13px;color:#444;background:#F8F9FA;padding:10px 14px;border-radius:6px;margin-bottom:12px;border-left:3px solid #DDD;line-height:1.5;}
+.eval-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+.eval-table th{background:#2E4057;color:white;padding:8px 10px;text-align:center;font-size:12px;}
+.eval-table td{padding:8px 10px;border-bottom:1px solid #EEE;text-align:center;}
+.eval-table td:first-child{text-align:left;font-weight:500;background:#F8F9FA;width:220px;}
+.eval-table label{display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;padding:6px;border-radius:4px;transition:background .1s;}
+.eval-table label:hover{background:#EEF2FF;}
+.eval-table input[type=radio]{width:16px;height:16px;cursor:pointer;}
+.q-notes{margin-top:12px;}
+.q-notes label{font-size:12px;font-weight:600;color:#666;display:block;margin-bottom:4px;}
+.q-notes textarea{width:100%;border:1px solid #DDD;border-radius:4px;padding:8px 10px;font-size:13px;resize:vertical;font-family:inherit;}
+.q-notes textarea:focus{outline:none;border-color:#1E8449;box-shadow:0 0 0 2px #1E844922;}
+/* SOFT SKILLS */
+.ss-section-title{font-size:16px;font-weight:700;color:#7D3C98;padding:12px 0 8px;border-bottom:2px solid #7D3C98;margin:24px 0 16px;}
+.ss-card{background:white;border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);border-left:4px solid #7D3C98;}
+.ss-header{background:#7D3C9811;padding:12px 14px;border-radius:6px;margin-bottom:14px;}
+.ss-header h4{color:#7D3C98;font-size:14px;font-weight:700;margin-bottom:2px;}
+.ss-header p{color:#555;font-size:13px;font-style:italic;}
+.ss-question{font-size:13px;color:#555;font-style:italic;margin-bottom:10px;padding:8px 12px;background:#F9F4FC;border-radius:6px;border-left:3px solid #7D3C9866;}
+.ss-eval-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px;}
+.ss-eval-table th{background:#7D3C98;color:white;padding:8px 10px;text-align:center;font-size:12px;}
+.ss-eval-table td{padding:8px 10px;border-bottom:1px solid #EEE;text-align:center;}
+.ss-eval-table td:first-child{text-align:left;font-weight:500;background:#F8F9FA;width:200px;}
+.ss-eval-table label{display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;padding:5px;border-radius:4px;}
+.ss-eval-table label:hover{background:#F9F4FC;}
+.ss-eval-table input[type=radio]{width:15px;height:15px;cursor:pointer;}
+.ss-note-small{width:100%;border:1px solid #DDD;border-radius:4px;padding:6px 10px;font-size:12px;resize:vertical;font-family:inherit;margin-top:4px;}
+.ss-synth{background:#F9F4FC;border-radius:8px;padding:16px;margin-top:16px;border:1px solid #7D3C9833;}
+.ss-synth h4{color:#7D3C98;margin-bottom:12px;font-size:14px;}
+/* SYNTHESIS */
+.synth-card{background:white;border-radius:8px;padding:24px;margin-top:24px;box-shadow:0 2px 8px rgba(0,0,0,.1);border-top:4px solid #4A235A;}
+.synth-card h2{margin-bottom:20px;}
+.score-table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px;}
+.score-table th{background:#2E4057;color:white;padding:8px 10px;text-align:center;font-size:12px;}
+.score-table td{padding:8px 10px;border-bottom:1px solid #EEE;text-align:center;}
+.score-table td:nth-child(2){text-align:left;font-size:12px;}
+.score-cell{font-size:16px;font-weight:700;}
+.avg-cell{background:#F5EEF8;}
+.synth-text{display:flex;flex-direction:column;gap:12px;margin-top:16px;}
+.synth-text label{font-size:13px;font-weight:700;color:#4A235A;}
+.synth-text textarea{border:1px solid #DDD;border-radius:4px;padding:8px 12px;font-size:13px;resize:vertical;font-family:inherit;}
+.scale-legend{background:white;border-radius:8px;padding:14px 20px;margin-bottom:20px;display:flex;gap:24px;align-items:center;flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.scale-legend span{font-size:13px;font-weight:600;}
+.sig-section{background:white;border-radius:8px;padding:20px;margin-top:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.sig-block label{font-size:12px;font-weight:700;color:#4A235A;display:block;margin-bottom:8px;}
+.sig-line{border-bottom:2px solid #DDD;height:40px;margin-top:8px;}
+.btn-row{display:flex;gap:12px;justify-content:center;margin:24px 0;flex-wrap:wrap;}
+.print-btn{background:#1E8449;color:white;border:none;padding:14px 32px;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);}
+.print-btn:hover{opacity:.9;}
+.mail-btn{background:#7D3C98;color:white;border:none;padding:14px 32px;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);}
+.mail-btn:hover{opacity:.9;}
+@media print{body{background:white;}.btn-row{display:none;}.header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.question-card,.synth-card,.info-card,.sig-section,.ss-card{box-shadow:none;border:1px solid #DDD;}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>BTS Photographie — Visite 2</h1>
+  <p>Suivi de progression — Premières compétences mobilisées</p>
+  <span class="badge">Référentiel officiel — Outil CRE / MA / Référent tuteur CFA</span>
+</div>
+<div class="container">
+
+  <div class="info-card">
+    <h3>Informations de visite</h3>
+    <div class="info-field"><label>Date de visite</label><input type="date" id="date_visite"></div>
+    <div class="info-field"><label>Année de formation</label><input type="text" id="annee" placeholder="ex: 2024-2026"></div>
+    <div class="info-field"><label>Prénom et Nom de l'apprenti·e</label><input type="text" id="apprenti" placeholder="Prénom NOM"></div>
+    <div class="info-field"><label>Entreprise d'accueil</label><input type="text" id="entreprise" placeholder="Nom de l'entreprise"></div>
+    <div class="info-field"><label>Maître d'apprentissage</label><input type="text" id="ma" placeholder="Prénom NOM"></div>
+    <div class="info-field"><label>Référent tuteur CFA</label><input type="text" id="cfa_ref" placeholder="Prénom NOM"></div>
+    <h4>📧 Adresses e-mail (pour envoi de la copie)</h4>
+    <div class="info-field"><label>E-mail de l'apprenti·e</label><input type="email" id="email_apprenti" placeholder="prenom.nom@etudiant.fr"></div>
+    <div class="info-field"><label>E-mail du maître d'apprentissage</label><input type="email" id="email_ma" placeholder="contact@entreprise.fr"></div>
+    <div class="info-field" style="grid-column:1/-1"><label>E-mail du responsable CFA</label><input type="email" id="email_cfa" placeholder="responsable@sup-photo.fr"></div>
+  </div>
+
+  <div class="scale-legend"><strong>Échelle d'évaluation :</strong><span style="color:#C0392B">1 = Non acquis</span><span style="color:#E67E22">2 = En cours d'acquisition</span><span style="color:#27AE60">3 = Acquis</span><span style="color:#1A5276">4 = Maîtrise</span></div>
+  <div class="section-title">Questions — Visite 2</div>
+
+  <!-- Q9 -->
+  <div class="question-card">
+    <div class="q-header" style="background:#1E844922;border-left:4px solid #1E8449">
+      <span class="q-num" style="color:#1E8449">Q9</span>
+      <span class="q-text">Évaluez le niveau de maîtrise de l'apprenti·e lors des séances de prise de vue : préparation, installation du matériel, composition, réalisation et éditing.</span>
+    </div>
+    <div class="q-comp"><span class="comp-badge">📋 C3, C4</span><span class="comp-detail">CP3.1–CP3.4 · CP4.1 Installer · CP4.2 Composer · CP4.3 Éclairage · CP4.4 Paramétrer · CP4.6 Réaliser · CP4.7 Éditer</span></div>
+    <div class="q-criteria"><strong>Critères :</strong> L'apprenti·e réalise les PdV avec les paramètres adaptés. Le matériel est installé correctement. Une sélection d'images est effectuée après la séance.</div>
+    <table class="eval-table"><thead><tr><th>Évaluateur</th><th style="color:#C0392B">1 — Non acquis</th><th style="color:#E67E22">2 — En cours</th><th style="color:#27AE60">3 — Acquis</th><th style="color:#1A5276">4 — Maîtrise</th></tr></thead>
+    <tbody>
+      <tr><td>🎓 Apprenti·e</td><td><label><input type="radio" name="q9_app" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q9_app" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q9_app" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q9_app" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏭 Maître d'apprentissage</td><td><label><input type="radio" name="q9_ma" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q9_ma" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q9_ma" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q9_ma" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏫 Référent CFA</td><td><label><input type="radio" name="q9_cfa" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q9_cfa" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q9_cfa" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q9_cfa" value="4" onchange="updateScores()"> 4</label></td></tr>
+    </tbody></table>
+    <div class="q-notes"><label>💬 Commentaires / Observations :</label><textarea id="notes_9" rows="2" placeholder="Exemples concrets, situations observées..."></textarea></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question-card">
+    <div class="q-header" style="background:#1E844922;border-left:4px solid #1E8449">
+      <span class="q-num" style="color:#1E8449">Q10</span>
+      <span class="q-text">Évaluez la maîtrise de l'éclairage : construction d'un plan lumière, choix des accessoires, dosage flash/ambiance, mesure au flashmètre, exposition correcte.</span>
+    </div>
+    <div class="q-comp"><span class="comp-badge">📋 C4</span><span class="comp-detail">CP4.3 Construire l'éclairage · CP4.4 Paramétrer · CP4.8 Regard critique</span></div>
+    <div class="q-criteria"><strong>Critères :</strong> L'éclairage mis en place valorise les sujets. Flash et lumière ambiante sont correctement dosés. Le diaphragme de travail est défini en fonction de la profondeur de champ souhaitée.</div>
+    <table class="eval-table"><thead><tr><th>Évaluateur</th><th style="color:#C0392B">1</th><th style="color:#E67E22">2</th><th style="color:#27AE60">3</th><th style="color:#1A5276">4</th></tr></thead>
+    <tbody>
+      <tr><td>🎓 Apprenti·e</td><td><label><input type="radio" name="q10_app" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q10_app" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q10_app" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q10_app" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏭 Maître d'apprentissage</td><td><label><input type="radio" name="q10_ma" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q10_ma" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q10_ma" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q10_ma" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏫 Référent CFA</td><td><label><input type="radio" name="q10_cfa" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q10_cfa" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q10_cfa" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q10_cfa" value="4" onchange="updateScores()"> 4</label></td></tr>
+    </tbody></table>
+    <div class="q-notes"><label>💬 Commentaires :</label><textarea id="notes_10" rows="2" placeholder="Exemples concrets..."></textarea></div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="question-card">
+    <div class="q-header" style="background:#1E844922;border-left:4px solid #1E8449">
+      <span class="q-num" style="color:#1E8449">Q11</span>
+      <span class="q-text">Évaluez l'autonomie dans les opérations de post-production : tri des images, développement RAW, corrections chromatiques, retouche, préparation à la sortie.</span>
+    </div>
+    <div class="q-comp"><span class="comp-badge">📋 C5</span><span class="comp-detail">CP5.3 Trier · CP5.4 Développer RAW · CP5.5 Corrections chromatiques · CP5.6 Retoucher · CP5.7 Préparer sortie</span></div>
+    <div class="q-criteria"><strong>Critères :</strong> Les images sont triées, développées et retouchées selon les standards professionnels. Le flux numérique est respecté.</div>
+    <table class="eval-table"><thead><tr><th>Évaluateur</th><th style="color:#C0392B">1</th><th style="color:#E67E22">2</th><th style="color:#27AE60">3</th><th style="color:#1A5276">4</th></tr></thead>
+    <tbody>
+      <tr><td>🎓 Apprenti·e</td><td><label><input type="radio" name="q11_app" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q11_app" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q11_app" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q11_app" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏭 Maître d'apprentissage</td><td><label><input type="radio" name="q11_ma" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q11_ma" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q11_ma" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q11_ma" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏫 Référent CFA</td><td><label><input type="radio" name="q11_cfa" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q11_cfa" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q11_cfa" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q11_cfa" value="4" onchange="updateScores()"> 4</label></td></tr>
+    </tbody></table>
+    <div class="q-notes"><label>💬 Commentaires :</label><textarea id="notes_11" rows="2" placeholder="Exemples concrets..."></textarea></div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="question-card">
+    <div class="q-header" style="background:#1E844922;border-left:4px solid #1E8449">
+      <span class="q-num" style="color:#1E8449">Q12</span>
+      <span class="q-text">Évaluez la capacité à rédiger des documents professionnels conformes : devis, courriers clients, autorisations de prise de vue, avec le bon niveau de formalisme.</span>
+    </div>
+    <div class="q-comp"><span class="comp-badge">📋 C1, C3, C7</span><span class="comp-detail">CP1.3 Documents professionnels · CP3.3 Rédiger un devis · CP7.1 Autorisations · CP7.4 Protection juridique</span></div>
+    <div class="q-criteria"><strong>Critères :</strong> Les documents produits sont complets, opérationnels et exploitables en cas de litige. Les règles de communication écrite professionnelle sont respectées.</div>
+    <table class="eval-table"><thead><tr><th>Évaluateur</th><th style="color:#C0392B">1</th><th style="color:#E67E22">2</th><th style="color:#27AE60">3</th><th style="color:#1A5276">4</th></tr></thead>
+    <tbody>
+      <tr><td>🎓 Apprenti·e</td><td><label><input type="radio" name="q12_app" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q12_app" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q12_app" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q12_app" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏭 Maître d'apprentissage</td><td><label><input type="radio" name="q12_ma" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q12_ma" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q12_ma" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q12_ma" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏫 Référent CFA</td><td><label><input type="radio" name="q12_cfa" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q12_cfa" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q12_cfa" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q12_cfa" value="4" onchange="updateScores()"> 4</label></td></tr>
+    </tbody></table>
+    <div class="q-notes"><label>💬 Commentaires :</label><textarea id="notes_12" rows="2" placeholder="Exemples concrets..."></textarea></div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="question-card">
+    <div class="q-header" style="background:#1E844922;border-left:4px solid #1E8449">
+      <span class="q-num" style="color:#1E8449">Q13</span>
+      <span class="q-text">Évaluez la capacité à porter un regard critique sur les images : justification des choix lors d'un éditing, identification des forces et faiblesses, cohérence avec le brief.</span>
+    </div>
+    <div class="q-comp"><span class="comp-badge">📋 C2, C4</span><span class="comp-detail">CP2.1 Analyser une image · CP2.2 Évaluer la pertinence · CP4.8 Regard critique</span></div>
+    <div class="q-criteria"><strong>Critères :</strong> L'apprenti·e est capable de justifier ses choix d'images. Il/elle identifie les forces et faiblesses d'une production photographique.</div>
+    <table class="eval-table"><thead><tr><th>Évaluateur</th><th style="color:#C0392B">1</th><th style="color:#E67E22">2</th><th style="color:#27AE60">3</th><th style="color:#1A5276">4</th></tr></thead>
+    <tbody>
+      <tr><td>🎓 Apprenti·e</td><td><label><input type="radio" name="q13_app" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q13_app" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q13_app" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q13_app" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏭 Maître d'apprentissage</td><td><label><input type="radio" name="q13_ma" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q13_ma" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q13_ma" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q13_ma" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏫 Référent CFA</td><td><label><input type="radio" name="q13_cfa" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q13_cfa" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q13_cfa" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q13_cfa" value="4" onchange="updateScores()"> 4</label></td></tr>
+    </tbody></table>
+    <div class="q-notes"><label>💬 Commentaires :</label><textarea id="notes_13" rows="2" placeholder="Exemples concrets..."></textarea></div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="question-card">
+    <div class="q-header" style="background:#1E844922;border-left:4px solid #1E8449">
+      <span class="q-num" style="color:#1E8449">Q14</span>
+      <span class="q-text">Évaluez la maîtrise de la gestion des couleurs : calibration de l'écran, intégration des profils ICC, flux colorimétrique, cohérence écran/tirage.</span>
+    </div>
+    <div class="q-comp"><span class="comp-badge">📋 C5</span><span class="comp-detail">CP5.2 Gestion des couleurs · CP5.7 Préparer la sortie · CP5.8 Tirer une épreuve · CP5.9 Contrôle qualité</span></div>
+    <div class="q-criteria"><strong>Critères :</strong> Le matériel de mesure est utilisé correctement. La calibration est optimale et reproductible. Les choix colorimétriques sont cohérents avec le flux de travail.</div>
+    <table class="eval-table"><thead><tr><th>Évaluateur</th><th style="color:#C0392B">1</th><th style="color:#E67E22">2</th><th style="color:#27AE60">3</th><th style="color:#1A5276">4</th></tr></thead>
+    <tbody>
+      <tr><td>🎓 Apprenti·e</td><td><label><input type="radio" name="q14_app" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q14_app" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q14_app" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q14_app" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏭 Maître d'apprentissage</td><td><label><input type="radio" name="q14_ma" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q14_ma" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q14_ma" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q14_ma" value="4" onchange="updateScores()"> 4</label></td></tr>
+      <tr><td>🏫 Référent CFA</td><td><label><input type="radio" name="q14_cfa" value="1" onchange="updateScores()"> 1</label></td><td><label><input type="radio" name="q14_cfa" value="2" onchange="updateScores()"> 2</label></td><td><label><input type="radio" name="q14_cfa" value="3" onchange="updateScores()"> 3</label></td><td><label><input type="radio" name="q14_cfa" value="4" onchange="updateScores()"> 4</label></td></tr>
+    </tbody></table>
+    <div class="q-notes"><label>💬 Commentaires :</label><textarea id="notes_14" rows="2" placeholder="Exemples concrets..."></textarea></div>
+  </div>
+
+  <!-- SOFT SKILLS V2 -->
+  <div class="ss-section-title">🧠 Soft Skills — Visite 2 (évaluation MA uniquement)</div>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;background:white;padding:10px 14px;border-radius:6px;border-left:3px solid #7D3C9866;"><em>Notation A (Acquis) / ECA (En cours d'acquisition) / NA (Non acquis) — renseignée par le maître d'apprentissage uniquement.</em></p>
+
+  <div class="ss-card">
+    <div class="ss-header"><h4>👂 Sens de l'écoute</h4><p>Capacité à prendre et restituer fidèlement un brief</p></div>
+    <div class="ss-question">Lorsque vous lui confiez un shooting ou une retouche, le résultat correspond-il à ce que vous aviez demandé sans allers-retours multiples ?</div>
+    <table class="ss-eval-table"><thead><tr><th>Évaluateur</th><th style="color:#27AE60">A — Acquis</th><th style="color:#E67E22">ECA — En cours</th><th style="color:#C0392B">NA — Non acquis</th></tr></thead>
+    <tbody><tr><td>🏭 Maître d'apprentissage</td>
+      <td><label><input type="radio" name="ss1_v2" value="A"> A</label></td>
+      <td><label><input type="radio" name="ss1_v2" value="ECA"> ECA</label></td>
+      <td><label><input type="radio" name="ss1_v2" value="NA"> NA</label></td>
+    </tr></tbody></table>
+    <textarea class="ss-note-small" id="ss1_v2_note" rows="1" placeholder="Exemple concret / justification..."></textarea>
+  </div>
+
+  <div class="ss-card">
+    <div class="ss-header"><h4>🎯 Rigueur et précision</h4><p>Respect des procédures et protocoles numériques</p></div>
+    <div class="ss-question">Ses exports et sauvegardes sont-ils conformes aux protocoles de l'entreprise (nommage, format, destination) ?</div>
+    <table class="ss-eval-table"><thead><tr><th>Évaluateur</th><th style="color:#27AE60">A</th><th style="color:#E67E22">ECA</th><th style="color:#C0392B">NA</th></tr></thead>
+    <tbody><tr><td>🏭 Maître d'apprentissage</td>
+      <td><label><input type="radio" name="ss2_v2" value="A"> A</label></td>
+      <td><label><input type="radio" name="ss2_v2" value="ECA"> ECA</label></td>
+      <td><label><input type="radio" name="ss2_v2" value="NA"> NA</label></td>
+    </tr></tbody></table>
+    <textarea class="ss-note-small" id="ss2_v2_note" rows="1" placeholder="Exemple concret / justification..."></textarea>
+  </div>
+
+  <div class="ss-card">
+    <div class="ss-header"><h4>⏱️ Gestion du temps</h4><p>Respect des délais de livraison en post-production</p></div>
+    <div class="ss-question">Respecte-t-il/elle les délais de livraison que vous lui fixez en post-production ?</div>
+    <table class="ss-eval-table"><thead><tr><th>Évaluateur</th><th style="color:#27AE60">A</th><th style="color:#E67E22">ECA</th><th style="color:#C0392B">NA</th></tr></thead>
+    <tbody><tr><td>🏭 Maître d'apprentissage</td>
+      <td><label><input type="radio" name="ss3_v2" value="A"> A</label></td>
+      <td><label><input type="radio" name="ss3_v2" value="ECA"> ECA</label></td>
+      <td><label><input type="radio" name="ss3_v2" value="NA"> NA</label></td>
+    </tr></tbody></table>
+    <textarea class="ss-note-small" id="ss3_v2_note" rows="1" placeholder="Exemple concret / justification..."></textarea>
+  </div>
+
+  <div class="ss-card">
+    <div class="ss-header"><h4>⚡ Réactivité face aux imprévus</h4><p>Capacité à trouver des solutions en autonomie</p></div>
+    <div class="ss-question">Face à un imprévu sur un shooting (panne, changement de lieu, météo), quelle a été sa réaction ? A-t-il/elle proposé une solution ou attendu qu'on lui dise quoi faire ?</div>
+    <table class="ss-eval-table"><thead><tr><th>Évaluateur</th><th style="color:#27AE60">A</th><th style="color:#E67E22">ECA</th><th style="color:#C0392B">NA</th></tr></thead>
+    <tbody><tr><td>🏭 Maître d'apprentissage</td>
+      <td><label><input type="radio" name="ss4_v2" value="A"> A</label></td>
+      <td><label><input type="radio" name="ss4_v2" value="ECA"> ECA</label></td>
+      <td><label><input type="radio" name="ss4_v2" value="NA"> NA</label></td>
+    </tr></tbody></table>
+    <textarea class="ss-note-small" id="ss4_v2_note" rows="1" placeholder="Exemple concret / justification..."></textarea>
+  </div>
+
+  <div class="ss-card">
+    <div class="ss-header"><h4>🔍 Curiosité technique</h4><p>Intérêt spontané pour les outils et techniques</p></div>
+    <div class="ss-question">A-t-il/elle posé des questions sur un logiciel, un boîtier ou une technique que vous utilisez, en dehors des tâches assignées ?</div>
+    <table class="ss-eval-table"><thead><tr><th>Évaluateur</th><th style="color:#27AE60">A</th><th style="color:#E67E22">ECA</th><th style="color:#C0392B">NA</th></tr></thead>
+    <tbody><tr><td>🏭 Maître d'apprentissage</td>
+      <td><label><input type="radio" name="ss5_v2" value="A"> A</label></td>
+      <td><label><input type="radio" name="ss5_v2" value="ECA"> ECA</label></td>
+      <td><label><input type="radio" name="ss5_v2" value="NA"> NA</label></td>
+    </tr></tbody></table>
+    <textarea class="ss-note-small" id="ss5_v2_note" rows="1" placeholder="Exemple concret / justification..."></textarea>
+  </div>
+
+  <div class="ss-card">
+    <div class="ss-header"><h4>🤝 Aisance relationnelle</h4><p>Aisance dans les interactions avec clients et modèles</p></div>
+    <div class="ss-question">Est-il/elle à l'aise pour diriger un modèle ou interagir avec un client en votre présence ?</div>
+    <table class="ss-eval-table"><thead><tr><th>Évaluateur</th><th style="color:#27AE60">A</th><th style="color:#E67E22">ECA</th><th style="color:#C0392B">NA</th></tr></thead>
+    <tbody><tr><td>🏭 Maître d'apprentissage</td>
+      <td><label><input type="radio" name="ss6_v2" value="A"> A</label></td>
+      <td><label><input type="radio" name="ss6_v2" value="ECA"> ECA</label></td>
+      <td><label><input type="radio" name="ss6_v2" value="NA"> NA</label></td>
+    </tr></tbody></table>
+    <textarea class="ss-note-small" id="ss6_v2_note" rows="1" placeholder="Exemple concret / justification..."></textarea>
+  </div>
+
+  <div class="ss-synth">
+    <h4>💬 Commentaire global — Soft Skills (Visite 2)</h4>
+    <textarea id="ss_global_v2" rows="3" style="width:100%;border:1px solid #DDD;border-radius:4px;padding:8px 10px;font-size:13px;resize:vertical;font-family:inherit;" placeholder="Bilan comportement professionnel à mi-première année..."></textarea>
+  </div>
+
+  <!-- SYNTHÈSE SCORES -->
+  <div class="synth-card">
+    <h2 style="color:#1E8449">📊 Synthèse des résultats — Visite 2</h2>
+    <table class="score-table" id="scoreTable">
+      <thead><tr><th>Question</th><th>Domaine</th><th>Apprenti·e</th><th>MA</th><th>CFA</th><th>Moyenne</th><th>Statut</th></tr></thead>
+      <tbody>
+        <tr id="srow-9"><td><strong style="color:#1E8449">Q9</strong></td><td style="font-size:12px">C3, C4 — Prise de vue</td><td id="s-app-9" class="score-cell">—</td><td id="s-ma-9" class="score-cell">—</td><td id="s-cfa-9" class="score-cell">—</td><td id="s-avg-9" class="score-cell avg-cell">—</td><td id="s-status-9">—</td></tr>
+        <tr id="srow-10"><td><strong style="color:#1E8449">Q10</strong></td><td style="font-size:12px">C4 — Éclairage</td><td id="s-app-10" class="score-cell">—</td><td id="s-ma-10" class="score-cell">—</td><td id="s-cfa-10" class="score-cell">—</td><td id="s-avg-10" class="score-cell avg-cell">—</td><td id="s-status-10">—</td></tr>
+        <tr id="srow-11"><td><strong style="color:#1E8449">Q11</strong></td><td style="font-size:12px">C5 — Post-production</td><td id="s-app-11" class="score-cell">—</td><td id="s-ma-11" class="score-cell">—</td><td id="s-cfa-11" class="score-cell">—</td><td id="s-avg-11" class="score-cell avg-cell">—</td><td id="s-status-11">—</td></tr>
+        <tr id="srow-12"><td><strong style="color:#1E8449">Q12</strong></td><td style="font-size:12px">C1, C3, C7 — Documents</td><td id="s-app-12" class="score-cell">—</td><td id="s-ma-12" class="score-cell">—</td><td id="s-cfa-12" class="score-cell">—</td><td id="s-avg-12" class="score-cell avg-cell">—</td><td id="s-status-12">—</td></tr>
+        <tr id="srow-13"><td><strong style="color:#1E8449">Q13</strong></td><td style="font-size:12px">C2, C4 — Regard critique</td><td id="s-app-13" class="score-cell">—</td><td id="s-ma-13" class="score-cell">—</td><td id="s-cfa-13" class="score-cell">—</td><td id="s-avg-13" class="score-cell avg-cell">—</td><td id="s-status-13">—</td></tr>
+        <tr id="srow-14"><td><strong style="color:#1E8449">Q14</strong></td><td style="font-size:12px">C5 — Gestion couleurs</td><td id="s-app-14" class="score-cell">—</td><td id="s-ma-14" class="score-cell">—</td><td id="s-cfa-14" class="score-cell">—</td><td id="s-avg-14" class="score-cell avg-cell">—</td><td id="s-status-14">—</td></tr>
+      </tbody>
+      <tfoot>
+        <tr style="background:#2E4057;color:white;font-weight:bold">
+          <td colspan="2">MOYENNE GÉNÉRALE</td>
+          <td id="tot-app">—</td><td id="tot-ma">—</td><td id="tot-cfa">—</td>
+          <td id="tot-avg" style="background:#4A235A">—</td><td id="tot-status">—</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="synth-text">
+      <label>✅ Compétences bien maîtrisées (score ≥ 3) :</label>
+      <textarea rows="3" id="strengths" placeholder="Identifiées ci-dessus — compléter avec observations..."></textarea>
+      <label>⚠️ Compétences insuffisantes ou à risque (score ≤ 2) :</label>
+      <textarea rows="3" id="risks" placeholder="Décrire les actions correctives..."></textarea>
+      <label>🧠 Bilan soft skills — Points à renforcer :</label>
+      <textarea rows="2" id="ss_bilan" placeholder="Synthèse comportements professionnels à travailler..."></textarea>
+      <label>🏫 Ajustements pédagogiques recommandés au CFA :</label>
+      <textarea rows="3" id="cfa_actions" placeholder="Modules, exercices, séances à prévoir..."></textarea>
+      <label>📝 Observations particulières :</label>
+      <textarea rows="3" id="notes_synth" placeholder="Contexte entreprise, situations à signaler..."></textarea>
+    </div>
+  </div>
+
+  <div class="sig-section">
+    <div class="sig-block"><label>Signature Apprenti·e</label><div class="sig-line"></div></div>
+    <div class="sig-block"><label>Signature Maître d'apprentissage</label><div class="sig-line"></div></div>
+    <div class="sig-block"><label>Signature Référent tuteur CFA</label><div class="sig-line"></div></div>
+  </div>
+  <div class="btn-row">
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimer / PDF</button>
+    <button class="mail-btn" onclick="sendEmail()">📧 Envoyer par e-mail</button>
+  </div>
+</div>
+
+<script>
+function getRadio(name){const el=document.querySelector('input[name="'+name+'"]:checked');return el?el.value:'—';}
+function getVal(id){const el=document.getElementById(id);if(!el)return'—';return el.value||'—';}
+function colorScore(v){return['','#C0392B','#E67E22','#27AE60','#1A5276'][v]||'#999';}
+function statusBadge(avg){
+  if(avg===null)return'—';
+  if(avg<2)return'<span style="color:#C0392B;font-weight:bold">⚠ Non acquis</span>';
+  if(avg<3)return'<span style="color:#E67E22;font-weight:bold">🔄 En cours</span>';
+  if(avg<4)return'<span style="color:#27AE60;font-weight:bold">✅ Acquis</span>';
+  return'<span style="color:#1A5276;font-weight:bold">⭐ Maîtrise</span>';
+}
+function updateScores(){
+  const qNums=[9,10,11,12,13,14];
+  let totApp=[],totMa=[],totCfa=[],totAll=[];
+  for(const n of qNums){
+    const app=getRadio('q'+n+'_app'),ma=getRadio('q'+n+'_ma'),cfa=getRadio('q'+n+'_cfa');
+    const aV=app!=='—'?parseInt(app):null,mV=ma!=='—'?parseInt(ma):null,cV=cfa!=='—'?parseInt(cfa):null;
+    const vals=[aV,mV,cV].filter(v=>v!==null);
+    const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length):null;
+    document.getElementById('s-app-'+n).innerHTML=aV?'<strong style="color:'+colorScore(aV)+'">'+aV+'</strong>':'—';
+    document.getElementById('s-ma-'+n).innerHTML=mV?'<strong style="color:'+colorScore(mV)+'">'+mV+'</strong>':'—';
+    document.getElementById('s-cfa-'+n).innerHTML=cV?'<strong style="color:'+colorScore(cV)+'">'+cV+'</strong>':'—';
+    document.getElementById('s-avg-'+n).innerHTML=avg!==null?'<strong style="color:'+colorScore(Math.round(avg))+'">'+avg.toFixed(1)+'</strong>':'—';
+    document.getElementById('s-status-'+n).innerHTML=statusBadge(avg);
+    if(aV!==null)totApp.push(aV);if(mV!==null)totMa.push(mV);if(cV!==null)totCfa.push(cV);if(avg!==null)totAll.push(avg);
+  }
+  const avg=arr=>arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2):null;
+  const gApp=avg(totApp),gMa=avg(totMa),gCfa=avg(totCfa),gAll=avg(totAll);
+  document.getElementById('tot-app').innerHTML=gApp?'<strong style="color:'+colorScore(Math.round(parseFloat(gApp)))+'">'+gApp+'</strong>':'—';
+  document.getElementById('tot-ma').innerHTML=gMa?'<strong style="color:'+colorScore(Math.round(parseFloat(gMa)))+'">'+gMa+'</strong>':'—';
+  document.getElementById('tot-cfa').innerHTML=gCfa?'<strong style="color:'+colorScore(Math.round(parseFloat(gCfa)))+'">'+gCfa+'</strong>':'—';
+  document.getElementById('tot-avg').innerHTML=gAll?'<strong style="font-size:16px">'+gAll+'</strong>':'—';
+  document.getElementById('tot-status').innerHTML=gAll?statusBadge(parseFloat(gAll)):'—';
+}
+
+function sendEmail(){
+  const emails=[getVal('email_apprenti'),getVal('email_ma'),getVal('email_cfa')].filter(e=>e&&e!=='—');
+  if(emails.length===0){alert('Veuillez renseigner au moins une adresse e-mail dans les coordonnées.');return;}
+  const apprenti=getVal('apprenti'),entreprise=getVal('entreprise'),dateV=getVal('date_visite');
+  const subject=encodeURIComponent('BTS Photo — Visite 2 — '+apprenti+' — '+entreprise+' — '+dateV);
+  let body='BTS PHOTOGRAPHIE — COMPTE RENDU DE VISITE 2\n'+'='.repeat(50)+'\n\n';
+  body+='Apprenti·e : '+apprenti+'\nEntreprise : '+entreprise+'\nMA : '+getVal('ma')+'\nCFA : '+getVal('cfa_ref')+'\nDate : '+dateV+'\n\n';
+  body+='ÉVALUATIONS (1=Non acquis, 2=En cours, 3=Acquis, 4=Maîtrise)\n'+'-'.repeat(40)+'\n';
+  [9,10,11,12,13,14].forEach(n=>{
+    body+='Q'+n+' — App:'+getRadio('q'+n+'_app')+' MA:'+getRadio('q'+n+'_ma')+' CFA:'+getRadio('q'+n+'_cfa')+'\n';
+    const note=getVal('notes_'+n);if(note&&note!=='—')body+='  → '+note+'\n';
+  });
+  body+='\nSOFT SKILLS VISITE 2 (MA uniquement)\n'+'-'.repeat(40)+'\n';
+  const ssItems=[['Sens de l\'écoute','ss1_v2','ss1_v2_note'],['Rigueur et précision','ss2_v2','ss2_v2_note'],['Gestion du temps','ss3_v2','ss3_v2_note'],['Réactivité','ss4_v2','ss4_v2_note'],['Curiosité technique','ss5_v2','ss5_v2_note'],['Aisance relationnelle','ss6_v2','ss6_v2_note']];
+  ssItems.forEach(([label,radio,noteId])=>{
+    body+=label+' : '+getRadio(radio)+'  '+getVal(noteId)+'\n';
+  });
+  body+='Commentaire global SS : '+getVal('ss_global_v2')+'\n\n';
+  body+='SYNTHÈSE\n'+'-'.repeat(40)+'\n';
+  body+='Points forts : '+getVal('strengths')+'\nPoints de vigilance : '+getVal('risks')+'\nBilan soft skills : '+getVal('ss_bilan')+'\nAjustements CFA : '+getVal('cfa_actions')+'\nObservations : '+getVal('notes_synth')+'\n';
+  body+='\n---\nDocument généré — BTS Photographie SUP-PHOTO\n';
+  const to=emails[0],cc=emails.slice(1).join(',');
+  let mailto='mailto:'+encodeURIComponent(to)+'?subject='+subject+'&body='+encodeURIComponent(body);
+  if(cc)mailto+='&cc='+encodeURIComponent(cc);
+  window.location.href=mailto;
+}
+</script>
+</body>
+</html>
