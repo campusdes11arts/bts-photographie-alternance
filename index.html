@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUP-PHOTO — Suivi Alternance BTS Photographie</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#D0021B;
+  --cream:#EDEAE2;
+  --bk:#1A1A1A;
+  --wh:#FFFFFF;
+  --gd:#888;
+  --gm:#D8D4CA;
+  --gn:#1a7a1a;
+  --or:#E67E22;
+  --f:'Open Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--f);background:var(--cream);color:var(--bk);min-height:100vh}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 56px;height:72px;
+  background:var(--wh);
+  border-bottom:1px solid rgba(0,0,0,.07);
+}
+.nav-logo img{height:38px;display:block}
+.nav-label{
+  font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gd);
+}
+
+/* ── HERO ── */
+.hero{
+  background:var(--cream);
+  padding:88px 80px 80px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:100px;align-items:center;
+}
+.hero-eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--bk);margin-bottom:28px;
+}
+.hero-eyebrow::before{content:'';display:block;width:32px;height:2px;background:var(--red);flex-shrink:0}
+.hero-h1{
+  font-size:clamp(58px,6.5vw,96px);font-weight:800;line-height:.88;
+  letter-spacing:-.02em;color:var(--bk);
+}
+.hero-h1 .red{color:var(--red)}
+.hero-sub-label{
+  font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gd);margin-top:22px;
+}
+
+/* Hero right : widget progression */
+.hero-right{
+  padding:28px 32px;
+  border:1px solid var(--gm);
+  background:var(--wh);
+}
+.hr-label{
+  font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gd);margin-bottom:20px;
+}
+.steps-mini{display:flex;flex-direction:column}
+.sm-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--gm)}
+.sm-item:last-child{border-bottom:none}
+.sm-dot{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;flex-shrink:0;
+}
+.sm-dot.active{background:var(--red);color:var(--wh)}
+.sm-dot.locked{background:var(--cream);color:var(--gd);border:1px solid var(--gm)}
+.sm-dot.done{background:var(--gn);color:var(--wh)}
+.sm-title{font-size:13px;font-weight:700;color:var(--bk)}
+.sm-title.locked{color:var(--gd)}
+.sm-title.done{color:var(--gn)}
+.sm-sub{font-size:11px;color:var(--gd);margin-top:2px}
+
+/* ── SELLING BAR ── */
+.selling-bar{
+  background:var(--red);
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.sb{
+  padding:32px 24px;text-align:center;
+  border-right:1px solid rgba(255,255,255,.18);
+}
+.sb:last-child{border-right:none}
+.sb-head{
+  font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--wh);line-height:1;margin-bottom:8px;
+}
+.sb-body{
+  font-size:13px;font-weight:300;color:rgba(255,255,255,.75);line-height:1.5;
+}
+
+/* ── SECTION ── */
+.section{padding:72px 80px}
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--red);margin-bottom:16px;
+}
+.eyebrow::before{content:'';display:block;width:32px;height:2px;background:var(--red);flex-shrink:0}
+.section-h2{
+  font-size:clamp(36px,4vw,52px);font-weight:800;letter-spacing:-.02em;
+  line-height:.92;margin-bottom:40px;
+}
+.section-h2 .red{color:var(--red)}
+
+/* ── INFO BAR ── */
+.info-bar{
+  background:var(--wh);border:1px solid var(--gm);
+  display:grid;grid-template-columns:repeat(3,1fr);
+  margin-bottom:36px;
+}
+.ib{padding:20px 28px;border-right:1px solid var(--gm)}
+.ib:last-child{border-right:none}
+.ib-l{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gd);margin-bottom:4px}
+.ib-v{font-size:15px;font-weight:700;color:var(--bk)}
+
+/* ── STEP CARDS ── */
+.steps-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border:1px solid var(--gm);background:var(--wh);
+}
+.sc{padding:0;border-right:1px solid var(--gm);position:relative}
+.sc:last-child{border-right:none}
+.sc-top{
+  padding:22px 28px 18px;border-bottom:1px solid var(--gm);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
+}
+.sc-num{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gd)}
+.sc-badge{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px}
+.b-active{background:#FFF3CD;color:#856404}
+.b-locked{background:#F0F0F0;color:var(--gd)}
+.b-done{background:#D5F5E3;color:var(--gn)}
+.b-blocked{background:#FADBD8;color:var(--red)}
+
+.sc-body{padding:26px 28px}
+.sc-ico{font-size:28px;margin-bottom:16px;display:block}
+.sc-title{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:.95;margin-bottom:10px}
+.sc-desc{font-size:13px;color:#555;line-height:1.65;margin-bottom:22px}
+
+/* checklist */
+.cl{margin-bottom:24px}
+.ci{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--gm);font-size:12px}
+.ci:first-child{border-top:1px solid var(--gm)}
+.ci-link{color:var(--bk);text-decoration:none;border-bottom:1px solid var(--gm);transition:color .15s,border-color .15s}
+.ci-link:hover{color:var(--red);border-color:var(--red)}
+.ci-l{flex:1;font-weight:600;color:var(--bk)}
+.ci-t{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;white-space:nowrap}
+.t-ok{background:#D5F5E3;color:var(--gn)}
+.t-todo{background:#F0F0F0;color:var(--gd)}
+.t-wait{background:#FFF3CD;color:#856404}
+.t-block{background:#FADBD8;color:var(--red)}
+
+.sc-foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.btn-c{
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  padding:12px 20px;text-decoration:none;display:inline-block;transition:all .2s;border:none;cursor:pointer;
+}
+.bc-primary{background:var(--red);color:var(--wh)}
+.bc-primary:hover{background:#a00015}
+.bc-done{background:#D5F5E3;color:var(--gn)}
+.bc-done:hover{background:var(--gn);color:var(--wh)}
+.bc-locked{background:#F0F0F0;color:var(--gd);pointer-events:none;cursor:not-allowed}
+.sc-pct{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--gd)}
+.sc-pct.cg{color:var(--gn)}.sc-pct.co{color:var(--or)}.sc-pct.cr{color:var(--red)}
+
+/* Lock overlay */
+.ov{
+  position:absolute;inset:0;
+  background:rgba(237,234,226,.82);backdrop-filter:blur(2px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.ov.on{opacity:1;pointer-events:all}
+.ov-inner{text-align:center;padding:20px}
+.ov-ico{font-size:32px;margin-bottom:10px}
+.ov-msg{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gd);line-height:1.65}
+
+/* ── VISITES ── */
+.vis-section{background:var(--wh);padding:56px 80px;border-top:4px solid var(--cream);display:none}
+.vis-section.show{display:block}
+.vis-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--gm);margin-top:32px}
+.vc{padding:24px;border-right:1px solid var(--gm)}
+.vc:last-child{border-right:none}
+.vc-n{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gd);margin-bottom:10px}
+.vc-t{font-size:16px;font-weight:800;letter-spacing:-.01em;line-height:1.1;margin-bottom:6px}
+.vc-w{font-size:11px;color:var(--gd);font-style:italic;margin-bottom:20px}
+.vc-lock{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gd);display:flex;align-items:center;gap:6px}
+.btn-v{
+  background:var(--red);color:var(--wh);
+  font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  padding:10px 18px;text-decoration:none;display:inline-block;transition:background .2s;
+}
+.btn-v:hover{background:#a00015}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--bk);padding:36px 56px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.footer-logo img{height:32px;display:block;opacity:.9}
+.f-copy{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.04em}
+.f-reset{
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);background:none;border:none;cursor:pointer;transition:color .2s;
+}
+.f-reset:hover{color:var(--red)}
+
+@media(max-width:960px){
+  .hero,.section{padding:48px 24px}
+  .hero{grid-template-columns:1fr;gap:40px}
+  .selling-bar{grid-template-columns:repeat(2,1fr)}
+  .steps-grid,.vis-grid{grid-template-columns:1fr}
+  .sc,.vc{border-right:none;border-bottom:1px solid var(--gm)}
+  nav{padding:0 24px}
+  .info-bar{grid-template-columns:1fr}.ib{border-right:none;border-bottom:1px solid var(--gm)}
+  .vis-section{padding:40px 24px}
+  footer{padding:24px;flex-direction:column;gap:20px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img src="logo-color.png" alt="SUP-PHOTO">
+  </a>
+  <div style="display:flex;align-items:center;gap:24px">
+    <span class="nav-label">Outil de suivi CRE · Alternance</span>
+    <a href="database.html" id="navDB" style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gd);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color=''">📊 Base de données</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Campus des Arts — SUP-PHOTO</div>
+    <div class="hero-h1">
+      Suivi<br>
+      Alternance<br>
+      <span class="red">BTS Photo</span>
+    </div>
+    <div class="hero-sub-label">BTS Photographie · Gestion de l'alternance</div>
+  </div>
+
+  <!-- Widget progression -->
+  <div class="hero-right">
+    <div class="hr-label">Progression du dossier</div>
+    <div class="steps-mini">
+      <div class="sm-item">
+        <div class="sm-dot active" id="hd1">1</div>
+        <div>
+          <div class="sm-title active" id="hl1">Conformité entreprise</div>
+          <div class="sm-sub">Grille de conformité + score</div>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-dot locked" id="hd2">2</div>
+        <div>
+          <div class="sm-title locked" id="hl2">Dossier administratif</div>
+          <div class="sm-sub">Documents à signer</div>
+        </div>
+      </div>
+      <div class="sm-item">
+        <div class="sm-dot locked" id="hd3">3</div>
+        <div>
+          <div class="sm-title locked" id="hl3">Suivi des visites</div>
+          <div class="sm-sub">4 visites sur 2 ans</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SELLING BAR -->
+<div class="selling-bar">
+  <div class="sb">
+    <div class="sb-head">Zéro coût de recrutement</div>
+    <div class="sb-body">Un profil formé à vos méthodes, pris en charge par l'OPCO</div>
+  </div>
+  <div class="sb">
+    <div class="sb-head">Compétences sur mesure</div>
+    <div class="sb-body">L'alternant apprend directement dans votre environnement</div>
+  </div>
+  <div class="sb">
+    <div class="sb-head">Un vivier de talents</div>
+    <div class="sb-body">Anticipez vos besoins en recrutant avant la fin de formation</div>
+  </div>
+  <div class="sb">
+    <div class="sb-head">Accompagnement CRE</div>
+    <div class="sb-body">Un référent SUP-PHOTO à vos côtés sur toute la durée</div>
+  </div>
+</div>
+
+<!-- SECTION ÉTAPES -->
+<div class="section" id="etapes">
+  <div class="eyebrow">Étapes du dossier</div>
+  <div class="section-h2">Suivi du <span class="red">dossier</span><br>d'alternance</div>
+
+  <div class="info-bar">
+    <div class="ib"><div class="ib-l">Alternant·e</div><div class="ib-v" id="ibA">— Non renseigné</div></div>
+    <div class="ib"><div class="ib-l">Entreprise</div><div class="ib-v" id="ibE">— Non renseignée</div></div>
+    <div class="ib"><div class="ib-l">Période</div><div class="ib-v" id="ibP">— Non renseignée</div></div>
+  </div>
+
+  <div class="steps-grid">
+
+    <!-- ÉTAPE 1 -->
+    <div class="sc">
+      <div class="sc-top">
+        <span class="sc-num">Étape 01</span>
+        <span class="sc-badge b-active" id="b1">● En cours</span>
+      </div>
+      <div class="sc-body">
+        <span class="sc-ico">🏢</span>
+        <div class="sc-title">Grille de<br>Conformité</div>
+        <p class="sc-desc">Vérifier que l'entreprise d'accueil couvre suffisamment les compétences du référentiel BTS Photographie avant de monter le dossier administratif.</p>
+        <div class="cl">
+          <div class="ci"><span class="ci-i">📋</span><span class="ci-l">Grille de conformité remplie</span><span class="ci-t t-todo" id="c1a">À FAIRE</span></div>
+          <div class="ci"><span class="ci-i">📊</span><span class="ci-l">Résultat : conforme ou réserves</span><span class="ci-t t-todo" id="c1b">EN ATTENTE</span></div>
+        </div>
+        <div class="sc-foot">
+          <a href="grille-conformite.html" class="btn-c bc-primary">Ouvrir la grille →</a>
+          <span class="sc-pct" id="p1">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 2 -->
+    <div class="sc">
+      <div class="sc-top">
+        <span class="sc-num">Étape 02</span>
+        <span class="sc-badge b-locked" id="b2">🔒 Verrouillé</span>
+      </div>
+      <div class="sc-body">
+        <span class="sc-ico">📁</span>
+        <div class="sc-title">Dossier<br>Administratif</div>
+        <p class="sc-desc">Collecte et signature de l'ensemble des documents nécessaires au montage du contrat d'apprentissage.</p>
+        <div class="cl">
+          <div class="ci"><span class="ci-i">📄</span><a href="fdr-complete.html" class="ci-l ci-link">Fiche de renseignements (FDR)</a><span class="ci-t t-todo" id="a0">À REMPLIR</span></div>
+          <div class="ci"><span class="ci-i">📝</span><a href="cerfa-generator.html" class="ci-l ci-link">CERFA N°10103*14 — Contrat d'apprentissage</a><span class="ci-t t-wait" id="a1">EN ATTENTE</span></div>
+          <div class="ci"><span class="ci-i">🤝</span><a href="livret-auto.html" class="ci-l ci-link">Livret d'apprentissage</a><span class="ci-t t-wait" id="a2">EN ATTENTE</span></div>
+          <div class="ci"><span class="ci-i">📓</span><span class="ci-t t-todo" id="a3">À SIGNER</span></div>
+        </div>
+        <div class="sc-foot">
+          <span class="sc-pct" id="p2">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 3 -->
+    <div class="sc">
+      <div class="sc-top">
+        <span class="sc-num">Étape 03</span>
+        <span class="sc-badge b-locked" id="b3">🔒 Verrouillé</span>
+      </div>
+      <div class="sc-body">
+        <span class="sc-ico">👁</span>
+        <div class="sc-title">Suivi des<br>Visites</div>
+        <p class="sc-desc">4 visites de suivi pédagogique sur les 2 ans de formation. Chaque visite est consignée et évaluée par le CRE.</p>
+        <div class="cl">
+          <div class="ci"><span class="ci-i">📍</span><span class="ci-l">Visite 1 — Diagnostic (~45 jours)</span><span class="ci-t t-todo" id="v1">À VENIR</span></div>
+          <div class="ci"><span class="ci-i">📍</span><span class="ci-l">Visite 2 — Bilan intermédiaire An 1</span><span class="ci-t t-todo" id="v2">À VENIR</span></div>
+          <div class="ci"><span class="ci-i">📍</span><span class="ci-l">Visite 3 — Bilan intermédiaire An 2</span><span class="ci-t t-todo" id="v3">À VENIR</span></div>
+          <div class="ci"><span class="ci-i">📍</span><span class="ci-l">Visite 4 — Bilan final</span><span class="ci-t t-todo" id="v4">À VENIR</span></div>
+        </div>
+        <div class="sc-foot">
+          <a href="visites-entreprise.html" class="btn-c bc-primary" id="btnV">Ouvrir le suivi →</a>
+          <span class="sc-pct" id="p3">—</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a class="footer-logo" href="index.html">
+    <img src="LOGOSPBASELINEBLANC.png" alt="SUP-PHOTO">
+  </a>
+  <span class="f-copy">Campus des Arts — BTS Photographie · Outil CRE Alternance</span>
+  <button class="f-reset" onclick="confirmReset()">↺ Réinitialiser le dossier</button>
+</footer>
+
+<script>
+const KEY='bts_photo_state';
+const FDR_KEY='supphoto_fdr_v3';
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||def();}catch(e){return def();}};
+const def=()=>({c:{done:false,score:null,verdict:'',bloque:false,alternant:'',entreprise:'',periode:''},a:{signed:[false,false,false,false]},v:{done:[false,false,false,false]}});
+const save=s=>localStorage.setItem(KEY,JSON.stringify(s));
+
+function getFDRProgress(){
+  try{
+    const fdr=JSON.parse(localStorage.getItem(FDR_KEY)||'{}');
+    const REQUIRED=['typeEmployeur','formeJuridique','raisonSociale','representantNom','representantFonction','adresseSiege','telEntreprise','mailEntreprise','siret','codeNaf','codeIdcc','nbSalaries','convCollective','activitePrincipale','caisseRetraite','opcoNom','opcoContact','presentationEntreprise','secteurActivite','presentationService','orgService','tuteurNom','tuteurPrenom','tuteurFonction','tuteurDdn','tuteurSecu','tuteurTel','tuteurMail','tuteurDiplome','tuteurNiveau','altNom','altPrenom','altPoste','altDdn','altLieuNaissance','altDepNaissance','altSecu','altRegimeSocial','altAdresse','altTel','altMail','altDiplomeObtenu','altDiplomePrepare','altDiplomePrecis','altDerniereClasse','nationalite','rqth','altSexe','altSportifHN','altProjetEntreprise','statutAvant','typeContrat','dateConclusionContrat','dateDebut','dateDebutPratique','dateFin','dureeHebdo','pctSmic','salaireEmbaucheBrut','machinesDangereuses','faitA'];
+    const RADIOS=new Set(['nationalite','rqth','statutAvant','typeContrat','typeEmployeur','altSexe','altSportifHN','altProjetEntreprise','machinesDangereuses']);
+    let done=0;
+    REQUIRED.forEach(f=>{if(RADIOS.has(f)){if(fdr[f])done++;}else{if(fdr[f]&&String(fdr[f]).trim())done++;}});
+    if(fdr.missions&&fdr.missions.length>=1)done++;
+    return {pct:Math.round(done/(REQUIRED.length+1)*100),fdr};
+  }catch(e){return {pct:0,fdr:{}};}
+}
+function sync(){
+  try{
+    const raw=localStorage.getItem('bts_photo_conformite');
+    if(!raw)return;
+    const g=JSON.parse(raw);
+    const s=load();s.c={...s.c,...g};save(s);
+  }catch(e){}
+}
+
+const tag=(id,cls,txt)=>{const el=document.getElementById(id);if(el){el.className='ci-t '+cls;el.textContent=txt;}};
+const badge=(id,cls,txt)=>{const el=document.getElementById(id);if(el){el.className='sc-badge '+cls;el.textContent=txt;}};
+const pct=(id,val,c)=>{const el=document.getElementById(id);if(el){el.textContent=val;el.className='sc-pct'+(c?' '+c:'');}};
+const ov=(id,on)=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',on);};
+
+function setHeroStep(n,state){
+  const dot=document.getElementById('hd'+n);
+  const lbl=document.getElementById('hl'+n);
+  if(!dot||!lbl)return;
+  dot.className='sm-dot '+state;
+  lbl.className='sm-title '+state;
+  dot.textContent=state==='done'?'✓':n;
+}
+
+function fmtDateShort(v){if(!v)return '';const p=v.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0].slice(2):v;}
+function render(){
+  const s=load(),c=s.c,v=s.v;
+  const {pct:fdrPct,fdr}=getFDRProgress();
+  const s1=c.done&&!c.bloque&&c.score!=null&&c.score>=25;
+  const vN=v.done.filter(Boolean).length;
+  const fdrDone=fdrPct===100;
+
+  // Info bar — lit depuis la FDR si dispo
+  const altName=fdr.altPrenom||fdr.altNom?((fdr.altPrenom||'')+' '+(fdr.altNom||'')).trim():c.alternant;
+  const entName=fdr.raisonSociale||c.entreprise;
+  const periode=fdr.dateDebut&&fdr.dateFin?fmtDateShort(fdr.dateDebut)+' → '+fmtDateShort(fdr.dateFin):c.periode;
+  document.getElementById('ibA').textContent=altName||'— Non renseigné';
+  document.getElementById('ibE').textContent=entName||'— Non renseignée';
+  document.getElementById('ibP').textContent=periode||'— Non renseignée';
+
+  setHeroStep(1,s1?'done':'active');
+  setHeroStep(2,fdrDone?'done':fdrPct>0?'active':'locked');
+  setHeroStep(3,vN===4?'done':vN>0?'active':'locked');
+
+  // Étape 1 — conformité
+  if(c.bloque){
+    badge('b1','b-blocked','⛔ Refus d\'agrément');
+    tag('c1a','t-block','BLOQUANT');tag('c1b','t-block','REFUSÉ');pct('p1','—','');
+  }else if(c.done&&c.score!=null){
+    badge('b1','b-done','✅ Complétée');
+    tag('c1a','t-ok','FAIT');
+    tag('c1b',c.score>=25?'t-ok':'t-block',c.score+'pts');
+    pct('p1',c.score+'/100',c.score>=75?'cg':c.score>=50?'co':'cr');
+  }else{
+    badge('b1','b-active','● En cours');
+    tag('c1a','t-todo','À FAIRE');tag('c1b','t-todo','EN ATTENTE');pct('p1','—','');
+  }
+
+  // Étape 2 — dossier administratif (FDR + CERFA + Livret)
+  badge('b2',fdrDone?'b-done':fdrPct>0?'b-active':'b-active',fdrDone?'✅ Complété':fdrPct>0?`● FDR ${fdrPct}%`:'● En attente');
+  // FDR : À REMPLIR → en cours (%) → COMPLÉTÉE
+  tag('a0',fdrDone?'t-ok':fdrPct>0?'t-wait':'t-todo',fdrDone?'COMPLÉTÉE':fdrPct>0?fdrPct+'%':'À REMPLIR');
+  // CERFA & Livret : EN ATTENTE tant que FDR pas finie, puis À SIGNER
+  tag('a1',fdrDone?'t-wait':'t-todo',fdrDone?'À SIGNER':'EN ATTENTE');
+  tag('a2',fdrDone?'t-wait':'t-todo',fdrDone?'À SIGNER':'EN ATTENTE');
+  pct('p2',fdrPct>0?fdrPct+'%':'—',fdrDone?'cg':fdrPct>0?'co':'');
+
+  // Étape 3 — visites
+  badge('b3',vN===4?'b-done':vN>0?'b-active':'b-active',vN===4?'✅ Complété':vN>0?`● ${vN}/4 visites`:'● En attente');
+  v.done.forEach((ok,i)=>tag('v'+(i+1),ok?'t-ok':'t-todo',ok?'FAITE':'À VENIR'));
+  document.getElementById('btnV').className='btn-c '+(vN===4?'bc-done':'bc-primary');
+  const pp3=Math.round(vN/4*100);pct('p3',vN>0?pp3+'%':'—',pp3===100?'cg':pp3>0?'co':'');
+}
+
+function confirmReset(){
+  if(confirm('Réinitialiser complètement le dossier ? Toutes les données enregistrées seront supprimées.')){
+    localStorage.removeItem(KEY);localStorage.removeItem('bts_photo_conformite');localStorage.removeItem('supphoto_fdr_v3');render();
+  }
+}
+
+sync();render();
+window.addEventListener('storage',e=>{if(e.key===KEY||e.key==='bts_photo_conformite'||e.key===FDR_KEY){sync();render();}});
+
+/* ── AUTO-SAVE VERS LA BASE DE DONNÉES ── */
+(function(){
+  const DB_KEY='supphoto_db';
+  function saveToDB(){
+    try{
+      const db=JSON.parse(localStorage.getItem(DB_KEY)||'{"dossiers":{},"activeDossierId":null}');
+      if(!db.activeDossierId||!db.dossiers[db.activeDossierId])return;
+      const d=db.dossiers[db.activeDossierId];
+      const st=JSON.parse(localStorage.getItem(KEY)||'null');
+      const conf=JSON.parse(localStorage.getItem('bts_photo_conformite')||'null');
+      const fdr=JSON.parse(localStorage.getItem(FDR_KEY)||'null');
+      if(st)d.state=st;if(conf)d.conformite=conf;if(fdr)d.fdr=fdr;
+      d.updatedAt=new Date().toISOString();
+      localStorage.setItem(DB_KEY,JSON.stringify(db));
+    }catch(e){}
+  }
+  window.addEventListener('beforeunload',saveToDB);
+  /* Indicateur "dossier actif" dans la nav */
+  try{
+    const db=JSON.parse(localStorage.getItem(DB_KEY)||'{}');
+    if(db.activeDossierId&&db.dossiers&&db.dossiers[db.activeDossierId]){
+      const fdr=JSON.parse(localStorage.getItem(FDR_KEY)||'{}');
+      const conf=JSON.parse(localStorage.getItem('bts_photo_conformite')||'{}');
+      const nom=([fdr.altPrenom,fdr.altNom].filter(Boolean).join(' ')||conf.alternant||'').trim();
+      const el=document.getElementById('navDB');
+      if(el&&nom){el.textContent='📊 BDD · '+nom;el.title='Dossier actif : '+nom;}
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

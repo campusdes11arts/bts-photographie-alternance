@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: sup-photo
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES
+        value: 8h
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sup-photo-db
+          property: connectionString
+
+databases:
+  - name: sup-photo-db
+    plan: free

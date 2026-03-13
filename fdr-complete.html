@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FDR — Montage Contrat d'Apprentissage BTS Photographie — SUP-PHOTO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --red:#E8003D;--red-d:#C0002F;--red-bg:#FFF0F4;
+  --bg:#F7F6F3;--bg2:#EFEFEC;--border:#E0DDD8;
+  --text:#1A1A1A;--mid:#555550;--grey:#888885;
+  --white:#FFFFFF;--green:#1a7a43;--green-bg:#f0faf4;
+  --orange:#C96B00;--orange-bg:#fff7ed;
+  --sans:'Open Sans',sans-serif;
+  --max:1100px;--pad:clamp(20px,5vw,72px);
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+nav{background:var(--white);border-bottom:2px solid var(--red);padding:0 var(--pad);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;height:64px}
+.nav-logo img{height:34px}
+.nav-label{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--grey)}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{background:var(--white);border-bottom:1px solid var(--border);padding:0 var(--pad);position:sticky;top:64px;z-index:90}
+.progress-inner{max-width:var(--max);margin:0 auto;padding:12px 0;display:flex;align-items:center;gap:16px}
+.progress-track{flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--red);border-radius:3px;transition:width .5s ease}
+.progress-text{font-size:12px;font-weight:700;color:var(--red);white-space:nowrap;min-width:48px;text-align:right}
+.progress-label{font-size:11px;font-weight:600;color:var(--grey);letter-spacing:.08em;text-transform:uppercase}
+
+/* ── HERO ── */
+.hero{background:var(--text);color:var(--white);padding:56px var(--pad) 48px;border-bottom:4px solid var(--red)}
+.hero-inner{max-width:var(--max);margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:var(--white);font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:5px 12px;margin-bottom:24px}
+.hero-badge::before{content:'';display:block;width:6px;height:6px;background:var(--white);border-radius:50%}
+.hero h1{font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:12px}
+.hero h1 span{color:var(--red)}
+.hero p{font-size:15px;color:rgba(255,255,255,.7);max-width:640px;line-height:1.7}
+.hero-alert{margin-top:24px;background:rgba(232,0,61,.15);border:1px solid rgba(232,0,61,.4);border-left:3px solid var(--red);padding:12px 16px;font-size:13px;font-weight:600;color:rgba(255,255,255,.9)}
+
+/* ── MAIN ── */
+main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
+
+/* ── SECTION ── */
+.form-section{background:var(--white);border:1px solid var(--border);margin-bottom:32px;overflow:hidden}
+.section-head{display:flex;align-items:center;gap:16px;padding:20px 28px;border-bottom:2px solid var(--red);background:var(--text);cursor:pointer;user-select:none}
+.section-num{width:36px;height:36px;background:var(--red);color:var(--white);font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--white);flex:1}
+.section-status{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px}
+.section-status.done{background:var(--green);color:var(--white)}
+.section-status.todo{background:rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
+.section-chevron{color:var(--white);font-size:18px;transition:transform .3s;flex-shrink:0}
+.section-head.collapsed .section-chevron{transform:rotate(-90deg)}
+
+.section-body{padding:28px;display:grid;gap:0}
+.section-body.hidden{display:none}
+
+/* ── GRID FIELDS ── */
+.fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.fields-grid.one{grid-template-columns:1fr}
+.fields-grid.three{grid-template-columns:1fr 1fr 1fr}
+.field-full{grid-column:1/-1}
+
+/* ── FIELD ── */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid)}
+.field label .req{color:var(--red)}
+.field input,.field select,.field textarea{
+  border:1.5px solid var(--border);padding:10px 14px;font-family:var(--sans);font-size:14px;color:var(--text);background:var(--white);outline:none;transition:border-color .2s,background .2s;width:100%
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);background:var(--red-bg)}
+.field input.filled,.field select.filled,.field textarea.filled{border-color:var(--green);background:var(--green-bg)}
+.field input.error,.field select.error,.field textarea.error{border-color:var(--orange)}
+.field textarea{resize:vertical;min-height:100px}
+.field select{cursor:pointer}
+.field .hint{font-size:11px;color:var(--grey);font-style:italic}
+
+/* ── RADIO GROUP ── */
+.radio-group{display:flex;gap:12px;flex-wrap:wrap}
+.radio-item{display:flex;align-items:center;gap:8px;padding:10px 16px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;font-size:13px;font-weight:600}
+.radio-item:has(input:checked){border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.radio-item input{accent-color:var(--red)}
+
+/* ── MISSIONS ── */
+.missions-list{display:flex;flex-direction:column;gap:10px}
+.mission-row{display:flex;gap:8px;align-items:center}
+.mission-row input{flex:1;border:1.5px solid var(--border);padding:10px 14px;font-family:var(--sans);font-size:14px}
+.mission-row input:focus{outline:none;border-color:var(--red);background:var(--red-bg)}
+.mission-row input.filled{border-color:var(--green);background:var(--green-bg)}
+.btn-rm{width:36px;height:36px;border:none;background:var(--bg2);cursor:pointer;font-size:18px;color:var(--grey);flex-shrink:0;transition:all .2s}
+.btn-rm:hover{background:var(--red);color:var(--white)}
+.btn-add{display:flex;align-items:center;gap:8px;background:none;border:1.5px dashed var(--border);padding:10px 16px;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--grey);margin-top:8px;transition:all .2s}
+.btn-add:hover{border-color:var(--red);color:var(--red)}
+
+/* ── DIVIDER ── */
+.sub-section{margin-top:28px;padding-top:24px;border-top:1px solid var(--border)}
+.sub-title{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sub-title::after{content:'';flex:1;height:1px;background:rgba(232,0,61,.2)}
+
+/* ── REMU TABLE ── */
+.remu-table{border:1px solid var(--border);overflow:hidden;margin-top:8px}
+.remu-head{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--text);color:var(--white)}
+.remu-head div,.remu-row div{padding:10px 16px;font-size:12px;font-weight:700;letter-spacing:.06em}
+.remu-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--border)}
+.remu-row div:first-child{background:var(--bg);font-weight:600;font-size:13px;display:flex;align-items:center}
+.remu-row input{border:none;border-left:1.5px solid var(--border);padding:10px 16px;font-family:var(--sans);font-size:14px;width:100%;background:var(--white);outline:none}
+.remu-row input:focus{background:var(--red-bg)}
+.remu-row input.filled{background:var(--green-bg)}
+
+/* ── ACTIONS ── */
+.actions{display:flex;gap:16px;align-items:center;margin-top:48px;padding-top:32px;border-top:2px solid var(--border)}
+.btn-save{background:var(--red);color:var(--white);border:none;padding:16px 40px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.btn-save:hover{background:var(--red-d)}
+.btn-save:disabled{background:var(--grey);cursor:not-allowed}
+.btn-reset{background:none;border:1.5px solid var(--border);padding:15px 28px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;color:var(--grey);transition:all .2s}
+.btn-reset:hover{border-color:var(--red);color:var(--red)}
+.btn-cerfa{background:var(--text);color:var(--white);border:none;padding:16px 32px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-cerfa:hover{background:#333}
+.btn-cerfa.locked{background:var(--grey);cursor:not-allowed;pointer-events:none}
+.btn-livret{background:var(--green);color:var(--white);border:none;padding:16px 32px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-livret:hover{background:#15613a}
+.btn-livret.locked{background:var(--grey);cursor:not-allowed;pointer-events:none}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:32px;right:32px;background:var(--text);color:var(--white);padding:16px 24px;font-size:13px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .4s;max-width:360px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-left:4px solid var(--green)}
+.toast.error{border-left:4px solid var(--red)}
+
+/* ── COMPLETION PANEL ── */
+.completion-panel{background:var(--white);border:2px solid var(--border);padding:28px;margin-bottom:32px}
+.cp-title{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);margin-bottom:16px}
+.cp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.cp-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border)}
+.cp-item .cp-icon{font-size:16px}
+.cp-item .cp-name{font-size:12px;font-weight:600;color:var(--mid)}
+.cp-item.done{border-color:var(--green);background:var(--green-bg)}
+.cp-item.done .cp-name{color:var(--green)}
+.cp-item.todo{border-color:var(--orange);background:var(--orange-bg)}
+.cp-item.todo .cp-name{color:var(--orange)}
+
+/* ── CONTRAT CARDS ── */
+.contrat-cards{display:flex;flex-direction:column;gap:12px}
+.contrat-card{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;border:2px solid var(--border);cursor:pointer;transition:all .2s;background:var(--white);position:relative}
+.contrat-card:has(input:checked){border-color:var(--red);background:var(--red-bg)}
+.contrat-card input{position:absolute;opacity:0;pointer-events:none}
+.cc-badge{width:40px;height:40px;background:var(--text);color:var(--white);font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:2px}
+.cc-badge-blue{background:#1A6FA8}
+.cc-badge-green{background:var(--green)}
+.cc-badge-orange{background:var(--orange)}
+.cc-content{flex:1}
+.cc-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.cc-desc{font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:6px}
+.cc-example{font-size:12px;color:var(--grey);font-style:italic;margin-bottom:4px}
+.cc-alert{font-size:12px;font-weight:600;color:var(--orange);background:var(--orange-bg);padding:6px 10px;border-left:3px solid var(--orange);margin-top:8px}
+.cc-check{width:24px;height:24px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;flex-shrink:0;transition:all .2s}
+.contrat-card:has(input:checked) .cc-check{background:var(--red);border-color:var(--red);color:var(--white)}
+.contrat-card:has(input:checked) .cc-title{color:var(--red)}
+#ancienContratWrap{display:none}
+
+/* ── REMU GRID ── */
+.remu-explainer{background:var(--bg);border:1px solid var(--border);overflow:hidden;margin-bottom:20px}
+.remu-explainer-head{background:var(--text);color:var(--white);padding:12px 20px;font-size:13px;font-weight:700}
+.remu-explainer-note{padding:12px 20px;font-size:13px;color:var(--mid);border-bottom:1px solid var(--border);line-height:1.6}
+.remu-grid-table{width:100%;border-collapse:collapse}
+.remu-grid-table th{background:var(--red);color:var(--white);font-size:11px;font-weight:700;letter-spacing:.06em;padding:10px 16px;text-align:left}
+.remu-grid-table .subhead th{background:rgba(0,0,0,.6);font-size:10px}
+.remu-grid-table td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);font-weight:600}
+.remu-grid-table tr:last-child td{border-bottom:none}
+.remu-grid-table tr.active-row td{background:rgba(232,0,61,.08)}
+.tranche-badge{background:var(--text);color:var(--white);font-size:11px;font-weight:700;padding:4px 10px;border-radius:2px;white-space:nowrap}
+.montant{font-weight:800;color:var(--green)}
+.remu-aide-note{padding:12px 20px;font-size:13px;background:rgba(26,122,67,.08);border-top:1px solid var(--border)}
+
+/* ── REMU CALC BOX ── */
+.remu-calc-box{background:var(--text);color:var(--white);padding:20px 24px;margin-bottom:0;border-radius:2px}
+.rcb-title{font-size:12px;font-weight:600;letter-spacing:.06em;color:rgba(255,255,255,.6);margin-bottom:14px;text-transform:uppercase}
+.rcb-waiting{font-size:13px;color:rgba(255,255,255,.5);font-style:italic}
+.rcb-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rcb-year{background:rgba(255,255,255,.07);padding:16px 20px;border-left:3px solid var(--red)}
+.rcb-year-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px}
+.rcb-year-age{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:6px}
+.rcb-year-pct{font-size:22px;font-weight:800;color:var(--red)}
+.rcb-year-montant{font-size:18px;font-weight:700;color:var(--white);margin-top:4px}
+.rcb-year-annuel{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.rcb-note{font-size:12px;color:rgba(255,255,255,.5);margin-top:12px;font-style:italic}
+.rcb-applied{font-size:12px;color:#4CAF50;margin-top:8px;font-weight:600}
+
+/* ── REMU MODE TOGGLE ── */
+.remu-mode-toggle{margin:16px 0;padding:16px 20px;background:var(--bg);border:1px solid var(--border)}
+.rmt-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--grey);margin-bottom:12px}
+.rmt-options{display:flex;gap:12px}
+.rmt-opt{flex:1;display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:2px solid var(--border);cursor:pointer;background:var(--white);transition:all .2s}
+.rmt-opt:has(input:checked){border-color:var(--red);background:var(--red-bg)}
+.rmt-opt input{margin-top:3px;accent-color:var(--red);flex-shrink:0}
+.rmt-opt-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.rmt-opt-desc{font-size:12px;color:var(--mid);line-height:1.4}
+.rmt-opt:has(input:checked) .rmt-opt-title{color:var(--red)}
+
+/* ── REMU ABOVE LEGAL ── */
+.remu-above-legal{display:flex;align-items:flex-start;gap:16px;background:var(--orange-bg);border:1px solid rgba(201,107,0,.3);border-left:4px solid var(--orange);padding:14px 18px;font-size:13px;line-height:1.6;color:var(--text)}
+.ral-icon{width:36px;height:36px;background:var(--orange);color:var(--white);font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── REMU BELOW ALERT ── */
+.remu-below-alert{background:#fff3cd;border:1px solid #ffc107;border-left:4px solid #e65100;padding:12px 16px;font-size:12px;color:#5c3d00;margin-top:8px}
+
+
+.remu-legal-note{background:var(--orange-bg);border:1px solid rgba(201,107,0,.2);border-left:3px solid var(--orange);padding:14px 18px;font-size:12px;color:var(--mid);line-height:1.8;margin-top:14px}
+.remu-legal-note strong{color:var(--text)}
+
+@media(max-width:700px){
+  .fields-grid,.fields-grid.three{grid-template-columns:1fr}
+  .remu-head,.remu-row{grid-template-columns:1fr}
+  .remu-head{display:none}
+  .actions{flex-direction:column;align-items:stretch}
+  .rcb-result-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img src="logo-color.png" alt="SUP-PHOTO">
+  </a>
+  <span class="nav-label">FDR — Montage Contrat d'Apprentissage</span>
+</nav>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <span class="progress-label">Complétion FDR</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-text" id="progressText">0%</span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Fiche de Renseignement</div>
+    <h1>Montage du Contrat<br><span>d'Apprentissage</span></h1>
+    <p>BTS Photographie – Niveau 5 (BAC+2) – Années 2025-2026 / 2026-2027<br>
+    Complétez intégralement ce formulaire. Les données alimenteront automatiquement le Livret d'Apprentissage, qui ne pourra être signé qu'à l'issue de cette démarche.</p>
+    <div class="hero-alert">⚠ LA PRÉSENTE FICHE DOIT ÊTRE INTÉGRALEMENT REMPLIE — Sans quoi aucun contrat d'apprentissage ne pourra être généré et le livret restera verrouillé.</div>
+  </div>
+</div>
+
+<main>
+
+<!-- PANEL COMPLÉTION -->
+<div class="completion-panel">
+  <div class="cp-title">État de complétion par section</div>
+  <div class="cp-grid" id="cpGrid">
+    <div class="cp-item todo" id="cp1"><span class="cp-icon">○</span><span class="cp-name">Société</span></div>
+    <div class="cp-item todo" id="cp2"><span class="cp-icon">○</span><span class="cp-name">Entreprise / Livret</span></div>
+    <div class="cp-item todo" id="cp3"><span class="cp-icon">○</span><span class="cp-name">Maître d'apprentissage</span></div>
+    <div class="cp-item todo" id="cp4"><span class="cp-icon">○</span><span class="cp-name">Alternant</span></div>
+    <div class="cp-item todo" id="cp5"><span class="cp-icon">○</span><span class="cp-name">Contrat</span></div>
+    <div class="cp-item todo" id="cp6"><span class="cp-icon">○</span><span class="cp-name">Missions</span></div>
+  </div>
+</div>
+
+<form id="fdrForm" novalidate>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 1 — INFORMATIONS SUR LA SOCIÉTÉ
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">1</div>
+    <div class="section-title">Informations sur la Société</div>
+    <span class="section-status todo" id="s1status">À compléter</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body" id="sb1">
+    <div class="fields-grid">
+      <div class="field">
+        <label>Type d'employeur <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="typeEmployeur" value="Privé" data-section="1" required> ☐ Employeur privé</label>
+          <label class="radio-item"><input type="radio" name="typeEmployeur" value="Public"> ☐ Employeur public</label>
+        </div>
+        <span class="hint">Détermine le régime d'assurance chômage de l'apprenti(e)</span>
+      </div>
+      <div class="field" id="employeurSpecifiqueWrap">
+        <label>Employeur spécifique <span style="font-size:11px;color:var(--grey)">(si applicable)</span></label>
+        <select name="employeurSpecifique" data-section="1">
+          <option value="">— Aucun / Non applicable —</option>
+          <option>Association</option>
+          <option>Fondation</option>
+          <option>Groupement d'employeurs</option>
+          <option>Travailleur indépendant</option>
+          <option>Entreprise d'insertion</option>
+          <option>Autre employeur spécifique</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Forme juridique <span class="req">*</span></label>
+        <select name="formeJuridique" data-section="1" required>
+          <option value="">— Sélectionner —</option>
+          <option>SARL</option><option>SAS</option><option>SASU</option>
+          <option>SA</option><option>EURL</option><option>EI</option>
+          <option>SNC</option><option>Association (Loi 1901)</option>
+          <option>Auto-entrepreneur / Micro-entreprise</option>
+          <option>Société civile (SC / SCI)</option><option>Autre</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Raison sociale <span class="req">*</span></label>
+        <input type="text" name="raisonSociale" data-section="1" required placeholder="Ex : Studio Photo Dupont SAS">
+      </div>
+      <div class="field">
+        <label>NOM Prénom du représentant <span class="req">*</span></label>
+        <input type="text" name="representantNom" data-section="1" required placeholder="Ex : MARTIN Jean">
+      </div>
+      <div class="field">
+        <label>Fonction du représentant <span class="req">*</span></label>
+        <input type="text" name="representantFonction" data-section="1" required placeholder="Ex : Gérant, PDG, Directeur…">
+      </div>
+      <div class="field field-full">
+        <label>Adresse du siège de l'entreprise <span class="req">*</span></label>
+        <input type="text" name="adresseSiege" data-section="1" required placeholder="N° voie, rue, code postal, ville">
+      </div>
+      <div class="field field-full">
+        <label>Adresse d'exécution du contrat <span class="hint-label">(si différente du siège)</span></label>
+        <input type="text" name="adresseExecution" data-section="1" placeholder="Laisser vide si identique au siège">
+      </div>
+      <div class="field">
+        <label>N° de téléphone <span class="req">*</span></label>
+        <input type="tel" name="telEntreprise" data-section="1" required placeholder="0X XX XX XX XX">
+      </div>
+      <div class="field">
+        <label>Adresse e-mail <span class="req">*</span></label>
+        <input type="email" name="mailEntreprise" data-section="1" required placeholder="contact@entreprise.fr">
+      </div>
+      <div class="field">
+        <label>N° SIRET <span class="req">*</span></label>
+        <input type="text" name="siret" data-section="1" required placeholder="14 chiffres" maxlength="17">
+      </div>
+      <div class="field">
+        <label>Code NAF / APE <span class="req">*</span></label>
+        <input type="text" name="codeNaf" data-section="1" required placeholder="Ex : 7420Z">
+      </div>
+      <div class="field">
+        <label>Code IDCC <span class="req">*</span></label>
+        <input type="text" name="codeIdcc" data-section="1" required placeholder="Ex : 1516">
+      </div>
+      <div class="field">
+        <label>Nombre de salariés <span class="req">*</span></label>
+        <select name="nbSalaries" data-section="1" required>
+          <option value="">— Sélectionner —</option>
+          <option>1 à 4</option><option>5 à 9</option><option>10 à 19</option>
+          <option>20 à 49</option><option>50 à 249</option><option>250 et plus</option>
+        </select>
+      </div>
+      <div class="field field-full">
+        <label>Intitulé complet de la convention collective <span class="req">*</span></label>
+        <input type="text" name="convCollective" data-section="1" required placeholder="Ex : Convention collective nationale de la photographie">
+      </div>
+      <div class="field field-full">
+        <label>Activité principale de l'entreprise <span class="req">*</span></label>
+        <input type="text" name="activitePrincipale" data-section="1" required placeholder="Description courte de l'activité">
+      </div>
+      <div class="field">
+        <label>Caisse de retraite complémentaire <span class="req">*</span></label>
+        <input type="text" name="caisseRetraite" data-section="1" required placeholder="Ex : Agirc-Arrco, Malakoff Humanis…">
+      </div>
+      <div class="field">
+        <label>NOM de l'OPCO <span class="req">*</span></label>
+        <input type="text" name="opcoNom" data-section="1" required placeholder="Ex : AFDAS, ATLAS, OPCO EP…">
+      </div>
+
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Contact privilégié en entreprise (si différent du tuteur et du représentant)</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>NOM</label>
+          <input type="text" name="contactPriNom" data-section="1" placeholder="NOM">
+        </div>
+        <div class="field">
+          <label>Prénom</label>
+          <input type="text" name="contactPriPrenom" data-section="1" placeholder="Prénom">
+        </div>
+        <div class="field">
+          <label>Fonction</label>
+          <input type="text" name="contactPriFonction" data-section="1" placeholder="Fonction dans l'entreprise">
+        </div>
+        <div class="field">
+          <label>Téléphone</label>
+          <input type="tel" name="contactPriTel" data-section="1" placeholder="0X XX XX XX XX">
+        </div>
+        <div class="field field-full">
+          <label>E-mail</label>
+          <input type="email" name="contactPriMail" data-section="1" placeholder="prenom.nom@entreprise.fr">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 2 — PRÉSENTATION ENTREPRISE (LIVRET)
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">2</div>
+    <div class="section-title">Présentation Entreprise — pour le Livret d'Apprentissage</div>
+    <span class="section-status todo" id="s2status">À compléter</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb2">
+    <p style="font-size:13px;color:var(--grey);margin-bottom:20px;font-style:italic">Ces informations seront directement intégrées dans la section 1.2 du Livret d'Apprentissage (à renseigner par l'entreprise).</p>
+    <div class="fields-grid one">
+      <div class="field">
+        <label>Présentation générale de l'entreprise <span class="req">*</span></label>
+        <textarea name="presentationEntreprise" data-section="2" required placeholder="Décrivez l'entreprise : histoire, activités, positionnement, valeurs…" style="min-height:120px"></textarea>
+      </div>
+      <div class="field">
+        <label>Secteur d'activité <span class="req">*</span></label>
+        <input type="text" name="secteurActivite" data-section="2" required placeholder="Ex : Studio photo mode et publicité, Agence de presse, Laboratoire photographique…">
+      </div>
+      <div class="field">
+        <label>Présentation du service concerné par l'apprenant <span class="req">*</span></label>
+        <textarea name="presentationService" data-section="2" required placeholder="Décrivez le service ou département où l'alternant sera intégré…"></textarea>
+      </div>
+      <div class="field">
+        <label>Organisation du service — effectif du service <span class="req">*</span></label>
+        <input type="text" name="orgService" data-section="2" required placeholder="Ex : Équipe de 3 personnes : 1 photographe senior, 1 retoucheur, 1 assistante">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 3 — MAÎTRE D'APPRENTISSAGE / TUTEUR
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">3</div>
+    <div class="section-title">Maître d'Apprentissage / Tuteur(trice)</div>
+    <span class="section-status todo" id="s3status">À compléter</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb3">
+    <div class="fields-grid">
+      <div class="field">
+        <label>NOM <span class="req">*</span></label>
+        <input type="text" name="tuteurNom" data-section="3" required placeholder="NOM (majuscules)">
+      </div>
+      <div class="field">
+        <label>Prénom <span class="req">*</span></label>
+        <input type="text" name="tuteurPrenom" data-section="3" required placeholder="Prénom">
+      </div>
+      <div class="field">
+        <label>Fonction dans l'entreprise <span class="req">*</span></label>
+        <input type="text" name="tuteurFonction" data-section="3" required placeholder="Ex : Photographe principal, Directeur artistique…">
+      </div>
+      <div class="field">
+        <label>Date de naissance <span class="req">*</span></label>
+        <input type="date" name="tuteurDdn" data-section="3" required>
+      </div>
+      <div class="field">
+        <label>Numéro de sécurité sociale <span class="req">*</span></label>
+        <input type="text" name="tuteurSecu" data-section="3" required placeholder="15 chiffres" maxlength="17">
+        <span class="hint">Requis pour la déclaration CERFA</span>
+      </div>
+      <div class="field">
+        <label>N° de téléphone <span class="req">*</span></label>
+        <input type="tel" name="tuteurTel" data-section="3" required placeholder="0X XX XX XX XX">
+      </div>
+      <div class="field">
+        <label>Adresse e-mail <span class="req">*</span></label>
+        <input type="email" name="tuteurMail" data-section="3" required placeholder="tuteur@entreprise.fr">
+      </div>
+      <div class="field field-full">
+        <label>Niveau + Intitulé exact du dernier diplôme obtenu <span class="req">*</span></label>
+        <input type="text" name="tuteurDiplome" data-section="3" required placeholder="Ex : MASTER Photographie et Art numérique – Université Paris 8">
+        <span class="hint">Le maître d'apprentissage doit justifier d'un niveau au moins équivalent à la formation préparée, ou de 2 ans d'expérience professionnelle dans le domaine</span>
+      </div>
+      <div class="field">
+        <label>Niveau de diplôme <span class="req">*</span></label>
+        <select name="tuteurNiveau" data-section="3" required>
+          <option value="">— Sélectionner —</option>
+          <option value="3">Niveau 3 – CAP/BEP</option>
+          <option value="4">Niveau 4 – BAC</option>
+          <option value="5">Niveau 5 – BTS/DUT/DEUST</option>
+          <option value="6">Niveau 6 – Licence/Bachelor</option>
+          <option value="7">Niveau 7 – Master/Mastère</option>
+          <option value="8">Niveau 8 – Doctorat</option>
+          <option value="exp">Expérience professionnelle (sans diplôme correspondant)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Maître d'apprentissage n°2 <span style="font-size:12px;font-weight:400;color:var(--grey)">(facultatif — si l'entreprise désigne un second tuteur)</span></div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>NOM</label>
+          <input type="text" name="tuteur2Nom" data-section="3" placeholder="NOM (majuscules)">
+        </div>
+        <div class="field">
+          <label>Prénom</label>
+          <input type="text" name="tuteur2Prenom" data-section="3" placeholder="Prénom">
+        </div>
+        <div class="field">
+          <label>Date de naissance</label>
+          <input type="date" name="tuteur2Ddn" data-section="3">
+        </div>
+        <div class="field">
+          <label>Adresse e-mail</label>
+          <input type="email" name="tuteur2Mail" data-section="3" placeholder="tuteur2@entreprise.fr">
+        </div>
+        <div class="field">
+          <label>Emploi occupé</label>
+          <input type="text" name="tuteur2Fonction" data-section="3" placeholder="Fonction dans l'entreprise">
+        </div>
+        <div class="field">
+          <label>Diplôme le plus élevé obtenu</label>
+          <input type="text" name="tuteur2Diplome" data-section="3" placeholder="Intitulé du diplôme">
+        </div>
+        <div class="field">
+          <label>Niveau du diplôme</label>
+          <select name="tuteur2Niveau" data-section="3">
+            <option value="">— Sélectionner —</option>
+            <option value="3">Niveau 3 – CAP/BEP</option>
+            <option value="4">Niveau 4 – BAC</option>
+            <option value="5">Niveau 5 – BTS/DUT</option>
+            <option value="6">Niveau 6 – Licence</option>
+            <option value="7">Niveau 7 – Master</option>
+            <option value="8">Niveau 8 – Doctorat</option>
+            <option value="exp">Expérience professionnelle</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 4 — INFORMATIONS SUR L'ALTERNANT(E)
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">4</div>
+    <div class="section-title">Informations sur l'Alternant(e)</div>
+    <span class="section-status todo" id="s4status">À compléter</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb4">
+    <div class="fields-grid">
+      <div class="field">
+        <label>NOM de naissance <span class="req">*</span></label>
+        <input type="text" name="altNom" data-section="4" required placeholder="NOM (majuscules)">
+      </div>
+      <div class="field">
+        <label>Nom d'usage <span style="font-size:11px;color:var(--grey)">(si différent du nom de naissance)</span></label>
+        <input type="text" name="altNomUsage" data-section="4" placeholder="Laisser vide si identique au nom de naissance">
+      </div>
+      <div class="field">
+        <label>Premier prénom selon l'état civil <span class="req">*</span></label>
+        <input type="text" name="altPrenom" data-section="4" required placeholder="Prénom">
+      </div>
+      <div class="field">
+        <label>Sexe <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="altSexe" value="M" data-section="4" required> M</label>
+          <label class="radio-item"><input type="radio" name="altSexe" value="F"> F</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Intitulé du poste <span class="req">*</span></label>
+        <input type="text" name="altPoste" data-section="4" required placeholder="Ex : Assistant(e) photographe, Opérateur numérique…">
+      </div>
+      <div class="field">
+        <label>Date de naissance <span class="req">*</span></label>
+        <input type="date" name="altDdn" data-section="4" required>
+      </div>
+      <div class="field">
+        <label>Lieu de naissance <span class="req">*</span></label>
+        <input type="text" name="altLieuNaissance" data-section="4" required placeholder="Ville de naissance">
+      </div>
+      <div class="field">
+        <label>Département de naissance <span class="req">*</span></label>
+        <input type="text" name="altDepNaissance" data-section="4" required placeholder="Ex : 06 – Alpes-Maritimes">
+      </div>
+      <div class="field">
+        <label>Numéro de sécurité sociale (NIR) <span class="req">*</span></label>
+        <input type="text" name="altSecu" data-section="4" required placeholder="15 chiffres" maxlength="17">
+      </div>
+      <div class="field">
+        <label>Régime social <span class="req">*</span></label>
+        <select name="altRegimeSocial" data-section="4" required>
+          <option value="">— Sélectionner —</option>
+          <option value="1">Régime général</option>
+          <option value="2">MSA (agricole)</option>
+          <option value="3">Régime spécial</option>
+        </select>
+        <span class="hint">Généralement : Régime général</span>
+      </div>
+      <div class="field field-full">
+        <label>Adresse postale <span class="req">*</span></label>
+        <input type="text" name="altAdresse" data-section="4" required placeholder="N° voie, rue, code postal, ville">
+      </div>
+      <div class="field">
+        <label>N° de téléphone <span class="req">*</span></label>
+        <input type="tel" name="altTel" data-section="4" required placeholder="0X XX XX XX XX">
+      </div>
+      <div class="field">
+        <label>Adresse e-mail <span class="req">*</span></label>
+        <input type="email" name="altMail" data-section="4" required placeholder="prenom.nom@email.com">
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Nationalité & Régime</div>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="nationalite" value="Française" data-section="4" required> Française</label>
+        <label class="radio-item"><input type="radio" name="nationalite" value="Union Européenne"> Union Européenne</label>
+        <label class="radio-item"><input type="radio" name="nationalite" value="Étranger hors Union Européenne"> Étranger hors UE</label>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Déclarations CERFA</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>Sportif de haut niveau ? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="altSportifHN" value="NON" data-section="4" required> NON</label>
+            <label class="radio-item"><input type="radio" name="altSportifHN" value="OUI"> OUI</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Projet de création/reprise d'entreprise ? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="altProjetEntreprise" value="NON" data-section="4" required> NON</label>
+            <label class="radio-item"><input type="radio" name="altProjetEntreprise" value="OUI"> OUI</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">RQTH & Situation médicale</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>Reconnaissance RQTH ? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="rqth" value="OUI" data-section="4" required> OUI</label>
+            <label class="radio-item"><input type="radio" name="rqth" value="NON"> NON</label>
+          </div>
+        </div>
+        <div class="field" id="rqthDetailsWrap" style="display:none">
+          <label>Si NON à la RQTH — Droits attachés ?</label>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+            <label class="radio-item"><input type="checkbox" name="altEquivalenceJeunes"> Équivalence jeunes</label>
+            <label class="radio-item"><input type="checkbox" name="altExtensionBOE"> Extension BOE (Bénéficiaire de l'Obligation d'Emploi)</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Disposition médicale particulière</label>
+          <input type="text" name="dispMedicale" data-section="4" placeholder="Si applicable (allergies, adaptation, aménagement…)">
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Parcours scolaire</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>Statut avant ce contrat <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="statutAvant" value="Étudiant(e)" data-section="4" required> Étudiant(e)</label>
+            <label class="radio-item"><input type="radio" name="statutAvant" value="Alternant(e)"> Alternant(e)</label>
+            <label class="radio-item"><input type="radio" name="statutAvant" value="Salarié(e)"> Salarié(e)</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Si ancien contrat d'alternance : joindre ancien CERFA + rupture</label>
+          <input type="text" name="ancienCerfa" data-section="4" placeholder="Numéro de l'ancien contrat (si applicable)">
+        </div>
+        <div class="field">
+          <label>Dernière classe / année suivie <span class="req">*</span></label>
+          <input type="text" name="altDerniereClasse" data-section="4" required placeholder="Ex : Terminale STD2A, BTS 1ère année Design Graphique…">
+        </div>
+        <div class="field">
+          <label>NOM du dernier diplôme ou titre préparé <span class="req">*</span></label>
+          <input type="text" name="altDiplomePrepare" data-section="4" required placeholder="Ex : BTS Design Graphique – non validé">
+        </div>
+        <div class="field">
+          <label>Intitulé précis du dernier diplôme préparé <span class="req">*</span></label>
+          <input type="text" name="altDiplomePrecis" data-section="4" required placeholder="Intitulé exact (comme sur le relevé de notes)">
+        </div>
+        <div class="field">
+          <label>Diplôme ou titre le plus élevé obtenu <span class="req">*</span></label>
+          <input type="text" name="altDiplomeObtenu" data-section="4" required placeholder="Ex : Baccalauréat STD2A, DNSEP…">
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section" id="repLegalSection">
+      <div class="sub-title">Représentant légal <span style="font-size:12px;font-weight:400;color:var(--grey)">(obligatoire si l'alternant(e) est mineur(e) non émancipé(e))</span></div>
+      <div id="repLegalAlert" style="display:none;background:var(--orange-bg);border-left:3px solid var(--orange);padding:10px 14px;font-size:13px;font-weight:600;color:var(--orange);margin-bottom:16px">⚠ L'alternant(e) est mineur(e) — le représentant légal doit être renseigné et signer le CERFA.</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>NOM et Prénom du représentant légal <span id="repLegalReq"></span></label>
+          <input type="text" name="repLegalNom" data-section="4" placeholder="NOM Prénom (père, mère, tuteur légal…)">
+        </div>
+        <div class="field field-full">
+          <label>Adresse du représentant légal</label>
+          <input type="text" name="repLegalAdresse" data-section="4" placeholder="N° voie, rue, code postal, ville (si différente de l'alternant)">
+        </div>
+        <div class="field">
+          <label>E-mail du représentant légal</label>
+          <input type="email" name="repLegalMail" data-section="4" placeholder="email@exemple.fr">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 5 — INFORMATIONS CONTRACTUELLES
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">5</div>
+    <div class="section-title">Informations Contractuelles</div>
+    <span class="section-status todo" id="s5status">À compléter</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb5">
+
+    <div class="sub-section" style="margin-top:0;padding-top:0;border-top:none">
+      <div class="sub-title">Formation</div>
+      <div style="background:var(--bg);border:1px solid var(--border);padding:16px 20px;font-size:13px;line-height:1.8">
+        <strong>Formation sélectionnée :</strong> BTS Photographie – Diplôme d'état – RNCP 36970 – Niveau 5<br>
+        <strong>Code formation :</strong> 32032325 &nbsp;|&nbsp; <strong>Niveau européen :</strong> 5 (BAC+2)<br>
+        <strong>Délivré par :</strong> Ministère de l'Enseignement Supérieur et de la Recherche
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Type de contrat</div>
+      <p style="font-size:13px;color:var(--grey);margin-bottom:16px;font-style:italic">Le type de contrat détermine le contexte de la signature. Sélectionnez le cas qui correspond à la situation de l'apprenti(e).</p>
+      <div class="contrat-cards" id="contratCards">
+
+        <label class="contrat-card" for="tc11">
+          <input type="radio" id="tc11" name="typeContrat" value="11" data-section="5" required>
+          <div class="cc-badge">11</div>
+          <div class="cc-content">
+            <div class="cc-title">Contrat initial</div>
+            <div class="cc-desc">L'apprenti(e) n'a <strong>jamais été en alternance</strong> ou ce contrat est son tout premier contrat chez cet employeur. C'est le cas le plus courant pour un(e) étudiant(e) entrant en BTS 1ère année.</div>
+            <div class="cc-example">→ Exemple : lycéen(ne) qui intègre un studio photo pour la 1ère fois.</div>
+          </div>
+          <div class="cc-check">✓</div>
+        </label>
+
+        <label class="contrat-card" for="tc21">
+          <input type="radio" id="tc21" name="typeContrat" value="21" data-section="5">
+          <div class="cc-badge cc-badge-blue">21</div>
+          <div class="cc-content">
+            <div class="cc-title">Renouvellement chez le même employeur</div>
+            <div class="cc-desc">L'apprenti(e) avait déjà un contrat chez <strong>le même employeur</strong> et renouvelle pour continuer (ex : passage de BTS 1ère à 2ème année, ou changement de diplôme dans la même entreprise).</div>
+            <div class="cc-example">→ Exemple : renouvellement en 2ème année chez le même studio.</div>
+            <div class="cc-alert">⚠ Joindre l'ancien numéro de contrat CERFA ci-dessous.</div>
+          </div>
+          <div class="cc-check">✓</div>
+        </label>
+
+        <label class="contrat-card" for="tc22">
+          <input type="radio" id="tc22" name="typeContrat" value="22" data-section="5">
+          <div class="cc-badge cc-badge-green">22</div>
+          <div class="cc-content">
+            <div class="cc-title">Après fin de contrat chez un précédent employeur</div>
+            <div class="cc-desc">L'apprenti(e) a <strong>terminé normalement</strong> un contrat précédent chez un autre employeur (contrat arrivé à son terme) et signe maintenant avec une nouvelle entreprise.</div>
+            <div class="cc-example">→ Exemple : a terminé son BTS 1 dans un labo photo, commence le BTS 2 dans un studio.</div>
+            <div class="cc-alert">⚠ Joindre l'ancien numéro de contrat CERFA + le CERFA de l'ancien contrat.</div>
+          </div>
+          <div class="cc-check">✓</div>
+        </label>
+
+        <label class="contrat-card" for="tc23">
+          <input type="radio" id="tc23" name="typeContrat" value="23" data-section="5">
+          <div class="cc-badge cc-badge-orange">23</div>
+          <div class="cc-content">
+            <div class="cc-title">Après rupture de contrat chez un autre employeur</div>
+            <div class="cc-desc">Le contrat précédent chez un <strong>autre employeur a été rompu</strong> avant son terme (rupture d'un commun accord, démission après médiation, ou licenciement). L'apprenti(e) cherchait une nouvelle entreprise, accompagné par le CFA.</div>
+            <div class="cc-example">→ Exemple : rupture de contrat avec un photographe indépendant, nouveau départ dans une agence.</div>
+            <div class="cc-alert">⚠ Joindre l'ancien CERFA + le document de rupture. L'apprenti(e) bénéficie du maintien de la formation théorique pendant 6 mois (art. L6222-18-2 Code du travail).</div>
+          </div>
+          <div class="cc-check">✓</div>
+        </label>
+
+      </div>
+      <div class="field" style="margin-top:16px;max-width:360px" id="ancienContratWrap">
+        <label>Numéro de l'ancien contrat CERFA <span style="font-size:11px;color:var(--orange);font-weight:700">(obligatoire pour types 21, 22, 23)</span></label>
+        <input type="text" name="numAncienContrat" data-section="5" placeholder="N° contrat CERFA précédent" id="numAncienContrat">
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Dates et durée</div>
+      <div class="fields-grid three">
+        <div class="field">
+          <label>Date de conclusion du contrat <span class="req">*</span></label>
+          <input type="date" name="dateConclusionContrat" data-section="5" required>
+          <span class="hint">Date de signatures = souvent = date de début</span>
+        </div>
+        <div class="field">
+          <label>Date de début d'exécution du contrat <span class="req">*</span></label>
+          <input type="date" name="dateDebut" data-section="5" required>
+        </div>
+        <div class="field">
+          <label>Date de début de formation pratique chez l'employeur <span class="req">*</span></label>
+          <input type="date" name="dateDebutPratique" data-section="5" required>
+          <span class="hint">Souvent identique à la date de début du contrat</span>
+        </div>
+        <div class="field">
+          <label>Date de fin du contrat <span class="req">*</span></label>
+          <input type="date" name="dateFin" data-section="5" required>
+          <span class="hint">Ne peut pas excéder 2 mois après la fin de formation</span>
+        </div>
+        <div class="field">
+          <label>Durée hebdomadaire (heures) <span class="req">*</span></label>
+          <input type="number" name="dureeHebdo" data-section="5" required min="35" max="39" placeholder="Ex : 35">
+        </div>
+        <div class="field">
+          <label>Type de dérogation <span style="font-size:11px;color:var(--grey)">(si applicable)</span></label>
+          <select name="typeDerogation" data-section="5">
+            <option value="">— Aucune dérogation —</option>
+            <option value="1">Dérogation durée – RQTH ou sportif de haut niveau</option>
+            <option value="2">Dérogation durée – 2ème contrat d'apprentissage</option>
+            <option value="3">Dérogation âge – jusqu'à 35 ans (création/reprise d'entreprise)</option>
+            <option value="4">Dérogation âge – sans limite (RQTH)</option>
+            <option value="5">Autre dérogation</option>
+          </select>
+          <span class="hint">La plupart des contrats BTS n'ont pas de dérogation</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Conditions particulières</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>Travail sur machines dangereuses ou exposition à risques ? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="machinesDangereuses" value="NON" data-section="5" required> NON</label>
+            <label class="radio-item"><input type="radio" name="machinesDangereuses" value="OUI"> OUI</label>
+          </div>
+          <span class="hint">Produits chimiques de développement, chambres froides, hauteurs — à évaluer avec l'employeur</span>
+        </div>
+        <div class="field">
+          <label>Salaire brut mensuel à l'embauche <span class="req">*</span></label>
+          <input type="text" name="salaireEmbaucheBrut" id="salaireEmbaucheBrut" data-section="5" required placeholder="Ex : 783,91 €">
+          <span class="hint">Pré-rempli par le calculateur de rémunération ci-dessus</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Avantages en nature</div>
+      <div class="fields-grid three">
+        <div class="field">
+          <label>Nourriture (€ / repas)</label>
+          <input type="text" name="avantageNourriture" data-section="5" placeholder="Ex : 4,50 (ou laisser vide)">
+        </div>
+        <div class="field">
+          <label>Logement (€ / mois)</label>
+          <input type="text" name="avantageLogement" data-section="5" placeholder="Ex : 200 (ou laisser vide)">
+        </div>
+        <div class="field">
+          <label>Autre avantage en nature</label>
+          <input type="text" name="avantageAutre" data-section="5" placeholder="Véhicule, téléphone, matériel… (ou laisser vide)">
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Signature du contrat</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>Fait à (lieu de signature) <span class="req">*</span></label>
+          <input type="text" name="faitA" data-section="5" required placeholder="Ex : Nice">
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Rémunération</div>
+
+      <!-- GRILLE OFFICIELLE -->
+      <div class="remu-explainer">
+        <div class="remu-explainer-head">📊 Grille légale minimale (% du SMIC brut mensuel = 1 823,03 €) — plancher obligatoire</div>
+        <div class="remu-explainer-note">Ces montants sont les <strong>minimums légaux</strong>. Un employeur peut toujours proposer une rémunération supérieure (convention collective plus favorable, accord d'entreprise, contrat précédent mieux rémunéré, volonté de l'employeur…). Il n'existe pas de plafond.</div>
+        <table class="remu-grid-table">
+          <thead>
+            <tr>
+              <th>Tranche d'âge</th>
+              <th colspan="2">1ère Année</th>
+              <th colspan="2">2ème Année</th>
+            </tr>
+            <tr class="subhead">
+              <th></th>
+              <th>% SMIC</th><th>Montant brut min.</th>
+              <th>% SMIC</th><th>Montant brut min.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-tranche="16-17">
+              <td><span class="tranche-badge">16–17 ans</span></td>
+              <td>27%</td><td class="montant">492,22 €</td>
+              <td>39%</td><td class="montant">710,98 €</td>
+            </tr>
+            <tr data-tranche="18-20">
+              <td><span class="tranche-badge">18–20 ans</span></td>
+              <td>43%</td><td class="montant">783,90 €</td>
+              <td>51%</td><td class="montant">929,75 €</td>
+            </tr>
+            <tr data-tranche="21-25">
+              <td><span class="tranche-badge">21–25 ans</span></td>
+              <td>53%</td><td class="montant">966,21 €</td>
+              <td>61%</td><td class="montant">1 112,05 €</td>
+            </tr>
+            <tr data-tranche="26+">
+              <td><span class="tranche-badge">26 ans et +</span></td>
+              <td>100%</td><td class="montant">1 823,03 €</td>
+              <td>100%</td><td class="montant">1 823,03 €</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="remu-aide-note">💶 Aide de l'État pour le BTS (Niveau 5) : <strong>4 500 €</strong> versée à l'employeur pour la 1ère année.</div>
+      </div>
+
+      <!-- TOGGLE AUTO / MANUEL -->
+      <div class="remu-mode-toggle" id="remuModeToggle">
+        <div class="rmt-label">Mode de saisie de la rémunération :</div>
+        <div class="rmt-options">
+          <label class="rmt-opt" id="rmt-auto-label">
+            <input type="radio" name="remuMode" value="auto" id="remuModeAuto" checked>
+            <div class="rmt-opt-content">
+              <div class="rmt-opt-title">🔢 Calcul automatique</div>
+              <div class="rmt-opt-desc">Calculé depuis l'âge et la grille légale — cas standard</div>
+            </div>
+          </label>
+          <label class="rmt-opt" id="rmt-manual-label">
+            <input type="radio" name="remuMode" value="manual" id="remuModeManual">
+            <div class="rmt-opt-content">
+              <div class="rmt-opt-title">✏️ Saisie manuelle</div>
+              <div class="rmt-opt-desc">Salaire supérieur au barème, convention collective ou accord particulier</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- CALCUL AUTOMATIQUE (affiché si mode auto) -->
+      <div id="remuAutoBlock">
+        <div class="remu-calc-box" id="remuCalcBox">
+          <div class="rcb-title">🔢 Calcul automatique depuis l'âge de l'alternant(e)</div>
+          <div class="rcb-result" id="rcbResult">
+            <div class="rcb-waiting">⟳ En attente de la date de naissance (section 4) et de la date de début de contrat…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERTE SALAIRE SUPÉRIEUR (affiché si mode manuel) -->
+      <div id="remuManualAlert" style="display:none">
+        <div class="remu-above-legal">
+          <div class="ral-icon">↑</div>
+          <div>
+            <strong>Rémunération supérieure au barème légal</strong><br>
+            Indiquez ci-dessous le motif et saisissez les montants librement. La rémunération doit rester <strong>au moins égale au minimum légal</strong> calculé dans la grille ci-dessus.
+          </div>
+        </div>
+        <div class="fields-grid" style="margin-top:12px">
+          <div class="field field-full">
+            <label>Motif du salaire supérieur au barème <span class="req">*</span></label>
+            <select name="remuMotifSuperieur" id="remuMotifSuperieur" data-section="5">
+              <option value="">— Sélectionner le motif —</option>
+              <option value="convention">Convention collective de branche plus favorable</option>
+              <option value="accord">Accord d'entreprise ou usage d'entreprise</option>
+              <option value="anterieur">Contrat précédent avec salaire plus élevé (maintien)</option>
+              <option value="employeur">Décision unilatérale de l'employeur (salaire négocié)</option>
+              <option value="smn">Salaire minimum conventionnel (SMC) supérieur au SMIC</option>
+              <option value="autre">Autre motif</option>
+            </select>
+          </div>
+          <div class="field field-full" id="remuMotifAutreWrap" style="display:none">
+            <label>Précisez le motif</label>
+            <input type="text" name="remuMotifAutreDetail" placeholder="Décrivez le motif…">
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAMP % SMIC / MONTANT -->
+      <div class="fields-grid" style="margin-top:16px">
+        <div class="field">
+          <label>% du SMIC ou base de calcul <span class="req">*</span></label>
+          <input type="text" name="pctSmic" id="pctSmicInput" data-section="5" required placeholder="Ex : 43% ou SMIC ou SMC">
+          <span class="hint" id="pctSmicHint">Pré-rempli automatiquement — vous pouvez le modifier</span>
+        </div>
+        <div class="field">
+          <label>Salaire minimum conventionnel (SMC) <span style="font-size:11px;color:var(--grey)">(si convention collective supérieure)</span></label>
+          <input type="text" name="montantSmc" data-section="5" placeholder="Montant brut mensuel en € — laisser vide si = SMIC">
+        </div>
+      </div>
+
+      <div class="remu-table" style="margin-top:8px">
+        <div class="remu-head">
+          <div>Année de formation</div>
+          <div>1ère rémunération (début d'année)</div>
+          <div>2ème rémunération (si évolution en cours d'année)</div>
+        </div>
+        <div class="remu-row">
+          <div>1ère Année</div>
+          <input type="text" name="remu1a1" id="remu1a1" data-section="5" placeholder="Montant brut mensuel en €" class="remu-inp">
+          <input type="text" name="remu1a2" id="remu1a2" data-section="5" placeholder="Si évolution en cours d'année" class="remu-inp">
+        </div>
+        <div class="remu-row">
+          <div>2ème Année</div>
+          <input type="text" name="remu2a1" id="remu2a1" data-section="5" placeholder="Montant brut mensuel en €" class="remu-inp">
+          <input type="text" name="remu2a2" id="remu2a2" data-section="5" placeholder="Si évolution en cours d'année" class="remu-inp">
+        </div>
+      </div>
+
+      <!-- AVERTISSEMENT INFÉRIEUR AU MINIMUM -->
+      <div id="remuBelowAlert" style="display:none" class="remu-below-alert">
+        ⚠ <strong>Attention :</strong> Un ou plusieurs montants semblent inférieurs au minimum légal pour cet âge. Vérifiez avant de valider.
+      </div>
+
+      <div class="remu-legal-note">
+        <strong>📌 Règle d'ancienneté :</strong> Si l'apprenti(e) change de tranche d'âge en cours d'année, la rémunération est revalorisée le 1er jour du mois suivant son anniversaire — indiquez les deux montants.<br>
+        <strong>📌 Exonération de charges :</strong> Exonération totale de cotisations salariales jusqu'à 79% du SMIC (~1 423 € brut). En dessous, brut = net pour l'apprenti.<br>
+        <strong>📌 Salaire libre :</strong> L'employeur peut librement fixer un salaire <strong>au-dessus</strong> du barème légal, sans justification obligatoire. Seul le plancher est imposé par la loi.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 6 — MISSIONS ATTRIBUÉES À L'ALTERNANT
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">6</div>
+    <div class="section-title">Missions attribuées à l'Alternant(e)</div>
+    <span class="section-status todo" id="s6status">À compléter</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb6">
+    <p style="font-size:13px;color:var(--grey);margin-bottom:20px">Ces missions doivent être en rapport avec la qualification visée (BTS Photographie – Niveau 5). Saisissez au minimum 3 missions principales.</p>
+    <div class="missions-list" id="missionsList">
+      <div class="mission-row"><input type="text" name="mission[]" data-section="6" placeholder="Ex : Réalisation de prises de vue en studio (packshot, portrait, corporate)…"><button type="button" class="btn-rm" onclick="removeMission(this)">×</button></div>
+      <div class="mission-row"><input type="text" name="mission[]" data-section="6" placeholder="Ex : Post-production et retouche numérique sur Lightroom / Photoshop…"><button type="button" class="btn-rm" onclick="removeMission(this)">×</button></div>
+      <div class="mission-row"><input type="text" name="mission[]" data-section="6" placeholder="Ex : Gestion et archivage de la photothèque numérique…"><button type="button" class="btn-rm" onclick="removeMission(this)">×</button></div>
+    </div>
+    <button type="button" class="btn-add" onclick="addMission()">+ Ajouter une mission</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     ACTIONS
+════════════════════════════════════════════════ -->
+<div class="actions">
+  <button type="button" class="btn-save" id="btnSave" onclick="saveFDR()">💾 Enregistrer la FDR</button>
+  <a href="cerfa-generator.html" class="btn-cerfa locked" id="btnCerfa">📄 Générer le CERFA →</a>
+  <a href="livret-auto.html" class="btn-livret locked" id="btnLivret">📋 Accéder au Livret →</a>
+  <button type="button" class="btn-reset" onclick="resetFDR()">Réinitialiser</button>
+</div>
+
+</form>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════ UTILS ═══════════ */
+const $ = id => document.getElementById(id);
+const STORE_KEY = 'supphoto_fdr_v3';
+
+function showToast(msg, type='success'){
+  const t=$('toast'); t.textContent=msg; t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+/* ═══════════ TOGGLE SECTIONS ═══════════ */
+function toggleSection(head){
+  const body = head.nextElementSibling;
+  head.classList.toggle('collapsed');
+  body.classList.toggle('hidden');
+}
+
+/* ═══════════ MISSIONS ═══════════ */
+function addMission(){
+  const list=$('missionsList');
+  const row=document.createElement('div'); row.className='mission-row';
+  row.innerHTML=`<input type="text" name="mission[]" data-section="6" placeholder="Mission attribuée à l'alternant…"><button type="button" class="btn-rm" onclick="removeMission(this)">×</button>`;
+  list.appendChild(row);
+  bindField(row.querySelector('input'));
+  updateProgress();
+}
+function removeMission(btn){
+  const rows=document.querySelectorAll('.mission-row');
+  if(rows.length<=1){showToast('Au moins une mission requise','error');return;}
+  btn.parentElement.remove(); updateProgress();
+}
+
+/* ═══════════ FIELD BINDING ═══════════ */
+function bindField(el){
+  el.addEventListener('input', ()=>{ markFilled(el); updateProgress(); });
+  el.addEventListener('change', ()=>{ markFilled(el); updateProgress(); });
+  markFilled(el);
+}
+function markFilled(el){
+  const v = el.value.trim();
+  el.classList.toggle('filled', v.length > 0);
+  if(el.required && v.length===0) el.classList.add('error'); else el.classList.remove('error');
+}
+
+function bindAll(){
+  document.querySelectorAll('input,select,textarea').forEach(bindField);
+}
+
+/* ═══════════ COMPLETION LOGIC ═══════════ */
+const REQUIRED = {
+  1:['typeEmployeur','formeJuridique','raisonSociale','representantNom','representantFonction','adresseSiege','telEntreprise','mailEntreprise','siret','codeNaf','codeIdcc','nbSalaries','convCollective','activitePrincipale','caisseRetraite','opcoNom'],
+  2:['presentationEntreprise','secteurActivite','presentationService','orgService'],
+  3:['tuteurNom','tuteurPrenom','tuteurFonction','tuteurDdn','tuteurSecu','tuteurTel','tuteurMail','tuteurDiplome','tuteurNiveau'],
+  4:['altNom','altPrenom','altPoste','altDdn','altLieuNaissance','altDepNaissance','altSecu','altRegimeSocial','altAdresse','altTel','altMail','altDiplomeObtenu','altDiplomePrepare','altDiplomePrecis','altDerniereClasse','nationalite','rqth','altSexe','altSportifHN','altProjetEntreprise','statutAvant'],
+  5:['typeContrat','dateConclusionContrat','dateDebut','dateDebutPratique','dateFin','dureeHebdo','pctSmic','salaireEmbaucheBrut','machinesDangereuses','faitA'],
+  6:['mission_count']
+};
+
+const RADIO_FIELDS = new Set(['nationalite','rqth','statutAvant','typeContrat','typeEmployeur','altSexe','altSportifHN','altProjetEntreprise','machinesDangereuses']);
+
+function getSectionCompletion(sec){
+  const fields = REQUIRED[sec];
+  let done=0,total=fields.length;
+  fields.forEach(f=>{
+    if(f==='mission_count'){
+      const ms=[...document.querySelectorAll('#missionsList input')].filter(i=>i.value.trim());
+      if(ms.length>=1) done++;
+    } else if(RADIO_FIELDS.has(f)){
+      const checked = document.querySelector(`input[name="${f}"]:checked`);
+      if(checked) done++;
+    } else {
+      const el = document.querySelector(`[name="${f}"]`);
+      if(el && el.value.trim()) done++;
+    }
+  });
+  return {done,total,pct:Math.round(done/total*100)};
+}
+
+function updateProgress(){
+  let totalDone=0, totalReq=0;
+  [1,2,3,4,5,6].forEach(i=>{
+    const {done,total,pct}=getSectionCompletion(i);
+    totalDone+=done; totalReq+=total;
+    const cp=$(`cp${i}`), st=$(`s${i}status`);
+    if(pct===100){
+      cp.className='cp-item done'; cp.querySelector('.cp-icon').textContent='✓';
+      st.className='section-status done'; st.textContent='Complété';
+    } else {
+      cp.className='cp-item todo'; cp.querySelector('.cp-icon').textContent='○';
+      st.className='section-status todo'; st.textContent=pct>0?`${pct}%`:'À compléter';
+    }
+  });
+  const pct = Math.round(totalDone/totalReq*100);
+  $('progressFill').style.width=pct+'%';
+  $('progressText').textContent=pct+'%';
+
+  const livretBtn = $('btnLivret');
+  const cerfaBtn  = $('btnCerfa');
+  if(pct===100){ livretBtn.classList.remove('locked'); if(cerfaBtn) cerfaBtn.classList.remove('locked'); }
+  else { livretBtn.classList.add('locked'); if(cerfaBtn) cerfaBtn.classList.add('locked'); }
+}
+
+/* ═══════════ SAVE / LOAD ═══════════ */
+function collectData(){
+  const data={};
+  document.querySelectorAll('input:not([type=radio]),select,textarea').forEach(el=>{
+    if(el.name && el.name!=='mission[]') data[el.name]=el.value;
+  });
+  // Radio
+  ['nationalite','rqth','statutAvant','typeContrat'].forEach(n=>{
+    const el=document.querySelector(`input[name="${n}"]:checked`);
+    data[n]=el?el.value:'';
+  });
+  // Missions
+  data.missions=[...document.querySelectorAll('#missionsList input')].map(i=>i.value.trim()).filter(Boolean);
+  return data;
+}
+
+function applyData(data){
+  Object.entries(data).forEach(([k,v])=>{
+    if(k==='missions') return;
+    const el=document.querySelector(`[name="${k}"]`);
+    if(el){ el.value=v; markFilled(el); }
+  });
+  // Radios
+  ['nationalite','rqth','statutAvant','typeContrat'].forEach(n=>{
+    if(data[n]){
+      const el=document.querySelector(`input[name="${n}"][value="${data[n]}"]`);
+      if(el) el.checked=true;
+    }
+  });
+  // Missions
+  if(data.missions && data.missions.length){
+    const list=$('missionsList'); list.innerHTML='';
+    data.missions.forEach(m=>{
+      const row=document.createElement('div'); row.className='mission-row';
+      row.innerHTML=`<input type="text" name="mission[]" data-section="6" placeholder="Mission…"><button type="button" class="btn-rm" onclick="removeMission(this)">×</button>`;
+      row.querySelector('input').value=m;
+      list.appendChild(row);
+      bindField(row.querySelector('input'));
+    });
+    if(data.missions.length===0){
+      addMission();
+    }
+  }
+}
+
+function saveFDR(){
+  const data=collectData();
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  updateProgress();
+  const pct=parseInt($('progressText').textContent);
+  if(pct===100){
+    showToast('✓ FDR sauvegardée et complète ! Le livret est maintenant signable.','success');
+  } else {
+    showToast(`FDR sauvegardée (${pct}% complété). Remplissez tous les champs obligatoires.`,'error');
+  }
+}
+
+function resetFDR(){
+  if(!confirm('Réinitialiser toutes les données ? Cette action est irréversible.')) return;
+  localStorage.removeItem(STORE_KEY);
+  location.reload();
+}
+
+/* ═══════════ AUTOSAVE ═══════════ */
+let autosaveTimer=null;
+function scheduleAutosave(){
+  clearTimeout(autosaveTimer);
+  autosaveTimer=setTimeout(()=>{
+    const data=collectData(); localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  },1200);
+}
+
+/* ═══════════ CONTRAT TYPE UI ═══════════ */
+function updateContratUI(){
+  const val = document.querySelector('input[name="typeContrat"]:checked')?.value;
+  const wrap = $('ancienContratWrap');
+  if(wrap) wrap.style.display = (val && val !== '11') ? 'block' : 'none';
+}
+document.querySelectorAll('input[name="typeContrat"]').forEach(r=>{
+  r.addEventListener('change', updateContratUI);
+});
+
+/* ═══════════ MINEUR + RQTH TOGGLES ═══════════ */
+function checkMineur(){
+  const ddn = document.querySelector('[name="altDdn"]')?.value;
+  const deb = document.querySelector('[name="dateDebut"]')?.value || new Date().toISOString().split('T')[0];
+  const alert = $('repLegalAlert');
+  const req   = $('repLegalReq');
+  if(!ddn || !alert) return;
+  const age = calcAge(ddn, deb);
+  if(age < 18){
+    alert.style.display = 'block';
+    if(req) req.innerHTML = '<span class="req">*</span>';
+  } else {
+    alert.style.display = 'none';
+    if(req) req.innerHTML = '';
+  }
+}
+
+function updateRQTHDetails(){
+  const val = document.querySelector('input[name="rqth"]:checked')?.value;
+  const wrap = $('rqthDetailsWrap');
+  if(wrap) wrap.style.display = (val === 'NON') ? 'block' : 'none';
+}
+document.querySelectorAll('input[name="rqth"]').forEach(r=>{
+  r.addEventListener('change', updateRQTHDetails);
+});
+document.querySelector('[name="altDdn"]')?.addEventListener('change', checkMineur);
+
+/* ═══════════ REMU MODE TOGGLE ═══════════ */
+function getRemuMode(){ return document.querySelector('input[name="remuMode"]:checked')?.value || 'auto'; }
+
+function updateRemuModeUI(){
+  const mode = getRemuMode();
+  const autoBlock   = $('remuAutoBlock');
+  const manualAlert = $('remuManualAlert');
+  const hintEl      = $('pctSmicHint');
+  const motifSel    = $('remuMotifSuperieur');
+
+  if(autoBlock)   autoBlock.style.display   = (mode==='auto') ? 'block' : 'none';
+  if(manualAlert) manualAlert.style.display  = (mode==='manual') ? 'block' : 'none';
+
+  // In manual mode, remu fields become free-form; hint changes
+  if(hintEl){
+    hintEl.textContent = mode==='auto'
+      ? 'Pré-rempli automatiquement — vous pouvez le modifier'
+      : 'Saisissez librement le % ou la base retenue';
+  }
+
+  // motif required only in manual mode
+  if(motifSel){
+    motifSel.required = (mode==='manual');
+    if(mode==='auto') motifSel.value = '';
+  }
+
+  // Re-run auto only if auto mode
+  if(mode==='auto') computeRemuAuto();
+  else clearAutoFields(); // don't wipe manual entries — just stop overwriting
+}
+
+function clearAutoFields(){
+  // Does nothing — fields remain as-is so manual values survive
+}
+
+document.querySelectorAll('input[name="remuMode"]').forEach(r=>{
+  r.addEventListener('change', ()=>{ updateRemuModeUI(); updateProgress(); scheduleAutosave(); });
+});
+
+// motif autre detail toggle
+document.addEventListener('change', e=>{
+  if(e.target.name==='remuMotifSuperieur'){
+    const wrap=$('remuMotifAutreWrap');
+    if(wrap) wrap.style.display = (e.target.value==='autre') ? 'block' : 'none';
+  }
+});
+
+/* ═══════════ CHECK BELOW MINIMUM ═══════════ */
+function checkBelowMinimum(){
+  if(getRemuMode()==='auto'){ if($('remuBelowAlert')) $('remuBelowAlert').style.display='none'; return; }
+  const ddn = document.querySelector('[name="altDdn"]')?.value;
+  const deb = document.querySelector('[name="dateDebut"]')?.value;
+  if(!ddn||!deb){ if($('remuBelowAlert')) $('remuBelowAlert').style.display='none'; return; }
+  const age  = calcAge(ddn,deb);
+  const t    = getTrancheAge(age);
+  const g    = GRILLE[t];
+  const minA1 = SMIC*g.a1, minA2 = SMIC*g.a2;
+
+  function parseEuro(v){ if(!v) return null; const n=parseFloat(v.replace(/[^\d,\.]/g,'').replace(',','.')); return isNaN(n)?null:n; }
+  const v1 = parseEuro(document.querySelector('[name="remu1a1"]')?.value);
+  const v2 = parseEuro(document.querySelector('[name="remu2a1"]')?.value);
+
+  const below = (v1!==null && v1 < minA1-0.5) || (v2!==null && v2 < minA2-0.5);
+  if($('remuBelowAlert')) $('remuBelowAlert').style.display = below ? 'block' : 'none';
+}
+
+/* ═══════════ SALAIRE — CALCUL AUTO ═══════════ */
+function computeRemuAuto(){
+  const ddn  = document.querySelector('[name="altDdn"]')?.value;
+  const deb  = document.querySelector('[name="dateDebut"]')?.value;
+  const box  = $('rcbResult');
+  if(!box) return;
+
+  if(!ddn || !deb){ box.innerHTML='<div class="rcb-waiting">⟳ Renseignez la date de naissance (section 4) et la date de début de contrat pour calculer automatiquement…</div>'; highlightGridRow(null); return; }
+
+  const ageA1 = calcAge(ddn, deb);
+  const debA2 = new Date(deb); debA2.setFullYear(debA2.getFullYear()+1);
+  const ageA2 = calcAge(ddn, debA2.toISOString().split('T')[0]);
+
+  if(ageA1 < 15 || ageA1 > 35){ box.innerHTML='<div class="rcb-waiting">⚠ Âge hors plage valide (15–35 ans). Vérifiez la date de naissance.</div>'; return; }
+
+  const t1 = getTrancheAge(ageA1);
+  const t2 = getTrancheAge(ageA2);
+  const g1 = GRILLE[t1], g2 = GRILLE[t2];
+  const m1a1 = SMIC * g1.a1;
+  const m2a1 = SMIC * g2.a2;
+
+  const p1a1 = $('remu1a1'), p1a2 = $('remu1a2'), p2a1 = $('remu2a1'), p2a2 = $('remu2a2');
+  const pct  = $('pctSmicInput');
+
+  if(p1a1){ p1a1.value = fmtEuro(m1a1); markFilled(p1a1); }
+  if(p2a1){ p2a1.value = fmtEuro(m2a1); markFilled(p2a1); }
+  if(pct){  pct.value  = (g1.a1*100)+'% (A1) — '+(g2.a2*100)+'% (A2)'; markFilled(pct); }
+
+  const sal = $('salaireEmbaucheBrut');
+  if(sal && !sal.dataset.manual){ sal.value = fmtEuro(m1a1); markFilled(sal); }
+
+  const changementTranche = t1 !== t2;
+  if(changementTranche){
+    if(p1a2){ p1a2.value = fmtEuro(SMIC * g2.a2); markFilled(p1a2); }
+  } else {
+    if(p1a2){ p1a2.value = ''; }
+  }
+  if(p2a2){ p2a2.value = ''; }
+
+  highlightGridRow(t1);
+  updateProgress();
+
+  box.innerHTML = `
+    <div class="rcb-result-grid">
+      <div class="rcb-year">
+        <div class="rcb-year-title">1ère Année de formation</div>
+        <div class="rcb-year-age">Âge au début : <strong>${ageA1} ans</strong> → <em>${trancheLabel(t1)}</em></div>
+        <div class="rcb-year-pct">${g1.a1*100}% du SMIC</div>
+        <div class="rcb-year-montant">${fmtEuro(m1a1)} brut / mois</div>
+        <div class="rcb-year-annuel">${fmtAnnuel(m1a1)}</div>
+        ${m1a1 <= SMIC*0.79 ? '<div class="rcb-note">✓ ≤ 79% SMIC → exonéré de charges salariales</div>' : '<div class="rcb-note">⚠ > 79% SMIC → cotisations salariales sur la partie excédentaire</div>'}
+      </div>
+      <div class="rcb-year">
+        <div class="rcb-year-title">2ème Année de formation</div>
+        <div class="rcb-year-age">Âge en 2ème année : <strong>${ageA2} ans</strong> → <em>${trancheLabel(t2)}</em></div>
+        <div class="rcb-year-pct">${g2.a2*100}% du SMIC</div>
+        <div class="rcb-year-montant">${fmtEuro(m2a1)} brut / mois</div>
+        <div class="rcb-year-annuel">${fmtAnnuel(m2a1)}</div>
+        ${m2a1 <= SMIC*0.79 ? '<div class="rcb-note">✓ ≤ 79% SMIC → exonéré de charges salariales</div>' : '<div class="rcb-note">⚠ > 79% SMIC → cotisations salariales sur la partie excédentaire</div>'}
+      </div>
+    </div>
+    ${changementTranche ? `<div class="rcb-note" style="margin-top:8px;color:#FFB74D">⚠ Changement de tranche entre A1 et A2 (${trancheLabel(t1)} → ${trancheLabel(t2)}). La 2ème colonne de la 1ère année a été mise à jour.</div>` : ''}
+    <div class="rcb-applied">✓ Montants appliqués automatiquement — passez en mode "Saisie manuelle" pour saisir un salaire différent</div>
+  `;
+}
+
+function computeRemu(){
+  if(getRemuMode()==='auto') computeRemuAuto();
+  checkBelowMinimum();
+}
+
+// Watch remu inputs for below-minimum check in manual mode
+['remu1a1','remu2a1'].forEach(id=>{
+  const el=$(id);
+  if(el) el.addEventListener('input', checkBelowMinimum);
+});
+
+const SMIC = 1823.03;
+const GRILLE = {
+  '16-17': { a1: 0.27, a2: 0.39 },
+  '18-20': { a1: 0.43, a2: 0.51 },
+  '21-25': { a1: 0.53, a2: 0.61 },
+  '26+':   { a1: 1.00, a2: 1.00 },
+};
+
+function getTrancheAge(ageAuDebut){
+  if(ageAuDebut < 18) return '16-17';
+  if(ageAuDebut < 21) return '18-20';
+  if(ageAuDebut < 26) return '21-25';
+  return '26+';
+}
+
+function calcAge(ddn, ref){
+  const d = new Date(ddn), r = new Date(ref);
+  let age = r.getFullYear() - d.getFullYear();
+  const m = r.getMonth() - d.getMonth();
+  if(m < 0 || (m === 0 && r.getDate() < d.getDate())) age--;
+  return age;
+}
+
+function fmtEuro(val){ return val.toFixed(2).replace('.',',') + ' €'; }
+function fmtAnnuel(montant){ return '(' + (montant*12).toFixed(2).replace('.',',') + ' € / an)'; }
+
+function trancheLabel(t){
+  return {'16-17':'16–17 ans','18-20':'18–20 ans','21-25':'21–25 ans','26+':'26 ans et +'}[t]||t;
+}
+
+function highlightGridRow(tranche){
+  document.querySelectorAll('.remu-grid-table tr[data-tranche]').forEach(r=>{
+    r.classList.toggle('active-row', r.dataset.tranche === tranche);
+  });
+}
+
+// Watchers — trigger computeRemu on key field changes
+['altDdn','dateDebut','dateFin'].forEach(name=>{
+  const el = document.querySelector(`[name="${name}"]`);
+  if(el) el.addEventListener('change', computeRemu);
+});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  bindAll();
+  const saved=localStorage.getItem(STORE_KEY);
+  if(saved){
+    try{ applyData(JSON.parse(saved)); }catch(e){}
+  }
+  updateProgress();
+  updateContratUI();
+  computeRemu();
+  updateRemuModeUI();
+  checkMineur();
+  updateRQTHDetails();
+  document.querySelectorAll('input,select,textarea').forEach(el=>{
+    el.addEventListener('input',()=>{ markFilled(el); updateProgress(); scheduleAutosave(); });
+    el.addEventListener('change',()=>{ markFilled(el); updateProgress(); scheduleAutosave(); computeRemu(); updateContratUI(); });
+  });
+  document.querySelectorAll('#missionsList input').forEach(el=>{
+    el.addEventListener('input',()=>{ markFilled(el); updateProgress(); scheduleAutosave(); });
+  });
+});
+</script>
+</body>
+</html>

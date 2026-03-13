@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUP-PHOTO — Connexion</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f0f13;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #1a1a24;
+      border: 1px solid #2a2a3a;
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.5);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: .5px;
+    }
+
+    .logo span {
+      font-size: 13px;
+      color: #888;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #7c3aed22;
+      color: #a78bfa;
+      border: 1px solid #7c3aed55;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      margin-bottom: 24px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      background: #111118;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .2s;
+      margin-bottom: 20px;
+    }
+
+    input:focus { border-color: #7c3aed; }
+
+    button {
+      width: 100%;
+      background: #7c3aed;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 13px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    button:hover { background: #6d28d9; }
+    button:disabled { background: #444; cursor: not-allowed; }
+
+    .error {
+      background: #7f1d1d33;
+      border: 1px solid #ef444455;
+      color: #fca5a5;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <h1>📷 SUP-PHOTO</h1>
+      <span>BTS Photographie — Suivi Alternance</span>
+    </div>
+    <div style="text-align:center">
+      <span class="badge">Espace sécurisé</span>
+    </div>
+
+    <div class="error" id="err"></div>
+
+    <form id="form">
+      <label for="email">Adresse email</label>
+      <input type="email" id="email" placeholder="vous@sup-photo.fr" required autocomplete="email">
+
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+
+      <button type="submit" id="btn">Se connecter</button>
+    </form>
+
+    <p class="footer">SUP-PHOTO © 2025-2027 — Données stockées localement</p>
+  </div>
+
+  <script src="/api.js"></script>
+  <script>
+    // Si déjà connecté, rediriger
+    const user = API.currentUser();
+    if (user && API.token()) {
+      redirect(user.role);
+    }
+
+    function redirect(role) {
+      const dest = {
+        admin:      '/etudiant/dossier.html',
+        etudiant:   '/etudiant/dossier.html',
+        entreprise: '/etudiant/dossier.html'
+      };
+      window.location.href = dest[role] || '/';
+    }
+
+    document.getElementById('form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = document.getElementById('btn');
+      const err = document.getElementById('err');
+      err.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Connexion…';
+
+      try {
+        const data = await API.login(
+          document.getElementById('email').value,
+          document.getElementById('password').value
+        );
+        if (data.error) throw new Error(data.error);
+        redirect(data.user.role);
+      } catch (ex) {
+        err.textContent = ex.message || 'Identifiants incorrects';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Se connecter';
+      }
+    });
+  </script>
+</body>
+</html>

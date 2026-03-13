@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Base de données — SUP-PHOTO Alternance</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#D0021B;--cream:#EDEAE2;--bk:#1A1A1A;--wh:#FFFFFF;
+  --gd:#888;--gm:#D8D4CA;--gn:#1a7a1a;--or:#E67E22;
+  --blue:#1A6FA8;--border:#E0DDD8;
+  --f:'Open Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--f);background:var(--cream);color:var(--bk);min-height:100vh}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 56px;height:72px;
+  background:var(--wh);border-bottom:1px solid rgba(0,0,0,.07);
+}
+.nav-logo img{height:38px;display:block}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-link{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gd);text-decoration:none;transition:color .15s}
+.nav-link:hover,.nav-link.active{color:var(--red)}
+
+/* HERO */
+.hero{
+  background:var(--bk);padding:48px 56px 40px;
+  border-bottom:4px solid var(--red);
+  display:flex;align-items:flex-start;justify-content:space-between;gap:40px;
+}
+.hero-eye{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+.hero-h1{font-size:clamp(32px,4vw,52px);font-weight:800;line-height:.92;letter-spacing:-.02em;color:var(--wh)}
+.hero-h1 .red{color:var(--red)}
+.hero-sub{margin-top:12px;font-size:13px;color:rgba(255,255,255,.45);max-width:540px;line-height:1.7}
+.hero-actions{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(5,1fr);background:var(--wh);border-bottom:1px solid var(--gm)}
+.stat{padding:18px 20px;border-right:1px solid var(--gm);text-align:center}
+.stat:last-child{border-right:none}
+.stat-v{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1;margin-bottom:3px}
+.stat-l{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gd)}
+.sv-total{color:var(--bk)}.sv-cours{color:var(--or)}.sv-conf{color:var(--gn)}.sv-complet{color:var(--blue)}.sv-bloque{color:var(--red)}
+
+/* TOOLBAR */
+.toolbar{
+  background:var(--wh);border-bottom:1px solid var(--gm);
+  padding:14px 56px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.search-wrap{position:relative;flex:1;min-width:180px;max-width:300px}
+.search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--gd);font-size:13px;pointer-events:none}
+.search-inp{
+  width:100%;padding:8px 10px 8px 32px;
+  border:1.5px solid var(--gm);background:var(--cream);
+  font-family:var(--f);font-size:13px;color:var(--bk);outline:none;transition:border-color .2s;
+}
+.search-inp:focus{border-color:var(--red)}
+.filter-sel{
+  padding:8px 12px;border:1.5px solid var(--gm);background:var(--cream);
+  font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--bk);outline:none;cursor:pointer;
+}
+.filter-sel:focus{border-color:var(--red)}
+.tb-sep{width:1px;height:26px;background:var(--gm);margin:0 2px}
+.ml-auto{margin-left:auto}
+.btn{
+  font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:8px 14px;border:none;cursor:pointer;transition:all .2s;white-space:nowrap;
+  font-family:var(--f);display:inline-flex;align-items:center;gap:5px;
+}
+.btn-primary{background:var(--red);color:var(--wh)}.btn-primary:hover{background:#a00015}
+.btn-secondary{background:var(--cream);color:var(--bk);border:1.5px solid var(--gm)}.btn-secondary:hover{border-color:var(--bk)}
+.btn-ghost{background:none;color:var(--gd);border:1.5px solid var(--gm)}.btn-ghost:hover{color:var(--bk);border-color:var(--bk)}
+.btn-hero-ghost{background:none;color:rgba(255,255,255,.5);border:1.5px solid rgba(255,255,255,.2);font-family:var(--f);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-hero-ghost:hover{color:var(--wh);border-color:rgba(255,255,255,.5)}
+.btn-hero-primary{background:var(--red);color:var(--wh);font-family:var(--f);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:10px 20px;border:none;cursor:pointer;transition:background .2s;white-space:nowrap}
+.btn-hero-primary:hover{background:#a00015}
+
+/* TABLE AREA */
+.table-wrap{padding:32px 56px 64px}
+
+/* TABLE */
+.db-table{width:100%;border-collapse:collapse;background:var(--wh);border:1px solid var(--gm)}
+.db-table thead tr{background:var(--bk)}
+.db-table thead th{
+  padding:10px 14px;text-align:left;
+  font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--wh);
+  border-right:1px solid rgba(255,255,255,.08);white-space:nowrap;cursor:pointer;user-select:none;
+}
+.db-table thead th:last-child{border-right:none;cursor:default}
+.db-table thead th:hover:not(:last-child){background:#2a2a2a}
+.db-table thead th.sorted{color:var(--red)}
+.db-table tbody tr{border-bottom:1px solid var(--gm);transition:background .1s}
+.db-table tbody tr:hover{background:#fafafa}
+.db-table tbody tr.active-row{background:#fff8f8}
+.db-table tbody td{padding:11px 14px;font-size:13px;vertical-align:middle;border-right:1px solid var(--gm)}
+.db-table tbody td:last-child{border-right:none}
+
+/* Cell types */
+.cell-name{font-weight:700;display:flex;align-items:center;gap:6px}
+.cell-sub{font-size:10px;color:var(--gd);margin-top:2px}
+
+/* Badges */
+.badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;white-space:nowrap}
+.badge-green{background:#D5F5E3;color:var(--gn)}
+.badge-red{background:#FADBD8;color:var(--red)}
+.badge-orange{background:#FFF3CD;color:#856404}
+.badge-grey{background:#F0F0F0;color:var(--gd)}
+.badge-blue{background:#D6EAF8;color:var(--blue)}
+.badge-active{background:var(--red);color:var(--wh);font-size:8px}
+
+/* Progress mini */
+.pm{display:flex;align-items:center;gap:7px}
+.pm-track{flex:1;height:4px;background:var(--gm);min-width:36px}
+.pm-fill{height:100%;transition:width .3s}
+.pm-fill.green{background:var(--gn)}.pm-fill.orange{background:var(--or)}.pm-fill.red{background:var(--red)}
+.pm-val{font-size:11px;font-weight:700;white-space:nowrap;min-width:26px;text-align:right}
+
+/* Visit dots */
+.vdots{display:flex;gap:3px;margin-bottom:3px}
+.vd{width:9px;height:9px;border-radius:50%}
+.vd.done{background:var(--gn)}.vd.todo{background:var(--gm)}
+
+/* Actions */
+.cell-actions{display:flex;gap:5px;align-items:center}
+.act-btn{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border:none;cursor:pointer;font-family:var(--f);transition:all .15s}
+.act-open{background:var(--red);color:var(--wh)}.act-open:hover{background:#a00015}
+.act-exp{background:var(--cream);color:var(--bk);border:1px solid var(--gm)}.act-exp:hover{border-color:var(--bk)}
+.act-del{background:none;color:var(--gd);border:1px solid var(--gm)}.act-del:hover{background:#FADBD8;color:var(--red);border-color:var(--red)}
+
+/* Empty state */
+.empty-state{padding:72px 40px;text-align:center;background:var(--wh);border:1px solid var(--gm)}
+.empty-ico{font-size:44px;margin-bottom:14px}
+.empty-h{font-size:20px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px}
+.empty-p{font-size:13px;color:var(--gd);margin-bottom:22px;line-height:1.7;max-width:400px;margin-left:auto;margin-right:auto}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:999;
+  background:var(--bk);color:var(--wh);padding:12px 18px;
+  font-size:12px;font-weight:600;letter-spacing:.04em;
+  opacity:0;transition:opacity .3s;pointer-events:none;max-width:300px;
+}
+.toast.show{opacity:1}
+
+/* Modal */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-ov.open{display:flex}
+.modal{background:var(--wh);padding:32px;max-width:400px;width:90%}
+.modal-h{font-size:17px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px}
+.modal-p{font-size:13px;color:var(--gd);margin-bottom:22px;line-height:1.6}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end}
+
+/* Detail panel */
+.detail-panel{
+  background:var(--wh);border:1px solid var(--gm);border-left:4px solid var(--red);
+  padding:20px 24px;margin-bottom:24px;display:none;
+}
+.detail-panel.show{display:block}
+.dp-title{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+.dp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.dp-item{}.dp-label{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gd);margin-bottom:2px}
+.dp-value{font-size:13px;font-weight:600;color:var(--bk)}
+
+@media(max-width:900px){
+  nav,.toolbar,.table-wrap,.hero{padding-left:20px;padding-right:20px}
+  .hero{flex-direction:column}
+  .stats-bar{grid-template-columns:repeat(3,1fr)}
+  .stat:nth-child(3){border-right:none}
+  .table-wrap{padding:16px 20px 40px;overflow-x:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img src="logo-color.png" alt="SUP-PHOTO">
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">← Tableau de bord</a>
+    <a href="database.html" class="nav-link active">Base de données</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eye">SUP-PHOTO · CRE Alternance</div>
+    <div class="hero-h1">Base de <span class="red">données</span><br>Alternants</div>
+    <div class="hero-sub">Gestion centralisée de tous les dossiers d'alternance BTS Photographie. Créez, suivez, exportez et archivez chaque dossier indépendamment.</div>
+  </div>
+  <div class="hero-actions">
+    <button class="btn-hero-primary" onclick="newDossier()">＋ Nouveau dossier</button>
+    <button class="btn-hero-ghost" onclick="importCurrentDossier()">↑ Sauvegarder le dossier actif</button>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-v sv-total" id="st-total">0</div><div class="stat-l">Total</div></div>
+  <div class="stat"><div class="stat-v sv-cours" id="st-cours">0</div><div class="stat-l">En cours</div></div>
+  <div class="stat"><div class="stat-v sv-conf" id="st-conf">0</div><div class="stat-l">Conformes</div></div>
+  <div class="stat"><div class="stat-v sv-complet" id="st-complet">0</div><div class="stat-l">Complets</div></div>
+  <div class="stat"><div class="stat-v sv-bloque" id="st-bloque">0</div><div class="stat-l">Bloqués</div></div>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="search-ico">🔍</span>
+    <input class="search-inp" type="text" id="searchInp" placeholder="Rechercher alternant ou entreprise…" oninput="renderTable()">
+  </div>
+  <select class="filter-sel" id="filterStatus" onchange="renderTable()">
+    <option value="">Tous les statuts</option>
+    <option value="COMPLET">Complet</option>
+    <option value="EN COURS">En cours</option>
+    <option value="NON COMMENCÉ">Non commencé</option>
+    <option value="BLOQUÉ">Bloqué</option>
+  </select>
+  <select class="filter-sel" id="sortBy" onchange="renderTable()">
+    <option value="updated">Trier : Récent</option>
+    <option value="name">Trier : Nom</option>
+    <option value="entreprise">Trier : Entreprise</option>
+    <option value="conformite">Trier : Conformité</option>
+    <option value="fdr">Trier : FDR %</option>
+    <option value="status">Trier : Statut</option>
+    <option value="created">Trier : Créé le</option>
+  </select>
+  <div class="tb-sep"></div>
+  <div class="ml-auto" style="display:flex;gap:7px;flex-wrap:wrap">
+    <button class="btn btn-ghost" onclick="triggerImport()">⬆ Importer JSON</button>
+    <button class="btn btn-ghost" onclick="exportCSV()">⬇ Exporter CSV</button>
+    <button class="btn btn-ghost" onclick="exportJSON()">⬇ Exporter JSON</button>
+  </div>
+  <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+</div>
+
+<!-- TABLE AREA -->
+<div class="table-wrap" id="tableWrap"></div>
+
+<!-- DELETE MODAL -->
+<div class="modal-ov" id="deleteModal">
+  <div class="modal">
+    <div class="modal-h">Supprimer ce dossier ?</div>
+    <div class="modal-p" id="deleteMsg">Cette action est irréversible. Toutes les données de ce dossier seront supprimées définitivement.</div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" id="deleteConfirmBtn">Supprimer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── CLÉS LOCALSTORAGE (cache de travail) ── */
+const ST_KEY   = 'bts_photo_state';
+const CONF_KEY = 'bts_photo_conformite';
+const FDR_KEY  = 'supphoto_fdr_v3';
+const ACTIVE_KEY = 'supphoto_active_id';
+
+/* ── CACHE LOCAL (rempli par fetchAll) ── */
+let _dossiers = [];
+let _activeId = localStorage.getItem(ACTIVE_KEY) || null;
+
+/* ── API HELPERS ── */
+const API = '/api/dossiers';
+const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+
+async function fetchAll() {
+  try {
+    const r = await fetch(API);
+    _dossiers = await r.json();
+  } catch(e) {
+    showToast('⚠ Impossible de joindre le serveur.');
+    _dossiers = [];
+  }
+}
+async function apiSave(d) {
+  return fetch(API, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(d)});
+}
+async function apiDelete(id) {
+  return fetch(API + '/' + id, {method:'DELETE'});
+}
+async function apiGet(id) {
+  const r = await fetch(API + '/' + id);
+  return r.ok ? r.json() : null;
+}
+
+/* ── CALCUL PROGRESSION FDR ── */
+const FDR_REQ = ['typeEmployeur','formeJuridique','raisonSociale','representantNom','representantFonction','adresseSiege','telEntreprise','mailEntreprise','siret','codeNaf','codeIdcc','nbSalaries','convCollective','activitePrincipale','caisseRetraite','opcoNom','opcoContact','presentationEntreprise','secteurActivite','presentationService','orgService','tuteurNom','tuteurPrenom','tuteurFonction','tuteurDdn','tuteurSecu','tuteurTel','tuteurMail','tuteurDiplome','tuteurNiveau','altNom','altPrenom','altPoste','altDdn','altLieuNaissance','altDepNaissance','altSecu','altRegimeSocial','altAdresse','altTel','altMail','altDiplomeObtenu','altDiplomePrepare','altDiplomePrecis','altDerniereClasse','nationalite','rqth','altSexe','altSportifHN','altProjetEntreprise','statutAvant','typeContrat','dateConclusionContrat','dateDebut','dateDebutPratique','dateFin','dureeHebdo','pctSmic','salaireEmbaucheBrut','machinesDangereuses','faitA'];
+const FDR_RADIO = new Set(['nationalite','rqth','statutAvant','typeContrat','typeEmployeur','altSexe','altSportifHN','altProjetEntreprise','machinesDangereuses']);
+function calcFDR(fdr) {
+  if (!fdr) return 0;
+  let n = 0;
+  FDR_REQ.forEach(f => { if (FDR_RADIO.has(f)) { if (fdr[f]) n++; } else { if (fdr[f] && String(fdr[f]).trim()) n++; } });
+  if (fdr.missions && fdr.missions.length >= 1) n++;
+  return Math.round(n / (FDR_REQ.length + 1) * 100);
+}
+
+/* ── ACCESSEURS DOSSIER ── */
+function getName(d) {
+  const f=d.fdr||{}, c=d.conformite||{}, s=(d.state&&d.state.c)||{};
+  return ([f.altPrenom,f.altNom].filter(Boolean).join(' ').trim() || c.alternant || s.alternant || '').trim() || '— Sans nom';
+}
+function getEnt(d) {
+  const f=d.fdr||{}, c=d.conformite||{}, s=(d.state&&d.state.c)||{};
+  return f.raisonSociale || c.entreprise || s.entreprise || '—';
+}
+function getPeriode(d) {
+  const f=d.fdr||{}, c=d.conformite||{}, s=(d.state&&d.state.c)||{};
+  if (f.dateDebut && f.dateFin) return fmtDate(f.dateDebut) + ' → ' + fmtDate(f.dateFin);
+  return c.periode || s.periode || '—';
+}
+function getConf(d) {
+  const c = d.conformite || (d.state && d.state.c) || {};
+  if (c.bloque) return {score:0, label:'BLOQUÉ', cls:'red'};
+  if (c.done && c.score != null) return {score:c.score, label:c.score+'pts', cls:c.score>=75?'green':c.score>=50?'orange':'red'};
+  return {score:null, label:'—', cls:'grey'};
+}
+function getFDR(d) {
+  const pct = calcFDR(d.fdr);
+  return {pct, done:pct===100};
+}
+function getVisites(d) {
+  const v = (d.state && d.state.v && d.state.v.done) || [false,false,false,false];
+  const n = v.filter(Boolean).length;
+  return {arr:v, count:n, done:n===4};
+}
+function getStatus(d) {
+  const c=getConf(d), f=getFDR(d), v=getVisites(d);
+  if (d.conformite && d.conformite.bloque) return {label:'BLOQUÉ', cls:'badge-red'};
+  if (v.done && f.done && c.score != null && c.score >= 25) return {label:'COMPLET', cls:'badge-blue'};
+  if (c.score != null || f.pct > 0 || v.count > 0) return {label:'EN COURS', cls:'badge-orange'};
+  return {label:'NON COMMENCÉ', cls:'badge-grey'};
+}
+
+/* ── FORMATAGE ── */
+function fmtDate(iso) {
+  if (!iso) return '';
+  const p = iso.split('-');
+  return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0].slice(2) : iso;
+}
+function fmtFull(iso) {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}); } catch { return iso; }
+}
+function today() { return new Date().toISOString().slice(0,10); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ── AUTO-SAVE : synchro localStorage → serveur au retour sur cette page ── */
+async function autoSaveActive() {
+  if (!_activeId) return;
+  const st   = JSON.parse(localStorage.getItem(ST_KEY)   || 'null');
+  const conf = JSON.parse(localStorage.getItem(CONF_KEY) || 'null');
+  const fdr  = JSON.parse(localStorage.getItem(FDR_KEY)  || 'null');
+  if (!st && !conf && !fdr) return;
+  const existing = await apiGet(_activeId);
+  const d = existing || {id: _activeId, createdAt: new Date().toISOString()};
+  if (st)   d.state      = st;
+  if (conf) d.conformite = conf;
+  if (fdr)  d.fdr        = fdr;
+  await apiSave(d);
+}
+
+/* ── OUVRIR UN DOSSIER ── */
+async function openDossier(id) {
+  const d = await apiGet(id);
+  if (!d) { showToast('Dossier introuvable.'); return; }
+  if (d.state)      localStorage.setItem(ST_KEY,   JSON.stringify(d.state));      else localStorage.removeItem(ST_KEY);
+  if (d.conformite) localStorage.setItem(CONF_KEY, JSON.stringify(d.conformite)); else localStorage.removeItem(CONF_KEY);
+  if (d.fdr)        localStorage.setItem(FDR_KEY,  JSON.stringify(d.fdr));        else localStorage.removeItem(FDR_KEY);
+  _activeId = id;
+  localStorage.setItem(ACTIVE_KEY, id);
+  window.location.href = 'index.html';
+}
+
+/* ── NOUVEAU DOSSIER ── */
+async function newDossier() {
+  await autoSaveActive();
+  localStorage.removeItem(ST_KEY);
+  localStorage.removeItem(CONF_KEY);
+  localStorage.removeItem(FDR_KEY);
+  const id = genId();
+  await apiSave({id, createdAt:new Date().toISOString(), state:null, conformite:null, fdr:null});
+  _activeId = id;
+  localStorage.setItem(ACTIVE_KEY, id);
+  window.location.href = 'index.html';
+}
+
+/* ── SAUVEGARDER LE DOSSIER ACTIF ── */
+async function importCurrentDossier() {
+  const st   = JSON.parse(localStorage.getItem(ST_KEY)   || 'null');
+  const conf = JSON.parse(localStorage.getItem(CONF_KEY) || 'null');
+  const fdr  = JSON.parse(localStorage.getItem(FDR_KEY)  || 'null');
+  if (!st && !conf && !fdr) { showToast('Aucune donnée active à sauvegarder.'); return; }
+  const id = _activeId || genId();
+  const existing = _activeId ? await apiGet(_activeId) : null;
+  const d = existing || {id, createdAt:new Date().toISOString()};
+  if (st)   d.state      = st;
+  if (conf) d.conformite = conf;
+  if (fdr)  d.fdr        = fdr;
+  d.id = id;
+  await apiSave(d);
+  _activeId = id;
+  localStorage.setItem(ACTIVE_KEY, id);
+  showToast('Dossier sauvegardé dans la base.');
+  await fetchAll();
+  renderTable();
+}
+
+/* ── SUPPRIMER ── */
+let _delId = null;
+function confirmDelete(id) {
+  _delId = id;
+  const d = _dossiers.find(x => x.id === id);
+  const name = d ? getName(d) : 'ce dossier';
+  document.getElementById('deleteMsg').textContent = 'Supprimer le dossier de « ' + name + ' » ? Cette action est irréversible.';
+  document.getElementById('deleteModal').classList.add('open');
+}
+function closeModal() { document.getElementById('deleteModal').classList.remove('open'); _delId = null; }
+document.getElementById('deleteConfirmBtn').onclick = async function() {
+  if (!_delId) return;
+  await apiDelete(_delId);
+  if (_activeId === _delId) {
+    _activeId = null;
+    localStorage.removeItem(ACTIVE_KEY);
+    localStorage.removeItem(ST_KEY);
+    localStorage.removeItem(CONF_KEY);
+    localStorage.removeItem(FDR_KEY);
+  }
+  closeModal();
+  await fetchAll();
+  renderTable();
+  showToast('Dossier supprimé.');
+};
+
+/* ── EXPORT CSV (client-side) ── */
+function exportCSV() {
+  if (!_dossiers.length) { showToast('Aucun dossier à exporter.'); return; }
+  const rows = [['Alternant','Entreprise','Période','Conformité (pts)','FDR (%)','Visites','Statut','Actif','Créé le','Modifié le']];
+  _dossiers.forEach(d => {
+    rows.push([
+      getName(d), getEnt(d), getPeriode(d),
+      getConf(d).label, getFDR(d).pct, getVisites(d).count + '/4',
+      getStatus(d).label, _activeId === d.id ? 'OUI' : '',
+      fmtFull(d.createdAt || d._created_at), fmtFull(d.updatedAt || d._updated_at)
+    ]);
+  });
+  const csv = rows.map(r => r.map(v => '"' + String(v||'').replace(/"/g,'""') + '"').join(',')).join('\n');
+  dl('\uFEFF' + csv, 'supphoto_alternants_' + today() + '.csv', 'text/csv;charset=utf-8');
+}
+
+/* ── EXPORT JSON → via API serveur ── */
+function exportJSON() {
+  if (!_dossiers.length) { showToast('Aucun dossier à exporter.'); return; }
+  window.location.href = '/api/export/json';
+}
+function exportSingle(id) {
+  const d = _dossiers.find(x => x.id === id);
+  if (!d) return;
+  const slug = getName(d).replace(/[^a-zA-Z0-9]/g,'_').slice(0,28);
+  dl(JSON.stringify(d, null, 2), 'dossier_' + slug + '_' + today() + '.json', 'application/json');
+}
+function dl(content, filename, type) {
+  const a = Object.assign(document.createElement('a'), {href:URL.createObjectURL(new Blob([content],{type})), download:filename});
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ── IMPORT JSON → via API serveur ── */
+function triggerImport() { document.getElementById('importFile').click(); }
+function handleImport(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = async ev => {
+    try {
+      const imp = JSON.parse(ev.target.result);
+      const list = Array.isArray(imp) ? imp : (imp.dossiers ? Object.values(imp.dossiers) : [imp]);
+      const res = await fetch('/api/import', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(list)});
+      const json = await res.json();
+      await fetchAll();
+      renderTable();
+      showToast((json.imported || 0) + ' dossier(s) importé(s) dans la base.');
+    } catch { showToast('Format JSON invalide.'); }
+    e.target.value = '';
+  };
+  r.readAsText(file);
+}
+
+/* ── TOAST ── */
+let _tTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(_tTimer); _tTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ── TRI ── */
+let _sortDir = -1;
+
+/* ── RENDU TABLE ── */
+function renderTable() {
+  const db     = loadDB();
+  const search = (document.getElementById('searchInp').value || '').toLowerCase();
+  const fStatus= document.getElementById('filterStatus').value;
+  const sortBy = document.getElementById('sortBy').value;
+
+  let all = Object.values(db.dossiers);
+
+  /* --- Stats (sur tout) --- */
+  document.getElementById('st-total').textContent   = all.length;
+  document.getElementById('st-cours').textContent   = all.filter(d => getStatus(d).label === 'EN COURS').length;
+  document.getElementById('st-conf').textContent    = all.filter(d => { const c=getConf(d); return c.score!=null && c.score>=25 && !(d.conformite&&d.conformite.bloque); }).length;
+  document.getElementById('st-complet').textContent = all.filter(d => getStatus(d).label === 'COMPLET').length;
+  document.getElementById('st-bloque').textContent  = all.filter(d => getStatus(d).label === 'BLOQUÉ').length;
+
+  /* --- Filtres --- */
+  if (search) all = all.filter(d => getName(d).toLowerCase().includes(search) || getEnt(d).toLowerCase().includes(search));
+  if (fStatus) all = all.filter(d => getStatus(d).label === fStatus);
+
+  /* --- Tri --- */
+  all.sort((a, b) => {
+    let av, bv;
+    switch (sortBy) {
+      case 'name':       av = getName(a);             bv = getName(b);              break;
+      case 'entreprise': av = getEnt(a);              bv = getEnt(b);               break;
+      case 'conformite': av = getConf(a).score ?? -1; bv = getConf(b).score ?? -1;  break;
+      case 'fdr':        av = getFDR(a).pct;          bv = getFDR(b).pct;           break;
+      case 'status':     av = getStatus(a).label;     bv = getStatus(b).label;      break;
+      case 'created':    av = a.createdAt || '';       bv = b.createdAt || '';       break;
+      default:           av = a.updatedAt || '';       bv = b.updatedAt || '';       break;
+    }
+    if (av < bv) return _sortDir; if (av > bv) return -_sortDir; return 0;
+  });
+
+  const wrap = document.getElementById('tableWrap');
+
+  /* --- État vide --- */
+  if (!Object.keys(db.dossiers).length) {
+    wrap.innerHTML = `<div class="empty-state">
+      <div class="empty-ico">📂</div>
+      <div class="empty-h">Aucun dossier</div>
+      <div class="empty-p">Commencez par créer un nouveau dossier ou importez vos données existantes via le dossier actif.</div>
+      <button class="btn btn-primary" onclick="newDossier()">＋ Créer le premier dossier</button>
+    </div>`;
+    return;
+  }
+  if (!all.length) {
+    wrap.innerHTML = `<div class="empty-state">
+      <div class="empty-ico">🔍</div>
+      <div class="empty-h">Aucun résultat</div>
+      <div class="empty-p">Aucun dossier ne correspond à votre recherche.</div>
+      <button class="btn btn-secondary" onclick="document.getElementById('searchInp').value='';document.getElementById('filterStatus').value='';renderTable()">Effacer les filtres</button>
+    </div>`;
+    return;
+  }
+
+  /* --- Lignes --- */
+  let rows = '';
+  all.forEach(d => {
+    const isActive = db.activeDossierId === d.id;
+    const name   = getName(d);
+    const conf   = getConf(d);
+    const fdr    = getFDR(d);
+    const vis    = getVisites(d);
+    const status = getStatus(d);
+
+    /* Colonne conformité */
+    let confCell;
+    if (conf.cls === 'grey') {
+      confCell = '<span style="color:var(--gd)">—</span>';
+    } else if (conf.label === 'BLOQUÉ') {
+      confCell = '<span class="badge badge-red">BLOQUÉ</span>';
+    } else {
+      const fc = conf.cls;
+      confCell = `<div class="pm">
+        <div class="pm-track"><div class="pm-fill ${fc}" style="width:${conf.score}%"></div></div>
+        <span class="pm-val" style="color:var(--${fc==='green'?'gn':fc==='orange'?'or':'red'})">${conf.score}pts</span>
+      </div>`;
+    }
+
+    /* Colonne FDR */
+    const fc2 = fdr.pct===100?'green':fdr.pct>0?'orange':'';
+    const fdrCell = fdr.pct === 0
+      ? '<span style="color:var(--gd)">—</span>'
+      : `<div class="pm"><div class="pm-track"><div class="pm-fill ${fc2}" style="width:${fdr.pct}%"></div></div><span class="pm-val">${fdr.pct}%</span></div>`;
+
+    /* Colonne visites */
+    const dots = vis.arr.map(ok => `<div class="vd ${ok?'done':'todo'}"></div>`).join('');
+    const visCell = `<div class="vdots">${dots}</div><div style="font-size:10px;color:var(--gd)">${vis.count}/4</div>`;
+
+    rows += `<tr class="${isActive?'active-row':''}">
+      <td>
+        <div class="cell-name">${esc(name)}${isActive?'<span class="badge badge-active">ACTIF</span>':''}</div>
+        <div class="cell-sub">Modifié ${fmtFull(d.updatedAt)}</div>
+      </td>
+      <td>${esc(getEnt(d))}</td>
+      <td style="font-size:12px;color:#555">${esc(getPeriode(d))}</td>
+      <td>${confCell}</td>
+      <td>${fdrCell}</td>
+      <td>${visCell}</td>
+      <td><span class="badge ${status.cls}">${status.label}</span></td>
+      <td>
+        <div class="cell-actions">
+          <button class="act-btn act-open" onclick="openDossier('${d.id}')">Ouvrir →</button>
+          <button class="act-btn act-exp" onclick="exportSingle('${d.id}')" title="Exporter ce dossier en JSON">⬇</button>
+          <button class="act-btn act-del" onclick="confirmDelete('${d.id}')" title="Supprimer">✕</button>
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  /* --- Indicateurs de tri --- */
+  const si = (col) => sortBy === col ? (_sortDir === -1 ? ' ↓' : ' ↑') : '';
+
+  wrap.innerHTML = `<table class="db-table">
+    <thead>
+      <tr>
+        <th onclick="toggleSort('name')">Alternant·e${si('name')}</th>
+        <th onclick="toggleSort('entreprise')">Entreprise${si('entreprise')}</th>
+        <th>Période</th>
+        <th onclick="toggleSort('conformite')">Conformité${si('conformite')}</th>
+        <th onclick="toggleSort('fdr')">FDR${si('fdr')}</th>
+        <th>Visites</th>
+        <th onclick="toggleSort('status')">Statut${si('status')}</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div style="margin-top:12px;font-size:11px;color:var(--gd)">
+    ${all.length} dossier${all.length>1?'s':''} affiché${all.length>1?'s':''} · Données stockées localement dans votre navigateur
+  </div>`;
+}
+
+function toggleSort(col) {
+  const sel = document.getElementById('sortBy');
+  if (sel.value === col) { _sortDir *= -1; } else { sel.value = col; _sortDir = -1; }
+  renderTable();
+}
+
+/* ── FERMER MODAL SUR OVERLAY ── */
+document.getElementById('deleteModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+/* ── INIT ── */
+autoSaveActive();
+renderTable();
+</script>
+</body>
+</html>

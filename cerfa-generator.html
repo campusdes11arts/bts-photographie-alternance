@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CERFA N°10103*14 — Contrat d'apprentissage — SUP-PHOTO</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── APP SHELL ── */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#E8003D;--bg:#F7F6F3;--border:#E0DDD8;
+  --text:#1A1A1A;--mid:#555550;--grey:#888885;
+  --white:#FFFFFF;--green:#1a7a43;--orange:#C96B00;
+  --sans:'Open Sans',sans-serif;
+  --navy:#1e3a5f;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text)}
+nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;height:64px}
+.nav-logo img{height:34px}
+.nav-actions{display:flex;gap:12px;align-items:center}
+.btn-print{background:var(--red);color:#fff;border:none;padding:10px 24px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.btn-back{background:none;border:1.5px solid var(--border);padding:9px 18px;font-family:var(--sans);font-size:12px;font-weight:600;color:var(--mid);cursor:pointer;text-decoration:none;display:inline-block}
+.status-bar{background:#fff;border-bottom:1px solid var(--border);padding:10px 32px}
+.sb-inner{max-width:820px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.sb-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.sb-msg{font-size:13px;font-weight:600}
+.screen-wrap{max-width:860px;margin:28px auto 48px;padding:0 24px}
+.screen-note{background:var(--text);color:#fff;padding:16px 22px;margin-bottom:24px;font-size:13px;line-height:1.7}
+.screen-note strong{font-weight:700}
+.screen-actions{display:flex;gap:16px;margin-top:24px}
+.btn-dl{background:var(--green);color:#fff;border:none;padding:14px 28px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer}
+
+/* ════════════════════════════════════
+   CERFA SHEET — reproduit le CERFA officiel
+════════════════════════════════════ */
+.cerfa-sheet{
+  background:#fff;
+  border:1px solid #ccc;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:9.5pt;
+  color:#000;
+  width:100%;
+}
+
+/* ── HEADER OFFICIEL ── */
+.cerfa-topbar{
+  display:grid;
+  grid-template-columns:110px 1fr 110px;
+  border-bottom:1.5px solid #000;
+  min-height:52px;
+}
+.cerfa-topbar-left{
+  border-right:1px solid #000;
+  padding:5px 6px;
+  display:flex;flex-direction:column;gap:2px;
+}
+.cerfa-ministry-logo{
+  display:flex;align-items:flex-start;gap:4px;
+}
+.logo-tricolor{display:flex;flex-direction:column;width:10px;gap:1px;flex-shrink:0;margin-top:1px}
+.logo-tricolor span{height:4px;display:block}
+.logo-tricolor .bl{background:#002395}
+.logo-tricolor .wh{background:#fff;border:0.5px solid #ccc}
+.logo-tricolor .rd{background:#ED2939}
+.ministry-text{font-size:6.5pt;font-weight:700;line-height:1.35;color:#000}
+.liberty-words{font-size:5.5pt;color:#555;line-height:1.3;font-style:italic;margin-top:2px}
+.cerfa-topbar-center{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:6px 10px;text-align:center;
+}
+.cerfa-main-title{font-size:14pt;font-weight:700;line-height:1.1}
+.cerfa-subtitle{font-size:7.5pt;color:#000;margin-top:2px}
+.cerfa-notice-inline{font-size:7pt;font-style:italic;margin-top:3px;color:#333}
+.cerfa-topbar-right{
+  border-left:1px solid #000;
+  padding:5px 6px;
+  display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;
+}
+.cerfa-logo-img{font-size:20pt;font-weight:900;font-style:italic;color:var(--navy);letter-spacing:-1px}
+.cerfa-numero{font-size:8.5pt;font-weight:700;color:#000;text-align:right}
+
+/* ── MODE CONTRACTUEL ── */
+.cerfa-mode-bar{
+  text-align:center;
+  font-size:9.5pt;
+  font-weight:700;
+  padding:4px 0;
+  border-bottom:1.5px solid #000;
+  letter-spacing:.05em;
+}
+
+/* ── SECTION HEADER ── */
+.sec-head{
+  background:#000;
+  color:#fff;
+  font-size:9pt;
+  font-weight:700;
+  text-align:center;
+  padding:3px 8px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  border-bottom:1px solid #000;
+}
+
+/* ── FORM TABLE LAYOUT ── */
+.ftable{width:100%;border-collapse:collapse}
+.ftable td,.ftable th{
+  border:1px solid #555;
+  padding:2px 5px;
+  vertical-align:top;
+  font-size:9pt;
+}
+.ftable .lbl{
+  font-size:7.5pt;
+  font-weight:700;
+  color:#000;
+  display:block;
+  line-height:1.2;
+  margin-bottom:1px;
+}
+.ftable .val{
+  font-size:9.5pt;
+  font-weight:400;
+  min-height:14px;
+  display:block;
+  border-bottom:1px solid #999;
+  line-height:1.4;
+  padding-bottom:1px;
+}
+.ftable .val.big{font-size:10pt;font-weight:700}
+.ftable .val.empty{color:#aaa;font-style:italic;font-weight:400;font-size:8.5pt}
+.no-border{border:none!important}
+.no-pad{padding:0!important}
+.bg-light{background:#f0f0f0}
+.bold{font-weight:700}
+.center{text-align:center}
+
+/* ── CHECKBOXES ── */
+.cb-row{display:flex;gap:10px;align-items:center;margin-top:2px;flex-wrap:wrap}
+.cb-item{display:flex;align-items:center;gap:3px;font-size:9pt;white-space:nowrap}
+.cb-box{
+  width:11px;height:11px;border:1.5px solid #333;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:9pt;font-weight:700;flex-shrink:0;
+  line-height:1;
+}
+.cb-box.on{background:#000;color:#fff;border-color:#000}
+
+/* ── SECTION SEPARATOR ── */
+.sec-wrap{border:1.5px solid #000;border-top:none}
+.sec-wrap + .sec-wrap{border-top:1.5px solid #000;margin-top:0}
+
+/* ── REMU TABLE ── */
+.remu-table{width:100%;border-collapse:collapse;font-size:8.5pt}
+.remu-table th{background:#ddd;border:1px solid #555;padding:2px 4px;text-align:center;font-size:7.5pt;font-weight:700}
+.remu-table td{border:1px solid #555;padding:2px 5px;text-align:center}
+.remu-table td:first-child{text-align:left;font-weight:700}
+
+/* ── SIGNATURES ── */
+.sig-table{width:100%;border-collapse:collapse}
+.sig-table td{border:1px solid #555;padding:6px 8px;vertical-align:top;width:33.33%}
+.sig-title{font-size:7.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#000;margin-bottom:5px}
+.sig-name{font-size:9pt;font-weight:700;margin-bottom:3px;min-height:14px}
+.sig-role{font-size:8pt;color:#333;margin-bottom:4px}
+.sig-canvas-wrap{
+  border:1px dashed #bbb;
+  height:75px;
+  background:#fafafa;
+  position:relative;
+  cursor:crosshair;
+  margin-top:4px;
+}
+.sig-canvas-wrap canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.sig-hint{font-size:7pt;color:#bbb;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap}
+.sig-clear{font-size:7.5pt;color:var(--red);cursor:pointer;text-align:right;margin-top:2px;font-weight:700}
+.sig-clear:hover{text-decoration:underline}
+
+/* ── CADRE RÉSERVÉ ── */
+.cadre-wrap{border:1.5px solid #000;border-top:none;padding:6px 8px;background:#f7f7f7}
+.cadre-title{font-size:7.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#000;margin-bottom:6px;border-bottom:1px solid #ccc;padding-bottom:3px}
+.cadre-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 12px}
+.cadre-field label{font-size:7pt;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:1px}
+.cadre-field input{border:none;border-bottom:1px solid #999;font-size:9pt;font-family:Arial,sans-serif;background:transparent;width:100%;outline:none;padding:1px 0}
+
+/* ── FOOTER NOTE ── */
+.cerfa-footer-note{font-size:7pt;color:#555;font-style:italic;padding:4px 8px;border-top:1px solid #ccc;text-align:center}
+
+/* ── PRINT ── */
+@media print{
+  nav,.status-bar,.screen-wrap>.screen-note,.screen-actions,.btn-print,.btn-back,.sig-clear,.cadre-wrap{display:none!important}
+  .screen-wrap{margin:0;padding:0;max-width:100%}
+  body{background:#fff}
+  .cerfa-sheet{border:none;font-size:9pt}
+  .sig-canvas-wrap{cursor:default}
+  .sec-wrap{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img src="logo-color.png" alt="SUP-PHOTO">
+  </a>
+  <div class="nav-actions">
+    <a href="fdr-complete.html" class="btn-back">← Retour FDR</a>
+    <button class="btn-print" onclick="window.print()">🖨 Imprimer / PDF</button>
+  </div>
+</nav>
+
+<div class="status-bar">
+  <div class="sb-inner">
+    <div class="sb-dot" id="sbDot" style="background:var(--grey)"></div>
+    <div class="sb-msg" id="sbMsg">Chargement des données…</div>
+  </div>
+</div>
+
+<div class="screen-wrap">
+
+  <div class="screen-note">
+    <strong>CERFA N°10103*14 — Contrat d'apprentissage</strong><br>
+    Ce document est pré-rempli depuis la Fiche de Renseignements. Vérifiez chaque champ avant impression.
+    Une fois signé par les trois parties, déposez-le auprès de l'OPCO dans les <strong>5 jours ouvrables</strong> suivant la date de début d'exécution du contrat.
+  </div>
+
+  <!-- ════ CERFA SHEET ════ -->
+  <div class="cerfa-sheet" id="cerfaSheet">
+
+    <!-- ── HEADER ── -->
+    <div class="cerfa-topbar">
+      <div class="cerfa-topbar-left">
+        <div class="cerfa-ministry-logo">
+          <div class="logo-tricolor"><span class="bl"></span><span class="wh"></span><span class="rd"></span></div>
+          <div class="ministry-text">MINISTÈRE<br>DU TRAVAIL,<br>DE LA SANTÉ,<br>DES SOLIDARITÉS<br>ET DES FAMILLES</div>
+        </div>
+        <div class="liberty-words">Liberté<br>Égalité<br>Fraternité</div>
+      </div>
+      <div class="cerfa-topbar-center">
+        <div class="cerfa-main-title">Contrat d'apprentissage</div>
+        <div class="cerfa-subtitle">(art. L6211-1 et suivants du code du travail)</div>
+        <div class="cerfa-notice-inline">(Lire ATTENTIVEMENT la notice Cerfa avant de remplir ce document)</div>
+      </div>
+      <div class="cerfa-topbar-right">
+        <div class="cerfa-logo-img">cerfa</div>
+        <div class="cerfa-numero">N° 10103*14</div>
+      </div>
+    </div>
+
+    <div class="cerfa-mode-bar">Mode contractuel de l'apprentissage</div>
+
+    <!-- ════ L'EMPLOYEUR ════ -->
+    <div class="sec-head">L'Employeur</div>
+    <div class="sec-wrap">
+      <table class="ftable">
+        <!-- Type employeur -->
+        <tr>
+          <td colspan="2">
+            <span class="lbl">Type d'employeur</span>
+            <div class="cb-row">
+              <div class="cb-item"><div class="cb-box" id="cbPrivé"></div>&nbsp;employeur privé</div>
+              <div class="cb-item"><div class="cb-box" id="cbPublic"></div>&nbsp;employeur « public »*</div>
+            </div>
+          </td>
+        </tr>
+        <!-- Nom + SIRET -->
+        <tr>
+          <td style="width:60%">
+            <span class="lbl">Nom et prénom ou dénomination :</span>
+            <span class="val big" id="c-raisonSociale"></span>
+          </td>
+          <td>
+            <span class="lbl">N°SIRET de l'établissement d'exécution du contrat :</span>
+            <span class="val" id="c-siret"></span>
+          </td>
+        </tr>
+        <!-- Adresse + Type/APE/Effectif/IDCC -->
+        <tr>
+          <td rowspan="3">
+            <span class="lbl">Adresse de l'établissement d'exécution du contrat :</span>
+            <span class="val" id="c-adresseExecution"></span>
+            <br><br>
+            <span class="lbl">Téléphone :</span>
+            <span class="val" id="c-telEntreprise"></span>
+            <br>
+            <span class="lbl">Courriel :</span>
+            <span class="val" id="c-mailEntreprise"></span>
+          </td>
+          <td>
+            <span class="lbl">Type d'employeur :</span>
+            <span class="val" id="c-typeEmployeur"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Employeur spécifique :</span>
+            <span class="val" id="c-employeurSpecifique"></span>
+            <br>
+            <span class="lbl">Code activité de l'entreprise (APE) :</span>
+            <span class="val" id="c-codeNaf"></span>
+            <br>
+            <span class="lbl">Effectif total salariés de l'entreprise :</span>
+            <span class="val" id="c-nbSalaries"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Code IDCC de la convention collective applicable :</span>
+            <span class="val" id="c-codeIdcc"></span>
+          </td>
+        </tr>
+        <!-- Secteur public -->
+        <tr>
+          <td colspan="2" style="font-size:8pt;font-style:italic;padding:3px 6px">
+            *Pour les employeurs du secteur public, adhésion de l'apprenti au régime spécifique d'assurance chômage :&nbsp;
+            <span class="cb-box" id="cbRegimeChomage" style="display:inline-flex;width:10px;height:10px;font-size:8pt"></span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ════ L'APPRENTI(E) ════ -->
+    <div class="sec-head" style="margin-top:0;border-top:1.5px solid #000">L'Apprenti(e)</div>
+    <div class="sec-wrap">
+      <table class="ftable">
+        <tr>
+          <td colspan="2">
+            <span class="lbl">Nom de naissance de l'apprenti(e) :</span>
+            <span class="val big" id="c-altNom"></span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span class="lbl">Nom d'usage :</span>
+            <span class="val" id="c-altNomUsage"></span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span class="lbl">Le premier prénom de l'apprenti(e) selon l'état civil :</span>
+            <span class="val big" id="c-altPrenom"></span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span class="lbl">NIR de l'apprenti(e) :</span>
+            <span class="val" id="c-altSecu"></span>
+          </td>
+        </tr>
+        <!-- Adresse apprenti | naissance + extras -->
+        <tr>
+          <td style="width:55%" rowspan="4">
+            <span class="lbl">Adresse de l'apprenti(e) :</span>
+            <span class="val" id="c-altAdresse"></span>
+            <br><br>
+            <span class="lbl">Téléphone :</span>
+            <span class="val" id="c-altTel"></span>
+            <br>
+            <span class="lbl">Courriel :</span>
+            <span class="val" id="c-altMail"></span>
+            <br><br>
+            <!-- Représentant légal -->
+            <span class="lbl" style="font-size:8pt">Représentant légal <em>(à renseigner si l'apprenti est mineur non émancipé)</em></span>
+            <span class="lbl">Nom de naissance et prénom :</span>
+            <span class="val" id="c-repLegalNom"></span>
+            <br>
+            <span class="lbl">Adresse du représentant légal :</span>
+            <span class="val" id="c-repLegalAdresse"></span>
+            <br>
+            <span class="lbl">Courriel :</span>
+            <span class="val" id="c-repLegalMail"></span>
+          </td>
+          <td>
+            <span class="lbl">Date de naissance :</span>
+            <span class="val" id="c-altDdn"></span>
+            <br>
+            <span class="lbl">Sexe :</span>
+            <div class="cb-row">
+              <div class="cb-item"><div class="cb-box" id="cbM"></div>&nbsp;M</div>
+              <div class="cb-item"><div class="cb-box" id="cbF"></div>&nbsp;F</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Département de naissance :</span>
+            <span class="val" id="c-altDepNaissance"></span>
+            <br>
+            <span class="lbl">Commune de naissance :</span>
+            <span class="val" id="c-altLieuNaissance"></span>
+            <br>
+            <span class="lbl">Nationalité :</span>
+            <span class="val" id="c-nationalite" style="display:inline-block;width:48%"></span>
+            &nbsp;&nbsp;<span class="lbl" style="display:inline">Régime social :</span>
+            <span class="val" id="c-altRegimeSocial" style="display:inline-block;width:40%"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Déclare être inscrit sur la liste des sportifs de haut niveau :</span>
+            <div class="cb-row">
+              <div class="cb-item"><div class="cb-box" id="cbSportifOui"></div>&nbsp;Oui</div>
+              <div class="cb-item"><div class="cb-box" id="cbSportifNon"></div>&nbsp;Non</div>
+            </div>
+            <br>
+            <span class="lbl">Déclare bénéficier de la reconnaissance travailleur handicapé :</span>
+            <div class="cb-row">
+              <div class="cb-item"><div class="cb-box" id="cbRqthOui"></div>&nbsp;Oui</div>
+              <div class="cb-item"><div class="cb-box" id="cbRqthNon"></div>&nbsp;Non</div>
+            </div>
+            <br>
+            <span class="lbl">Si non, bénéficiez-vous de droits attachés à la RQTH** :</span>
+            <div class="cb-row">
+              <div class="cb-item">Équivalence jeunes : <div class="cb-box" id="cbEqJeunes"></div>&nbsp;Oui</div>
+              <div class="cb-item"><div class="cb-box" id="cbEqJeunesNon"></div>&nbsp;Non</div>
+            </div>
+            <div class="cb-row">
+              <div class="cb-item">Extension BOE : <div class="cb-box" id="cbExtBOE"></div>&nbsp;Oui</div>
+              <div class="cb-item"><div class="cb-box" id="cbExtBOENon"></div>&nbsp;Non</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Situation avant ce contrat :</span>
+            <span class="val" id="c-statutAvant"></span>
+            <br>
+            <span class="lbl">Dernier diplôme ou titre préparé :</span>
+            <span class="val" id="c-altDiplomePrepare"></span>
+            <br>
+            <span class="lbl">Dernière classe / année suivie :</span>
+            <span class="val" id="c-altDerniereClasse"></span>
+            <br>
+            <span class="lbl">Intitulé précis du dernier diplôme ou titre préparé :</span>
+            <span class="val" id="c-altDiplomePrecis"></span>
+            <br>
+            <span class="lbl">Diplôme ou titre le plus élevé obtenu :</span>
+            <span class="val" id="c-altDiplomeObtenu"></span>
+            <br>
+            <span class="lbl">Déclare avoir un projet de création ou de reprise d'entreprise :</span>
+            <div class="cb-row">
+              <div class="cb-item"><div class="cb-box" id="cbProjetOui"></div>&nbsp;Oui</div>
+              <div class="cb-item"><div class="cb-box" id="cbProjetNon"></div>&nbsp;Non</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="font-size:7.5pt;font-style:italic;padding:3px 6px">** Reportez-vous à la page 4 de la notice pour en savoir plus sur les droits attachés à la RQTH</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ════ LE MAÎTRE D'APPRENTISSAGE ════ -->
+    <div class="sec-head" style="border-top:1.5px solid #000">Le Maître d'Apprentissage</div>
+    <div class="sec-wrap">
+      <table class="ftable">
+        <tr>
+          <td style="width:50%;font-weight:700;font-size:9pt" class="bg-light">Maître d'apprentissage n°1</td>
+          <td style="font-weight:700;font-size:9pt" class="bg-light">Maître d'apprentissage n°2</td>
+        </tr>
+        <tr>
+          <td><span class="lbl">Nom de naissance :</span><span class="val big" id="c-tuteurNom"></span></td>
+          <td><span class="lbl">Nom de naissance :</span><span class="val" id="c-tuteur2Nom"></span></td>
+        </tr>
+        <tr>
+          <td><span class="lbl">Prénom :</span><span class="val" id="c-tuteurPrenom"></span></td>
+          <td><span class="lbl">Prénom :</span><span class="val" id="c-tuteur2Prenom"></span></td>
+        </tr>
+        <tr>
+          <td><span class="lbl">Date de naissance :</span><span class="val" id="c-tuteurDdn"></span></td>
+          <td><span class="lbl">Date de naissance :</span><span class="val" id="c-tuteur2Ddn"></span></td>
+        </tr>
+        <tr>
+          <td><span class="lbl">Courriel :</span><span class="val" id="c-tuteurMail"></span></td>
+          <td><span class="lbl">Courriel :</span><span class="val" id="c-tuteur2Mail"></span></td>
+        </tr>
+        <tr>
+          <td><span class="lbl">Emploi occupé :</span><span class="val" id="c-tuteurFonction"></span></td>
+          <td><span class="lbl">Emploi occupé :</span><span class="val" id="c-tuteur2Fonction"></span></td>
+        </tr>
+        <tr>
+          <td><span class="lbl">Diplôme ou titre le plus élevé obtenu :</span><span class="val" id="c-tuteurDiplome"></span></td>
+          <td><span class="lbl">Diplôme ou titre le plus élevé obtenu :</span><span class="val" id="c-tuteur2Diplome"></span></td>
+        </tr>
+        <tr>
+          <td><span class="lbl">Niveau de diplôme ou titre le plus élevé obtenu :</span><span class="val" id="c-tuteurNiveau"></span></td>
+          <td><span class="lbl">Niveau de diplôme ou titre le plus élevé obtenu :</span><span class="val" id="c-tuteur2Niveau"></span></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="font-size:8.5pt;font-style:italic;padding:4px 6px">
+            <span class="cb-box" style="display:inline-flex;width:10px;height:10px;font-size:8pt"></span>
+            &nbsp;L'employeur atteste sur l'honneur que le maître d'apprentissage répond à l'ensemble des critères d'éligibilité à cette fonction.
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ════ LE CONTRAT ════ -->
+    <div class="sec-head" style="border-top:1.5px solid #000">Le Contrat</div>
+    <div class="sec-wrap">
+      <table class="ftable">
+        <tr>
+          <td style="width:34%">
+            <span class="lbl">Type de contrat ou d'avenant :</span>
+            <span class="val big" id="c-typeContrat"></span>
+          </td>
+          <td style="width:33%">
+            <span class="lbl">Type de dérogation : <em style="font-weight:400;font-size:7.5pt">à renseigner si une dérogation existe</em></span>
+            <span class="val" id="c-typeDerogation"></span>
+          </td>
+          <td>
+            <span class="lbl">Numéro du contrat précédent ou du contrat sur lequel porte l'avenant :</span>
+            <span class="val" id="c-numAncienContrat"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Date de conclusion :<br><em style="font-weight:400;font-size:7.5pt">(Date de signatures du présent contrat)</em></span>
+            <span class="val" id="c-dateConclusionContrat"></span>
+          </td>
+          <td>
+            <span class="lbl">Date de début d'exécution du contrat :</span>
+            <span class="val" id="c-dateDebut"></span>
+          </td>
+          <td>
+            <span class="lbl">Date de début de formation pratique chez l'employeur :</span>
+            <span class="val" id="c-dateDebutPratique"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Date de fin du contrat ou de la période d'apprentissage :</span>
+            <span class="val" id="c-dateFin"></span>
+          </td>
+          <td>
+            <span class="lbl">Durée hebdomadaire du travail :</span>
+            <span class="val" id="c-dureeHebdo"></span>
+          </td>
+          <td>
+            <span class="lbl">Travail sur machines dangereuses ou exposition à des risques particuliers :</span>
+            <div class="cb-row">
+              <div class="cb-item"><div class="cb-box" id="cbMachOui"></div>&nbsp;Oui</div>
+              <div class="cb-item"><div class="cb-box" id="cbMachNon"></div>&nbsp;Non</div>
+            </div>
+          </td>
+        </tr>
+        <!-- RÉMUNÉRATION -->
+        <tr>
+          <td colspan="3" style="padding:3px 6px;font-size:8pt;font-weight:700;background:#f0f0f0">
+            Rémunération * — Indiquer SMIC ou SMC (salaire minimum conventionnel)
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" style="padding:4px 6px">
+            <table class="remu-table">
+              <thead>
+                <tr>
+                  <th style="text-align:left;width:14%">Année</th>
+                  <th>Du</th><th>au</th><th>% du *</th>
+                  <th style="border-left:2px solid #888">Du</th><th>au</th><th>% du *</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1ère année</td>
+                  <td id="c-remu1-d1"></td><td id="c-remu1-f1"></td><td id="c-remu1a1"></td>
+                  <td style="border-left:2px solid #888" id="c-remu1-d2">—</td><td id="c-remu1-f2">—</td><td id="c-remu1a2">—</td>
+                </tr>
+                <tr>
+                  <td>2ème année</td>
+                  <td id="c-remu2-d1"></td><td id="c-remu2-f1"></td><td id="c-remu2a1"></td>
+                  <td style="border-left:2px solid #888">—</td><td>—</td><td>—</td>
+                </tr>
+                <tr><td>3ème année</td><td>—</td><td>—</td><td>—</td><td style="border-left:2px solid #888">—</td><td>—</td><td>—</td></tr>
+                <tr><td>4ème année</td><td>—</td><td>—</td><td>—</td><td style="border-left:2px solid #888">—</td><td>—</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Salaire brut mensuel à l'embauche :</span>
+            <span class="val big" id="c-salaireEmbaucheBrut"></span>
+          </td>
+          <td>
+            <span class="lbl">Caisse de retraite complémentaire :</span>
+            <span class="val" id="c-caisseRetraite"></span>
+          </td>
+          <td>
+            <span class="lbl">Avantages en nature, le cas échéant :</span>
+            <span class="val" id="c-avantages" style="font-size:8.5pt"></span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ════ LA FORMATION ════ -->
+    <div class="sec-head" style="border-top:1.5px solid #000">La Formation</div>
+    <div class="sec-wrap">
+      <table class="ftable">
+        <tr>
+          <td style="width:30%">
+            <span class="lbl">CFA d'entreprise :</span>
+            <div class="cb-row">
+              <div class="cb-item"><div class="cb-box" id="cbCfaOui"></div>&nbsp;Oui</div>
+              <div class="cb-item"><div class="cb-box on" id="cbCfaNon">✓</div>&nbsp;Non</div>
+            </div>
+          </td>
+          <td>
+            <span class="lbl">Dénomination du CFA responsable :</span>
+            <span class="val big">SUP-PHOTO Image &amp; Stratégie</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">N° UAI du CFA :</span>
+            <span class="val">0062410M</span>
+          </td>
+          <td>
+            <span class="lbl">N° SIRET CFA :</span>
+            <span class="val">812 487 973 00065</span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span class="lbl">Adresse du CFA responsable :</span>
+            <span class="val">12 Boulevard René Cassin — 06200 Nice</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Diplôme ou titre visé par l'apprenti :</span>
+            <span class="val big">BTS Photographie</span>
+          </td>
+          <td>
+            <span class="lbl">Intitulé précis :</span>
+            <span class="val">Brevet de Technicien Supérieur Photographie</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Code du diplôme :</span>
+            <span class="val">32032325</span>
+          </td>
+          <td>
+            <span class="lbl">Code RNCP :</span>
+            <span class="val">RNCP 36970 — Niveau 5 (BAC+2)</span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span style="font-size:8pt;font-style:italic">
+              <span class="cb-box" style="display:inline-flex;width:10px;height:10px;font-size:8pt"></span>
+              &nbsp;Si le CFA responsable est le lieu de formation principal, cochez la case ci-contre
+            </span>
+          </td>
+        </tr>
+        <!-- Organisation formation -->
+        <tr>
+          <td colspan="2" style="background:#f0f0f0;font-weight:700;font-size:8.5pt;padding:3px 6px">Organisation de la formation en CFA</td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Date de début de formation en CFA :</span>
+            <input type="date" id="inp-dateDebutCFA" style="font-size:9.5pt;font-family:Arial;border:none;border-bottom:1px solid #999;width:100%;background:transparent;outline:none;padding:1px 0">
+          </td>
+          <td>
+            <span class="lbl">Date prévue de fin des épreuves ou examens :</span>
+            <input type="date" id="inp-dateFinEpreuves" style="font-size:9.5pt;font-family:Arial;border:none;border-bottom:1px solid #999;width:100%;background:transparent;outline:none;padding:1px 0">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lbl">Durée de la formation :</span>
+            <span class="val">1 050 heures</span>
+          </td>
+          <td>
+            <span class="lbl">Dont heures de formation à distance :</span>
+            <span class="val">0 heure</span>
+          </td>
+        </tr>
+        <!-- Visa CFA + attestation -->
+        <tr>
+          <td>
+            <span class="lbl">Visa du CFA (cachet et signature du directeur) :</span>
+            <div style="border:1px dashed #bbb;height:55px;margin-top:4px;background:#fafafa;display:flex;align-items:center;justify-content:center;font-size:7.5pt;color:#bbb">Cachet + signature directeur CFA</div>
+          </td>
+          <td style="vertical-align:middle;font-size:8.5pt;font-style:italic;padding:8px">
+            <span class="cb-box" style="display:inline-flex;width:10px;height:10px;font-size:8pt"></span>
+            &nbsp;L'employeur atteste disposer de l'ensemble des pièces justificatives nécessaires au dépôt du contrat
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- ════ SIGNATURES ════ -->
+    <div style="border-top:1.5px solid #000;padding:4px 8px;font-size:9pt;display:flex;justify-content:space-between;background:#fff">
+      <span>Fait à : <strong id="c-faitA"></strong></span>
+      <span>Le : <strong id="c-dateConclusion2"></strong></span>
+    </div>
+    <table class="sig-table">
+      <tr>
+        <td>
+          <div class="sig-title">Signature de l'employeur</div>
+          <div class="sig-name" id="sig-employeur-name"></div>
+          <div class="sig-role" id="sig-employeur-info"></div>
+          <div class="sig-canvas-wrap" id="sigBox1">
+            <canvas id="sigCanvas1"></canvas>
+            <div class="sig-hint">Signer ici</div>
+          </div>
+          <div class="sig-clear" onclick="clearSig(1)">✕ Effacer</div>
+        </td>
+        <td>
+          <div class="sig-title">Signature de l'apprenti(e)</div>
+          <div class="sig-name" id="sig-apprenti-name"></div>
+          <div class="sig-role" style="font-size:8pt;color:#555">Date de naissance : <span id="sig-apprenti-ddn"></span></div>
+          <div class="sig-canvas-wrap" id="sigBox2">
+            <canvas id="sigCanvas2"></canvas>
+            <div class="sig-hint">Signer ici</div>
+          </div>
+          <div class="sig-clear" onclick="clearSig(2)">✕ Effacer</div>
+        </td>
+        <td>
+          <div class="sig-title">Signature du représentant légal <span style="font-size:7.5pt;font-weight:400">(si apprenti(e) mineur(e))</span></div>
+          <div class="sig-name" id="sig-repleg-name"></div>
+          <div class="sig-canvas-wrap" id="sigBox3">
+            <canvas id="sigCanvas3"></canvas>
+            <div class="sig-hint">Signer ici si applicable</div>
+          </div>
+          <div class="sig-clear" onclick="clearSig(3)">✕ Effacer</div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- ════ CADRE RÉSERVÉ OPCO ════ -->
+    <div class="cadre-wrap">
+      <div class="cadre-title">Cadre réservé à l'organisme en charge du dépôt du contrat</div>
+      <div class="cadre-grid">
+        <div class="cadre-field"><label>Nom de l'organisme</label><input type="text" placeholder="OPCO…"></div>
+        <div class="cadre-field"><label>Date de réception du dossier complet</label><input type="date"></div>
+        <div class="cadre-field"><label>N° de dépôt</label><input type="text" placeholder="N°…"></div>
+        <div class="cadre-field"><label>N° SIRET de l'organisme</label><input type="text" placeholder="14 chiffres"></div>
+        <div class="cadre-field"><label>Date de la décision</label><input type="date"></div>
+        <div class="cadre-field"><label>Numéro d'avenant</label><input type="text" placeholder="Si avenant…"></div>
+      </div>
+    </div>
+
+    <div class="cerfa-footer-note">Pour remplir le contrat et pour plus d'informations sur les traitements de données, reportez-vous à la notice N°51649#09</div>
+
+  </div><!-- /cerfa-sheet -->
+
+  <div class="screen-actions">
+    <button class="btn-dl" onclick="window.print()">🖨 Imprimer / Enregistrer en PDF</button>
+    <a href="fdr-complete.html" class="btn-back" style="padding:14px 28px;font-size:13px">← Modifier la FDR</a>
+  </div>
+
+</div><!-- /screen-wrap -->
+
+<script>
+const STORE_KEY = 'supphoto_fdr_v3';
+const $ = id => document.getElementById(id);
+
+function fmtDate(v){
+  if(!v) return '—';
+  const p = v.split('-');
+  if(p.length===3) return `${p[2]}/${p[1]}/${p[0]}`;
+  return v;
+}
+function setVal(id, val, fallback='—'){
+  const el=$(id); if(!el) return;
+  const v = (val||'').toString().trim();
+  el.textContent = v || fallback;
+  if(!v) el.classList.add('empty');
+}
+function checkBox(id, checked){
+  const el=$(id); if(!el) return;
+  el.textContent = checked ? '✓' : '';
+  el.classList.toggle('on', !!checked);
+}
+
+function loadData(){
+  const raw = localStorage.getItem(STORE_KEY);
+  if(!raw){
+    $('sbDot').style.background='var(--orange)';
+    $('sbMsg').textContent='⚠ Aucune donnée FDR trouvée — retournez à la FDR pour la compléter.';
+    return;
+  }
+  const d = JSON.parse(raw);
+  $('sbDot').style.background='var(--green)';
+  $('sbMsg').textContent='✓ CERFA pré-rempli depuis la FDR — vérifiez chaque champ avant signature et impression.';
+
+  // ── EMPLOYEUR
+  checkBox('cbPrivé', d.typeEmployeur !== 'Public');
+  checkBox('cbPublic', d.typeEmployeur === 'Public');
+  setVal('c-employeurSpecifique', d.employeurSpecifique);
+  setVal('c-raisonSociale', d.raisonSociale);
+  setVal('c-siret', d.siret);
+  setVal('c-adresseExecution', d.adresseExecution || d.adresseSiege);
+  setVal('c-telEntreprise', d.telEntreprise);
+  setVal('c-mailEntreprise', d.mailEntreprise);
+  setVal('c-codeNaf', d.codeNaf);
+  setVal('c-typeEmployeur', d.typeEmployeur||'Privé');
+  setVal('c-nbSalaries', d.nbSalaries);
+  setVal('c-codeIdcc', d.codeIdcc);
+
+  // ── APPRENTI
+  setVal('c-altNom', d.altNom);
+  setVal('c-altNomUsage', d.altNomUsage||'');
+  setVal('c-altPrenom', d.altPrenom);
+  setVal('c-altSecu', d.altSecu);
+  setVal('c-altAdresse', d.altAdresse);
+  setVal('c-altTel', d.altTel);
+  setVal('c-altMail', d.altMail);
+  setVal('c-altDdn', fmtDate(d.altDdn));
+  setVal('c-nationalite', d.nationalite);
+  setVal('c-altDepNaissance', d.altDepNaissance);
+  setVal('c-altLieuNaissance', d.altLieuNaissance);
+  setVal('c-altRegimeSocial', ({1:'1 — Général',2:'2 — MSA',3:'3 — Spécial'})[d.altRegimeSocial]||d.altRegimeSocial||'—');
+  setVal('c-statutAvant', d.statutAvant);
+  setVal('c-altDiplomePrepare', d.altDiplomePrepare);
+  setVal('c-altDerniereClasse', d.altDerniereClasse);
+  setVal('c-altDiplomePrecis', d.altDiplomePrecis);
+  setVal('c-altDiplomeObtenu', d.altDiplomeObtenu);
+  setVal('c-repLegalNom', d.repLegalNom||'');
+  setVal('c-repLegalAdresse', d.repLegalAdresse||'');
+  setVal('c-repLegalMail', d.repLegalMail||'');
+
+  checkBox('cbM', d.altSexe==='M');
+  checkBox('cbF', d.altSexe==='F');
+  checkBox('cbSportifOui', d.altSportifHN==='OUI');
+  checkBox('cbSportifNon', d.altSportifHN!=='OUI');
+  checkBox('cbRqthOui', d.rqth==='OUI');
+  checkBox('cbRqthNon', d.rqth!=='OUI');
+  const noRqth = d.rqth!=='OUI';
+  checkBox('cbEqJeunes', noRqth && !!d.altEquivalenceJeunes);
+  checkBox('cbEqJeunesNon', noRqth && !d.altEquivalenceJeunes);
+  checkBox('cbExtBOE', noRqth && !!d.altExtensionBOE);
+  checkBox('cbExtBOENon', noRqth && !d.altExtensionBOE);
+  checkBox('cbProjetOui', d.altProjetEntreprise==='OUI');
+  checkBox('cbProjetNon', d.altProjetEntreprise!=='OUI');
+
+  // ── MAÎTRE D'APPRENTISSAGE
+  setVal('c-tuteurNom', d.tuteurNom);
+  setVal('c-tuteurPrenom', d.tuteurPrenom);
+  setVal('c-tuteurDdn', fmtDate(d.tuteurDdn));
+  setVal('c-tuteurMail', d.tuteurMail);
+  setVal('c-tuteurFonction', d.tuteurFonction);
+  setVal('c-tuteurDiplome', d.tuteurDiplome);
+  setVal('c-tuteurNiveau', d.tuteurNiveau ? 'Niveau '+d.tuteurNiveau : '—');
+  setVal('c-tuteur2Nom', d.tuteur2Nom||'');
+  setVal('c-tuteur2Prenom', d.tuteur2Prenom||'');
+  setVal('c-tuteur2Ddn', d.tuteur2Ddn ? fmtDate(d.tuteur2Ddn) : '');
+  setVal('c-tuteur2Mail', d.tuteur2Mail||'');
+  setVal('c-tuteur2Fonction', d.tuteur2Fonction||'');
+  setVal('c-tuteur2Diplome', d.tuteur2Diplome||'');
+  setVal('c-tuteur2Niveau', d.tuteur2Niveau ? 'Niveau '+d.tuteur2Niveau : '');
+
+  // ── CONTRAT
+  const typeLabels={'11':'11 — Contrat initial','21':'21 — Renouvellement même employeur','22':'22 — Fin contrat précédent autre employeur','23':'23 — Rupture contrat précédent autre employeur'};
+  setVal('c-typeContrat', typeLabels[d.typeContrat]||d.typeContrat);
+  setVal('c-typeDerogation', d.typeDerogation||'—');
+  setVal('c-numAncienContrat', d.numAncienContrat||'—');
+  setVal('c-dateConclusionContrat', fmtDate(d.dateConclusionContrat||d.dateDebut));
+  setVal('c-dateDebut', fmtDate(d.dateDebut));
+  setVal('c-dateDebutPratique', fmtDate(d.dateDebutPratique||d.dateDebut));
+  setVal('c-dateFin', fmtDate(d.dateFin));
+  setVal('c-dureeHebdo', d.dureeHebdo ? d.dureeHebdo+' h / semaine' : '—');
+  checkBox('cbMachOui', d.machinesDangereuses==='OUI');
+  checkBox('cbMachNon', d.machinesDangereuses!=='OUI');
+  setVal('c-salaireEmbaucheBrut', d.salaireEmbaucheBrut ? d.salaireEmbaucheBrut+' €' : '—');
+  setVal('c-caisseRetraite', d.caisseRetraite);
+  const avList=[];
+  if(d.avantageNourriture) avList.push('Nourr. : '+d.avantageNourriture+' €/repas');
+  if(d.avantageLogement)   avList.push('Log. : '+d.avantageLogement+' €/mois');
+  if(d.avantageAutre)      avList.push(d.avantageAutre);
+  setVal('c-avantages', avList.join(' — ')||'Aucun');
+
+  // ── REMU DATES
+  if(d.dateDebut && d.dateFin){
+    const dStart = new Date(d.dateDebut);
+    const dEnd   = new Date(d.dateFin);
+    const pad = n => String(n).padStart(2,'0');
+    const fmt = dt => `${pad(dt.getDate())}/${pad(dt.getMonth()+1)}/${dt.getFullYear()}`;
+    const an1End = new Date(dStart); an1End.setFullYear(an1End.getFullYear()+1); an1End.setDate(an1End.getDate()-1);
+    const an2Start = new Date(dStart); an2Start.setFullYear(an2Start.getFullYear()+1);
+    $('c-remu1-d1').textContent = fmt(dStart);
+    $('c-remu1-f1').textContent = fmt(an1End);
+    $('c-remu2-d1').textContent = fmt(an2Start);
+    $('c-remu2-f1').textContent = fmt(dEnd);
+  }
+  function extractPct(v){ if(!v) return '—'; const m=v.match(/(\d+[,.]?\d*)\s*%/); return m?m[1]+' %':v; }
+  $('c-remu1a1').textContent = extractPct(d.remu1a1)||'—';
+  $('c-remu1a2').textContent = d.remu1a2 ? extractPct(d.remu1a2) : '—';
+  $('c-remu2a1').textContent = extractPct(d.remu2a1)||'—';
+
+  // ── SIGNATURES
+  setVal('c-faitA', d.faitA||'Nice');
+  setVal('c-dateConclusion2', fmtDate(d.dateConclusionContrat||d.dateDebut));
+  $('sig-employeur-name').textContent = d.representantNom||'';
+  $('sig-employeur-info').textContent = d.representantFonction||'';
+  $('sig-apprenti-name').textContent  = ((d.altPrenom||'')+' '+(d.altNom||'')).trim();
+  $('sig-apprenti-ddn').textContent   = fmtDate(d.altDdn);
+  $('sig-repleg-name').textContent    = d.repLegalNom||'';
+}
+
+/* ── SIGNATURE PADS ── */
+function initSig(n){
+  const canvas=$(`sigCanvas${n}`), box=$(`sigBox${n}`);
+  if(!canvas||!box) return;
+  canvas.width=box.offsetWidth; canvas.height=box.offsetHeight;
+  const ctx=canvas.getContext('2d');
+  let drawing=false,lx=0,ly=0;
+  function pos(e){
+    const r=canvas.getBoundingClientRect(),sx=canvas.width/r.width,sy=canvas.height/r.height;
+    if(e.touches) return{x:(e.touches[0].clientX-r.left)*sx,y:(e.touches[0].clientY-r.top)*sy};
+    return{x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};
+  }
+  function start(e){e.preventDefault();drawing=true;const p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.arc(lx,ly,1,0,Math.PI*2);ctx.fillStyle='#000';ctx.fill();}
+  function draw(e){e.preventDefault();if(!drawing)return;const p=pos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#000';ctx.lineWidth=1.5;ctx.lineCap='round';ctx.stroke();lx=p.x;ly=p.y;}
+  function end(){drawing=false;}
+  canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',draw);canvas.addEventListener('mouseup',end);canvas.addEventListener('mouseleave',end);
+  canvas.addEventListener('touchstart',start,{passive:false});canvas.addEventListener('touchmove',draw,{passive:false});canvas.addEventListener('touchend',end);
+}
+function clearSig(n){const c=$(`sigCanvas${n}`);if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  loadData();
+  [1,2,3].forEach(initSig);
+  window.addEventListener('resize',()=>[1,2,3].forEach(n=>{
+    const c=$(`sigCanvas${n}`),b=$(`sigBox${n}`);
+    if(c&&b){c.width=b.offsetWidth;c.height=b.offsetHeight;}
+  }));
+});
+</script>
+</body>
+</html>

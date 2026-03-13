@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080)",
+      "Read(//Users/simonhidier/Desktop/Site BTS /**)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/index.html)",
+      "Bash(npm install:*)",
+      "Bash(\"/Users/simonhidier/Desktop/Site BTS:*)",
+      "Bash(node database/seed.js)",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H \"Content-Type: application/json\" -d '{\"\"\"\"email\"\"\"\":\"\"\"\"admin@sup-photo.fr\"\"\"\",\"\"\"\"password\"\"\"\":\"\"\"\"admin123\"\"\"\"}')",
+      "Bash(sed 's|/etudiant/login.html|/entreprise/login.html|g' \"/Users/simonhidier/Desktop/Site BTS /app-etudiant/api.js\")",
+      "Bash(\"/Users/simonhidier/Desktop/Site BTS /app-entreprise/api.js\")",
+      "Bash(npm uninstall:*)",
+      "Bash(gh auth:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/simonhidier/Desktop/Site BTS ",
+      "/Users/simonhidier/Desktop/Site BTS /backend",
+      "/Users/simonhidier/Desktop/Site BTS /frontend",
+      "/Users/simonhidier/Desktop/Site BTS /app-etudiant"
+    ]
+  }
+}

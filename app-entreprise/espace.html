@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUP-PHOTO — Espace Entreprise</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f13; color: #e0e0e0; min-height: 100vh; }
+    nav { background: #1a1a24; border-bottom: 1px solid #2a2a3a; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+    nav h1 { font-size: 16px; font-weight: 700; color: #fff; }
+    .logout-btn { background: none; border: 1px solid #2a2a3a; color: #aaa; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+    main { padding: 32px 24px; max-width: 800px; margin: 0 auto; }
+    h2 { font-size: 20px; margin-bottom: 24px; color: #fff; }
+    .section { background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .section h3 { font-size: 15px; color: #a78bfa; margin-bottom: 16px; font-weight: 600; }
+    .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e1e2a; font-size: 14px; }
+    .row:last-child { border-bottom: none; }
+    .row .k { color: #888; }
+    .row .v { color: #e0e0e0; font-weight: 500; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: 12px; color: #777; text-transform: uppercase; letter-spacing: .5px; padding: 10px 0; border-bottom: 1px solid #2a2a3a; text-align: left; }
+    td { padding: 10px 0; border-bottom: 1px solid #1e1e2a; font-size: 14px; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge.en_cours { background: #78350f33; color: #fbbf24; border: 1px solid #78350f88; }
+    .badge.complet  { background: #065f4633; color: #34d399; border: 1px solid #065f4688; }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>📷 SUP-PHOTO — Espace Entreprise</h1>
+    <button class="logout-btn" onclick="API.logout()">Déconnexion</button>
+  </nav>
+
+  <main id="main">
+    <p style="color:#555;text-align:center;margin-top:60px">Chargement…</p>
+  </main>
+
+  <script src="/api.js"></script>
+  <script>
+    if (!API.requireRole('entreprise')) throw new Error();
+
+    function row(label, val) {
+      return `<div class="row"><span class="k">${label}</span><span class="v">${val || '—'}</span></div>`;
+    }
+
+    Promise.all([API.get('/api/entreprise/profil'), API.get('/api/entreprise/alternants')]).then(([profil, alternants]) => {
+      const main = document.getElementById('main');
+      main.innerHTML = `
+        <h2>${profil.raison_sociale}</h2>
+
+        <div class="section">
+          <h3>Fiche entreprise</h3>
+          ${row('SIRET', profil.siret)}
+          ${row('Adresse', profil.adresse)}
+          ${row('Téléphone', profil.tel)}
+          ${row('Email', profil.mail)}
+          ${row('Tuteur', profil.tuteur_prenom + ' ' + profil.tuteur_nom)}
+          ${row('Fonction tuteur', profil.tuteur_fonction)}
+          ${row('Score conformité', profil.score_conformite + '/100')}
+          ${row('Verdict conformité', profil.verdict_conformite)}
+        </div>
+
+        <div class="section">
+          <h3>Alternants (${alternants.length})</h3>
+          ${alternants.length === 0 ? '<p style="color:#555;font-size:14px">Aucun alternant lié</p>' : `
+          <table>
+            <thead>
+              <tr><th>Nom</th><th>Contrat</th><th>Période</th><th>Statut dossier</th></tr>
+            </thead>
+            <tbody>
+              ${alternants.map(a => `
+                <tr>
+                  <td>${a.prenom} ${a.nom}</td>
+                  <td style="color:#888">${a.type_contrat || '—'}</td>
+                  <td style="color:#888">${a.date_debut || '—'} → ${a.date_fin || '—'}</td>
+                  <td><span class="badge ${a.statut || 'en_cours'}">${a.statut || 'en_cours'}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>`}
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>

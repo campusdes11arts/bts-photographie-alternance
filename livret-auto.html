@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Livret d'Apprentissage — BTS Photographie — SUP-PHOTO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --red:#E8003D;--red-d:#C0002F;--red-bg:#FFF0F4;
+  --bg:#F7F6F3;--bg2:#EFEFEC;--border:#E0DDD8;
+  --text:#1A1A1A;--mid:#555550;--grey:#888885;
+  --white:#FFFFFF;--green:#1a7a43;--green-bg:#f0faf4;
+  --orange:#C96B00;--orange-bg:#fff7ed;
+  --sans:'Open Sans',sans-serif;
+  --max:1000px;--pad:clamp(20px,5vw,64px);
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+nav{background:var(--white);border-bottom:2px solid var(--red);padding:0 var(--pad);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;height:64px}
+.nav-logo img{height:34px}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-label{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--grey)}
+.btn-fdr{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white);background:var(--red);padding:8px 18px;text-decoration:none;transition:background .2s}
+.btn-fdr:hover{background:var(--red-d)}
+
+/* ── STATUS BAR ── */
+.status-bar{padding:12px var(--pad);border-bottom:1px solid var(--border)}
+.status-bar-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:12px}
+.status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.status-dot.ok{background:var(--green)}
+.status-dot.warn{background:var(--orange)}
+.status-dot.err{background:var(--red)}
+.status-text{font-size:13px;font-weight:600}
+.status-bar.fdr-ok{background:var(--green-bg);border-color:rgba(26,122,67,.3)}
+.status-bar.fdr-warn{background:var(--orange-bg);border-color:rgba(201,107,0,.3)}
+.status-pct{font-size:12px;font-weight:700;color:var(--grey);margin-left:auto}
+
+/* ── HERO ── */
+.hero{background:var(--text);color:var(--white);padding:56px var(--pad) 48px;border-bottom:4px solid var(--red)}
+.hero-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:var(--white);font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:5px 12px;margin-bottom:24px}
+.hero h1{font-size:clamp(28px,4vw,46px);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:12px}
+.hero h1 span{color:var(--red)}
+.hero p{font-size:14px;color:rgba(255,255,255,.7);line-height:1.7}
+.hero-logo{display:flex;align-items:flex-start;justify-content:flex-end}
+.hero-logo img{height:70px;opacity:.8}
+
+/* ── MAIN ── */
+main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
+
+/* ── SECTION LIVRET ── */
+.livret-section{background:var(--white);border:1px solid var(--border);margin-bottom:32px;overflow:hidden}
+.lsec-head{display:flex;align-items:center;gap:16px;padding:18px 24px;border-bottom:2px solid var(--red);background:var(--text)}
+.lsec-num{width:36px;height:36px;background:var(--red);color:var(--white);font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lsec-title{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white);flex:1}
+.lsec-body{padding:28px}
+
+/* ── FICHE DATA ── */
+.fiche-subtitle{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.fiche-block{background:var(--bg);border:1px solid var(--border);padding:20px 24px;margin-bottom:16px}
+.fiche-block-title{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--white);background:var(--red);display:inline-block;padding:4px 10px;margin-bottom:14px}
+.fiche-row{display:flex;gap:8px;margin-bottom:8px;align-items:baseline}
+.fiche-row:last-child{margin-bottom:0}
+.fiche-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);min-width:180px;flex-shrink:0}
+.fiche-val{font-size:14px;font-weight:600;color:var(--text)}
+.fiche-val.empty{font-size:13px;font-weight:400;color:var(--grey);font-style:italic}
+.fiche-val.highlight{color:var(--red)}
+
+/* ── MISSIONS LIST ── */
+.missions-display{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.missions-display li{display:flex;align-items:flex-start;gap:10px;font-size:14px;font-weight:600}
+.missions-display li::before{content:'—';color:var(--red);font-weight:800;flex-shrink:0}
+
+/* ── CONTACTS GRID ── */
+.contacts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.contact-card{background:var(--bg);border:1px solid var(--border);padding:16px 20px}
+.contact-card-title{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--white);background:var(--text);padding:4px 10px;display:inline-block;margin-bottom:12px}
+.contact-card p{font-size:13px;line-height:1.8}
+.contact-card strong{font-weight:700}
+
+/* ── PDF TABS ── */
+.pdf-tabs{display:flex;gap:0;margin-bottom:0;border:2px solid var(--border);border-bottom:none;overflow:hidden}
+.pdf-tab{flex:1;padding:11px 16px;background:var(--bg);border:none;font-family:var(--sans);font-size:13px;font-weight:700;color:var(--mid);cursor:pointer;letter-spacing:.04em;transition:all .15s}
+.pdf-tab.active{background:var(--text);color:var(--white)}
+.pdf-panel iframe{border-radius:0}
+
+/* ── CALENDAR SECTION (existing) ── */
+.calendar-info{background:var(--bg);border:1px solid var(--border);padding:20px 24px}
+.cal-table{width:100%;border-collapse:collapse;margin-top:12px}
+.cal-table th{background:var(--text);color:var(--white);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;text-align:left}
+.cal-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border)}
+.cal-table tr:last-child td{border-bottom:none}
+.cal-table tr:nth-child(even) td{background:var(--bg)}
+
+/* ── EXAM TABLE ── */
+.exam-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+.exam-table th{background:var(--red);color:var(--white);font-size:11px;font-weight:700;letter-spacing:.06em;padding:10px 14px;text-align:left}
+.exam-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.exam-table .coeff{text-align:center;font-weight:700;color:var(--red)}
+.exam-table tr.group td{background:var(--text);color:var(--white);font-weight:700}
+.exam-table tr:last-child td{border-bottom:none}
+
+/* ── SUIVI TABLE ── */
+.suivi-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+.suivi-table th{background:var(--text);color:var(--white);font-size:11px;font-weight:700;letter-spacing:.06em;padding:10px 14px;text-align:center}
+.suivi-table td{padding:12px 14px;border-bottom:1px solid var(--border);text-align:center;font-weight:600}
+.suivi-table td:first-child{text-align:left;font-weight:700}
+.suivi-table tr:nth-child(even) td{background:var(--bg)}
+
+/* ══════════════════════════════════════
+   BLOC DE SIGNATURE
+══════════════════════════════════════ */
+.signature-section{background:var(--white);border:2px solid var(--border);padding:36px;margin-bottom:32px}
+.sig-locked{text-align:center;padding:48px 24px}
+.sig-locked-icon{font-size:48px;margin-bottom:16px}
+.sig-locked h3{font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px}
+.sig-locked p{font-size:14px;color:var(--grey);margin-bottom:24px;line-height:1.7}
+.sig-locked .missing-list{text-align:left;max-width:440px;margin:0 auto 24px;list-style:none;display:flex;flex-direction:column;gap:6px}
+.sig-locked .missing-list li{font-size:13px;font-weight:600;color:var(--orange);display:flex;align-items:center;gap:8px}
+.sig-locked .missing-list li::before{content:'○';color:var(--orange)}
+.btn-to-fdr{background:var(--red);color:var(--white);border:none;padding:14px 36px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block}
+
+.sig-unlocked{display:none}
+.sig-unlocked .sig-intro{background:var(--green-bg);border:1px solid rgba(26,122,67,.3);border-left:4px solid var(--green);padding:16px 20px;font-size:14px;font-weight:600;color:var(--green);margin-bottom:32px}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-bottom:32px}
+.sig-party{display:flex;flex-direction:column;gap:8px}
+.sig-party-title{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mid);margin-bottom:4px}
+.sig-name{font-size:14px;font-weight:700;color:var(--text)}
+.sig-role{font-size:12px;color:var(--grey)}
+.sig-box{border:1.5px solid var(--border);height:100px;background:var(--bg);position:relative;margin-top:8px;display:flex;align-items:center;justify-content:center;cursor:crosshair;overflow:hidden}
+.sig-box canvas{position:absolute;top:0;left:0}
+.sig-box-label{font-size:11px;color:var(--grey);font-style:italic;pointer-events:none}
+.sig-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn-clear-sig{background:none;border:1.5px solid var(--border);padding:8px 16px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;color:var(--grey)}
+.btn-clear-sig:hover{border-color:var(--red);color:var(--red)}
+.date-sig{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:600;color:var(--mid)}
+.date-sig input{border:1.5px solid var(--border);padding:8px 12px;font-family:var(--sans);font-size:13px;outline:none}
+.date-sig input:focus{border-color:var(--red)}
+.btn-print{background:var(--text);color:var(--white);border:none;padding:14px 32px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px}
+.btn-print:hover{background:#333}
+
+/* ── LEGAL INFO ── */
+.legal-note{background:var(--bg);border-left:3px solid var(--border);padding:16px 20px;font-size:12px;color:var(--grey);line-height:1.7;margin-top:20px}
+
+@media print{
+  nav,.status-bar,.btn-fdr,.btn-print,.sig-locked,.sig-actions,.btn-clear-sig,.progress-wrap{display:none!important}
+  .sig-unlocked{display:block!important}
+  .sig-locked{display:none!important}
+  main{padding:20px}
+  .livret-section,.signature-section{break-inside:avoid}
+  body{background:white}
+}
+@media(max-width:700px){
+  .contacts-grid,.sig-grid,.hero-inner{grid-template-columns:1fr}
+  .hero-logo{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img src="logo-color.png" alt="SUP-PHOTO">
+  </a>
+  <div class="nav-right">
+    <span class="nav-label">Livret d'Apprentissage</span>
+    <a href="fdr-complete.html" class="btn-fdr">← Retour FDR</a>
+  </div>
+</nav>
+
+<div class="status-bar fdr-warn" id="statusBar">
+  <div class="status-bar-inner">
+    <div class="status-dot warn" id="statusDot"></div>
+    <span class="status-text" id="statusText">Chargement de la FDR…</span>
+    <span class="status-pct" id="statusPct"></span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">Livret d'Apprentissage</div>
+      <h1>BTS <span>Photographie</span><br>Suivi Alternance</h1>
+      <p>Niveau 5 (BAC+2) — Années 2025-2026 / 2026-2027<br>
+      Ce document est automatiquement renseigné à partir de la Fiche de Renseignement. Il ne peut être signé qu'une fois la FDR intégralement complétée.</p>
+    </div>
+    <div class="hero-logo">
+      <img src="LOGOSPBASELINEBLANC.png" alt="SUP-PHOTO">
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══ SECTION 1 — LES ACTEURS ══ -->
+<div class="livret-section">
+  <div class="lsec-head">
+    <div class="lsec-num">1</div>
+    <div class="lsec-title">1. Les Acteurs — BTS Photographie Niveau 5 (BAC+2)</div>
+  </div>
+  <div class="lsec-body">
+
+    <div class="fiche-subtitle">1.1 — Contrat</div>
+    <div class="fiche-block">
+      <div class="fiche-block-title">CONTRAT</div>
+      <div class="fiche-row">
+        <span class="fiche-label">Type</span>
+        <span class="fiche-val">Alternance — Contrat d'apprentissage</span>
+      </div>
+      <div class="fiche-row">
+        <span class="fiche-label">Formation</span>
+        <span class="fiche-val">BTS Photographie — RNCP36970 — Niveau 5</span>
+      </div>
+      <div class="fiche-row">
+        <span class="fiche-label">Date de début</span>
+        <span class="fiche-val" id="d_dateDebut"></span>
+      </div>
+      <div class="fiche-row">
+        <span class="fiche-label">Date de fin</span>
+        <span class="fiche-val" id="d_dateFin"></span>
+      </div>
+      <div class="fiche-row">
+        <span class="fiche-label">Durée hebdomadaire</span>
+        <span class="fiche-val" id="d_dureeHebdo"></span>
+      </div>
+      <div class="fiche-row">
+        <span class="fiche-label">Type de contrat</span>
+        <span class="fiche-val" id="d_typeContrat"></span>
+      </div>
+    </div>
+
+    <div class="fiche-block">
+      <div class="fiche-block-title">MAÎTRE D'APPRENTISSAGE</div>
+      <div class="fiche-row"><span class="fiche-label">NOM</span><span class="fiche-val" id="d_tuteurNom"></span></div>
+      <div class="fiche-row"><span class="fiche-label">Prénom</span><span class="fiche-val" id="d_tuteurPrenom"></span></div>
+      <div class="fiche-row"><span class="fiche-label">Intitulé du poste</span><span class="fiche-val" id="d_tuteurFonction"></span></div>
+      <div class="fiche-row"><span class="fiche-label">E-mail</span><span class="fiche-val" id="d_tuteurMail"></span></div>
+      <div class="fiche-row"><span class="fiche-label">Téléphone</span><span class="fiche-val" id="d_tuteurTel"></span></div>
+    </div>
+
+    <div class="fiche-block">
+      <div class="fiche-block-title">ALTERNANT(E)</div>
+      <div class="fiche-row"><span class="fiche-label">NOM</span><span class="fiche-val" id="d_altNom"></span></div>
+      <div class="fiche-row"><span class="fiche-label">Prénom</span><span class="fiche-val" id="d_altPrenom"></span></div>
+      <div class="fiche-row"><span class="fiche-label">Intitulé du poste</span><span class="fiche-val" id="d_altPoste"></span></div>
+      <div class="fiche-row"><span class="fiche-label">E-mail</span><span class="fiche-val" id="d_altMail"></span></div>
+      <div class="fiche-row"><span class="fiche-label">Téléphone</span><span class="fiche-val" id="d_altTel"></span></div>
+      <div class="fiche-row"><span class="fiche-label">Adresse</span><span class="fiche-val" id="d_altAdresse"></span></div>
+    </div>
+
+    <div class="fiche-block">
+      <div class="fiche-block-title">ENTREPRISE</div>
+      <div class="fiche-row"><span class="fiche-label">NOM / Raison sociale</span><span class="fiche-val" id="d_raisonSociale"></span></div>
+      <div class="fiche-row"><span class="fiche-label">SIRET</span><span class="fiche-val" id="d_siret"></span></div>
+      <div class="fiche-row"><span class="fiche-label">Adresse</span><span class="fiche-val" id="d_adresseSiege"></span></div>
+      <div class="fiche-row"><span class="fiche-label">Téléphone</span><span class="fiche-val" id="d_telEntreprise"></span></div>
+    </div>
+
+    <div class="fiche-subtitle" style="margin-top:28px">1.2 — À renseigner par l'Entreprise</div>
+
+    <div class="fiche-block">
+      <div class="fiche-block-title">PRÉSENTATION DE L'ENTREPRISE</div>
+      <p style="font-size:14px;line-height:1.8;white-space:pre-line" id="d_presentationEntreprise"></p>
+    </div>
+    <div class="fiche-block">
+      <div class="fiche-block-title">SECTEUR D'ACTIVITÉ</div>
+      <p style="font-size:14px;font-weight:600" id="d_secteurActivite"></p>
+    </div>
+    <div class="fiche-block">
+      <div class="fiche-block-title">PRÉSENTATION DU SERVICE CONCERNÉ PAR L'APPRENANT</div>
+      <p style="font-size:14px;line-height:1.8;white-space:pre-line" id="d_presentationService"></p>
+    </div>
+    <div class="fiche-block">
+      <div class="fiche-block-title">ORGANISATION DU SERVICE (EFFECTIF DU SERVICE)</div>
+      <p style="font-size:14px;font-weight:600" id="d_orgService"></p>
+    </div>
+    <div class="fiche-block">
+      <div class="fiche-block-title">MISSIONS PRINCIPALES DU POSTE</div>
+      <ul class="missions-display" id="d_missions"></ul>
+    </div>
+
+    <div class="fiche-subtitle" style="margin-top:28px">1.3 — Contacts CFA SUP-PHOTO</div>
+    <div class="contacts-grid">
+      <div class="contact-card">
+        <div class="contact-card-title">Contact Relation Entreprise</div>
+        <p><strong>LUSLEY Rémi</strong><br>Chargé des relations entreprises et étudiants<br>📞 07 60 20 34 02<br>✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1f6d31736a6c737a665f7c7e726f6a6c7b7a6c2e2e7e6d6b6c317c7072">[email&#160;protected]</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-title">Contact Pédagogie</div>
+        <p><strong>CHERPAK Galit</strong><br>Directrice Pédagogique Campus Nice<br>📞 06 19 17 27 23<br>✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="771059141f120507161c3714161a0702041312044646160503045914181a">[email&#160;protected]</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-title">Contact Direction</div>
+        <p><strong>JULIEN Patricia</strong><br>Directrice Campus Nice<br>📞 06 72 28 84 43<br>✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="50207e3a253c39353e1033313d2025233435236161312224237e333f3d">[email&#160;protected]</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="contact-card-title">Service Handicap</div>
+        <p><strong>HIDIER Bruno</strong><br>Référent Handicap SUP-PHOTO Nice<br>📞 06 48 07 83 08<br>✉ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="12703c7a7b767b77605271737f6267617677612323736066613c717d7f">[email&#160;protected]</a></p>
+      </div>
+    </div>
+
+    <div class="fiche-subtitle" style="margin-top:28px">1.4 — Institutionnels</div>
+    <div class="contact-card" style="margin-bottom:0">
+      <div class="contact-card-title">Rectorat de Nice</div>
+      <p>Accueil téléphonique : 04 92 93 88 72<br>
+      53 Avenue Cap-de-Croix, 06181 Nice<br>
+      Mission de contrôle pédagogique des formations par apprentissage :<br>
+      <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="51323e3f25233e3d347c21343530363e36382024347c30212123343f2538222230363411233436383e3f7c213032307f3723">[email&#160;protected]</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 2 — RÉCAPITULATIF SUIVI EN ENTREPRISE ══ -->
+<div class="livret-section">
+  <div class="lsec-head">
+    <div class="lsec-num">2</div>
+    <div class="lsec-title">3.1 — Récapitulatif du Suivi en Entreprise</div>
+  </div>
+  <div class="lsec-body">
+    <table class="suivi-table">
+      <thead>
+        <tr>
+          <th style="text-align:left">Étape</th>
+          <th>Période</th>
+          <th>Document associé</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Contrôle de conformité de l'entreprise</td><td>Avant début du contrat</td><td>Grille de conformité SUP-PHOTO</td></tr>
+        <tr><td>Récapitulatifs contractuels (CERFA)</td><td>Début de contrat</td><td>CERFA N° 10103*14 — signé par l'entreprise et l'apprenti(e)</td></tr>
+        <tr><td>1ère visite en entreprise</td><td>Dans les 45 jours — Période probatoire (P1)</td><td>Fiche de visite P1 — signée en séance</td></tr>
+        <tr><td>2ème visite en entreprise</td><td>Mi-parcours — 1ère année (P2)</td><td>Fiche de visite P2 — signée en séance</td></tr>
+        <tr><td>3ème visite en entreprise</td><td>Mi-parcours — 2ème année (P3)</td><td>Fiche de visite P3 — signée en séance</td></tr>
+        <tr><td>4ème visite en entreprise</td><td>Fin de parcours (P4)</td><td>Fiche de visite P4 — signée en séance</td></tr>
+      </tbody>
+    </table>
+    <div class="legal-note">Les fiches de visite en entreprise sont accessibles depuis la plateforme SUP-PHOTO. Chaque visite est signée <strong>en séance</strong> par l'alternant(e), le maître d'apprentissage et le représentant de l'école, avec la mention « lu et approuvé » et le cachet de l'entreprise. Les originaux sont conservés par le CFA.</div>
+  </div>
+</div>
+
+<!-- ══ SECTION CALENDRIERS SCOLAIRES ══ -->
+<div class="livret-section">
+  <div class="lsec-head">
+    <div class="lsec-num" style="font-size:16px;line-height:1">📅</div>
+    <div class="lsec-title">3.2 — Calendriers Scolaires 2025–2027</div>
+  </div>
+  <div class="lsec-body">
+    <div class="pdf-tabs">
+      <button class="pdf-tab active" onclick="showPdf(1,this)">BTS 1ère Année — 2025 / 2026</button>
+      <button class="pdf-tab" onclick="showPdf(2,this)">BTS 2ème Année — 2026 / 2027</button>
+    </div>
+    <div id="pdf-1" class="pdf-panel">
+      <iframe src="calendriers_SUP_Photo_25-27_revus_xlsx_-_Anne_e_25-26.pdf" width="100%" height="520" style="border:1px solid var(--border);display:block"></iframe>
+    </div>
+    <div id="pdf-2" class="pdf-panel" style="display:none">
+      <iframe src="CALENDRIER_NICE_25-27_xlsx_-_Anne_e_26-27.pdf" width="100%" height="520" style="border:1px solid var(--border);display:block"></iframe>
+    </div>
+    <div class="legal-note">* Planning sous réserve de modification — transmis aux entreprises en début d'année par SUP-PHOTO.</div>
+  </div>
+</div>
+
+<!-- ══ SECTION 3 — ÉVALUATIONS ══ -->
+<div class="livret-section">
+  <div class="lsec-head">
+    <div class="lsec-num">3</div>
+    <div class="lsec-title">3.3 — Évaluation en Cours de Formation</div>
+  </div>
+  <div class="lsec-body">
+    <div class="calendar-info">
+      <div class="fiche-subtitle" style="margin-bottom:12px">Calendrier des conseils de classe</div>
+      <table class="cal-table">
+        <thead>
+          <tr>
+            <th>Étape</th>
+            <th>BTS 1ère Année</th>
+            <th>BTS 2ème Année</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>BTS Blanc 1er sem.</td><td>05-06/01/2026</td><td>01-03/12/2026</td></tr>
+          <tr><td>Arrêt des notes SEM 1</td><td>24/01/2026</td><td>17/12/2026</td></tr>
+          <tr><td>Date de conseil de classe</td><td><strong>03/02/2026</strong></td><td><strong>05/01/2027</strong></td></tr>
+          <tr><td>Arrêt des notes SEM 2</td><td>12/06/2026</td><td>06/04/2027</td></tr>
+          <tr><td>BTS Blanc 2ème sem.</td><td>21-23/06/2026</td><td>—</td></tr>
+          <tr><td>Date de conseil de classe</td><td><strong>06/07/2026</strong></td><td><strong>10/04/2027</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legal-note" style="margin-top:16px">Un bulletin de notes est remis à l'alternant et à son employeur à la fin de chaque semestre. SUP-PHOTO informe mensuellement les entreprises employeurs de l'assiduité de l'apprenant.</div>
+  </div>
+</div>
+
+<!-- ══ SECTION 4 — EXAMEN NATIONAL ══ -->
+<div class="livret-section">
+  <div class="lsec-head">
+    <div class="lsec-num">4</div>
+    <div class="lsec-title">3.4 — Examen National BTS Photographie</div>
+  </div>
+  <div class="lsec-body">
+    <table class="exam-table">
+      <thead>
+        <tr><th>Épreuve</th><th>Unité</th><th style="text-align:center">Coeff.</th><th>Forme</th><th>Durée</th></tr>
+      </thead>
+      <tbody>
+        <tr class="group"><td colspan="5">E1. Culture générale et photographique — Coeff. 4</td></tr>
+        <tr><td>U1.1 — Culture générale et expression</td><td>U1.1</td><td class="coeff">2</td><td>Écrite</td><td>4h</td></tr>
+        <tr><td>U1.2 — Culture photographique et visuelle</td><td>U1.2</td><td class="coeff">2</td><td>Écrite</td><td>3h</td></tr>
+        <tr><td>E2. Langue vivante étrangère : Anglais</td><td>U2</td><td class="coeff">2</td><td>Orale</td><td>30 min prépa + 30 min compréhension + 15 min</td></tr>
+        <tr><td>E3. Sciences appliquées</td><td>U3</td><td class="coeff">2</td><td>Écrite</td><td>3h</td></tr>
+        <tr><td>E4. Gestion et droit</td><td>U4</td><td class="coeff">3</td><td>Écrite</td><td>4h</td></tr>
+        <tr><td>E5. Technologie : sensisométrie & équipement</td><td>U5</td><td class="coeff">4</td><td>Écrite</td><td>2h prépa + 30 min Interrogation</td></tr>
+        <tr class="group"><td colspan="5">E6. Épreuve professionnelle de synthèse — Coeff. 7</td></tr>
+        <tr><td>U6.1 — Rapport de stage</td><td>U6.1</td><td class="coeff">2</td><td>Orale</td><td>30 min</td></tr>
+        <tr><td>U6.2 — Projet photographique</td><td>U6.2</td><td class="coeff">5</td><td>Orale</td><td>45 min</td></tr>
+        <tr><td>Épreuve Facultative (LV2 hors Anglais)</td><td>UF1</td><td class="coeff">—</td><td>Orale</td><td>20 min prépa + 20 min</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ SECTION 5 — RÉMUNÉRATION ══ -->
+<div class="livret-section">
+  <div class="lsec-head">
+    <div class="lsec-num">5</div>
+    <div class="lsec-title">Rémunération de l'Alternant(e)</div>
+  </div>
+  <div class="lsec-body">
+    <div class="fiche-block">
+      <div class="fiche-block-title">RÉMUNÉRATION CONTRACTUELLE</div>
+      <div class="fiche-row"><span class="fiche-label">% du SMIC</span><span class="fiche-val" id="d_pctSmic"></span></div>
+      <div class="fiche-row"><span class="fiche-label">1ère année – 1ère rémuné.</span><span class="fiche-val" id="d_remu1a1"></span></div>
+      <div class="fiche-row"><span class="fiche-label">1ère année – 2ème rémuné.</span><span class="fiche-val" id="d_remu1a2"></span></div>
+      <div class="fiche-row"><span class="fiche-label">2ème année – 1ère rémuné.</span><span class="fiche-val" id="d_remu2a1"></span></div>
+      <div class="fiche-row"><span class="fiche-label">2ème année – 2ème rémuné.</span><span class="fiche-val" id="d_remu2a2"></span></div>
+    </div>
+    <div class="legal-note">BTS Photographie = Niveau 5 : aide de 4 500 € versée à l'employeur. La période probatoire est de 45 jours consécutifs ou non en entreprise.</div>
+  </div>
+</div>
+
+<!-- ══ SECTION 6 — ENGAGEMENTS & CHARTE ══ -->
+<div class="livret-section">
+  <div class="lsec-head">
+    <div class="lsec-num">6</div>
+    <div class="lsec-title">6. Charte de l'Apprentissage — Engagements</div>
+  </div>
+  <div class="lsec-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+      <div>
+        <div class="fiche-subtitle">L'Alternant s'engage auprès de l'entreprise à :</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--mid);line-height:1.6">
+          <li>→ S'investir dans l'environnement de travail</li>
+          <li>→ Effectuer les missions confiées</li>
+          <li>→ Respecter le règlement intérieur et les horaires</li>
+          <li>→ Appliquer les consignes de sécurité</li>
+          <li>→ Rendre compte de ses activités en CFA</li>
+        </ul>
+        <div class="fiche-subtitle" style="margin-top:16px">L'Alternant s'engage auprès du CFA à :</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--mid);line-height:1.6">
+          <li>→ S'investir totalement dans la formation</li>
+          <li>→ Respecter le calendrier et les horaires</li>
+          <li>→ Participer aux épreuves d'examen</li>
+        </ul>
+      </div>
+      <div>
+        <div class="fiche-subtitle">L'Employeur / Tuteur s'engage à :</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--mid);line-height:1.6">
+          <li>→ Faciliter l'intégration de l'alternant</li>
+          <li>→ Assurer la formation pratique</li>
+          <li>→ Veiller au suivi de la formation en CFA</li>
+          <li>→ Respecter la législation du travail</li>
+          <li>→ Garantir un environnement sans discrimination</li>
+          <li>→ Désigner un maître d'apprentissage qualifié</li>
+        </ul>
+      </div>
+      <div>
+        <div class="fiche-subtitle">Le CFA s'engage à :</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--mid);line-height:1.6">
+          <li>→ Dispenser la formation générale et pratique</li>
+          <li>→ Accompagner l'apprenant tout au long du parcours</li>
+          <li>→ Assurer le suivi en entreprise (visites)</li>
+          <li>→ Proposer des outils de suivi du parcours</li>
+          <li>→ Faire le lien entre entreprise et formation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal-note" style="margin-top:20px">Confidentialité et RGPD : L'apprenti s'engage à respecter le secret professionnel concernant les informations internes de l'entreprise. Le CFA et l'Entreprise s'engagent à traiter les données de l'apprenti (évaluations, assiduité) conformément au RGPD et uniquement dans le cadre du suivi pédagogique.</div>
+  </div>
+</div>
+
+<!-- ══ BLOC DE SIGNATURE ══ -->
+<div class="signature-section">
+  <h2 style="font-size:18px;font-weight:800;letter-spacing:-.01em;margin-bottom:24px;color:var(--text)">Signatures — Validation du Livret d'Apprentissage</h2>
+
+  <!-- ÉTAT VERROUILLÉ -->
+  <div class="sig-locked" id="sigLocked">
+    <div class="sig-locked-icon">🔒</div>
+    <h3>Livret non signable</h3>
+    <p>La Fiche de Renseignement (FDR) doit être intégralement complétée avant de pouvoir signer ce livret.<br>Champs manquants :</p>
+    <ul class="missing-list" id="missingList"></ul>
+    <a href="fdr-complete.html" class="btn-to-fdr">→ Compléter la FDR</a>
+  </div>
+
+  <!-- ÉTAT DÉVERROUILLÉ -->
+  <div class="sig-unlocked" id="sigUnlocked">
+    <div class="sig-intro">✓ La Fiche de Renseignement est complète. Ce livret peut maintenant être signé et imprimé.</div>
+
+    <div class="fiche-subtitle">Signatures des parties</div>
+    <div class="sig-grid">
+      <div class="sig-party">
+        <div class="sig-party-title">École — SUP-PHOTO</div>
+        <div class="sig-name">CHERPAK Galit</div>
+        <div class="sig-role">Directrice Pédagogique Campus Nice</div>
+        <div class="sig-box" id="sigBox1">
+          <canvas id="sigCanvas1" width="300" height="100"></canvas>
+          <span class="sig-box-label" id="sigLabel1">Signer ici</span>
+        </div>
+        <div class="sig-actions">
+          <button class="btn-clear-sig" onclick="clearSig(1)">Effacer</button>
+          <div class="date-sig"><span>Date :</span><input type="date" id="sigDate1"></div>
+        </div>
+      </div>
+      <div class="sig-party">
+        <div class="sig-party-title">Entreprise — Maître d'apprentissage</div>
+        <div class="sig-name" id="sig_tuteurNom"></div>
+        <div class="sig-role" id="sig_tuteurFonction"></div>
+        <div class="sig-box" id="sigBox2">
+          <canvas id="sigCanvas2" width="300" height="100"></canvas>
+          <span class="sig-box-label" id="sigLabel2">Signer ici</span>
+        </div>
+        <div class="sig-actions">
+          <button class="btn-clear-sig" onclick="clearSig(2)">Effacer</button>
+          <div class="date-sig"><span>Date :</span><input type="date" id="sigDate2"></div>
+        </div>
+      </div>
+      <div class="sig-party">
+        <div class="sig-party-title">Alternant(e)</div>
+        <div class="sig-name" id="sig_altNom"></div>
+        <div class="sig-role" id="sig_altPoste"></div>
+        <div class="sig-box" id="sigBox3">
+          <canvas id="sigCanvas3" width="300" height="100"></canvas>
+          <span class="sig-box-label" id="sigLabel3">Signer ici</span>
+        </div>
+        <div class="sig-actions">
+          <button class="btn-clear-sig" onclick="clearSig(3)">Effacer</button>
+          <div class="date-sig"><span>Date :</span><input type="date" id="sigDate3"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+      <button class="btn-print" onclick="window.print()">🖨 Imprimer / Exporter PDF</button>
+      <p style="font-size:12px;color:var(--grey)">Mention requise : « Lu et approuvé » + cachet entreprise sur la version imprimée</p>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const STORE_KEY = 'supphoto_fdr_v3';
+const $ = id => document.getElementById(id);
+
+/* ═══════════ PDF TABS ═══════════ */
+function showPdf(n, btn){
+  document.querySelectorAll('.pdf-panel').forEach(el=>el.style.display='none');
+  document.querySelectorAll('.pdf-tab').forEach(el=>el.classList.remove('active'));
+  const panel=document.getElementById('pdf-'+n);
+  if(panel) panel.style.display='block';
+  if(btn) btn.classList.add('active');
+}
+
+/* ═══════════ HELPERS ═══════════ */
+function val(v, fallback='—'){
+  return (v && v.toString().trim()) ? v.toString().trim() : fallback;
+}
+function fmtDate(d){
+  if(!d) return '—';
+  try{ const [y,m,j]=d.split('-'); return `${j}/${m}/${y}`; }catch(e){return d;}
+}
+function setField(id, value, empty='— Non renseigné'){
+  const el=$(id); if(!el) return;
+  if(value && value.toString().trim()){
+    el.textContent=value; el.className='fiche-val';
+  } else {
+    el.textContent=empty; el.className='fiche-val empty';
+  }
+}
+function typeContratLabel(code){
+  const map={'11':'11 — Contrat initial','21':'21 — Renouvellement chez le même employeur','22':'22 — Après fin de contrat précédent','23':'23 — Après rupture du contrat précédent'};
+  return map[code]||code||'—';
+}
+
+/* ═══════════ CHAMPS REQUIS POUR VALIDATION ═══════════ */
+const REQUIRED_FIELDS = [
+  ['formeJuridique','Forme juridique'],['raisonSociale','Raison sociale'],
+  ['representantNom','Représentant de l\'entreprise'],['telEntreprise','Téléphone entreprise'],
+  ['mailEntreprise','E-mail entreprise'],['siret','N° SIRET'],['codeNaf','Code NAF'],
+  ['codeIdcc','Code IDCC'],['nbSalaries','Nombre de salariés'],['convCollective','Convention collective'],
+  ['activitePrincipale','Activité principale'],['caisseRetraite','Caisse de retraite'],
+  ['presentationEntreprise','Présentation entreprise'],['secteurActivite','Secteur d\'activité'],
+  ['presentationService','Présentation du service'],['orgService','Organisation du service'],
+  ['tuteurNom','NOM maître d\'apprentissage'],['tuteurPrenom','Prénom maître d\'apprentissage'],
+  ['tuteurFonction','Fonction tuteur'],['tuteurDdn','Date de naissance tuteur'],
+  ['tuteurSecu','N° sécu tuteur'],['tuteurTel','Téléphone tuteur'],
+  ['tuteurMail','E-mail tuteur'],['tuteurDiplome','Diplôme tuteur'],
+  ['altNom','NOM alternant'],['altPrenom','Prénom alternant'],['altPoste','Poste alternant'],
+  ['altDdn','Date naissance alternant'],['altSecu','N° sécu alternant'],
+  ['altAdresse','Adresse alternant'],['altTel','Téléphone alternant'],
+  ['altMail','E-mail alternant'],['altDiplomeObtenu','Dernier diplôme obtenu'],
+  ['nationalite','Nationalité'],['rqth','RQTH'],['statutAvant','Statut avant contrat'],
+  ['typeContrat','Type de contrat'],['dateDebut','Date de début'],['dateFin','Date de fin'],
+  ['dureeHebdo','Durée hebdomadaire'],['pctSmic','% du SMIC'],
+];
+
+/* ═══════════ CHARGEMENT DONNÉES ═══════════ */
+function loadData(){
+  let data = {};
+  try{ data = JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); }catch(e){}
+
+  // Complétion
+  const missing = [];
+  REQUIRED_FIELDS.forEach(([k,label])=>{
+    const v = data[k];
+    if(!v || !v.toString().trim()) missing.push(label);
+  });
+  // Vérifier missions
+  if(!data.missions || data.missions.filter(m=>m).length<1) missing.push('Missions attribuées (min. 1)');
+
+  const complete = missing.length === 0;
+  const pct = Math.round((REQUIRED_FIELDS.length - missing.length) / REQUIRED_FIELDS.length * 100);
+
+  // Barre de statut
+  const sb=$('statusBar');
+  if(complete){
+    sb.className='status-bar fdr-ok';
+    $('statusDot').className='status-dot ok';
+    $('statusText').textContent='✓ FDR complète — Le livret est signable';
+    $('statusPct').textContent='100%';
+  } else {
+    sb.className='status-bar fdr-warn';
+    $('statusDot').className='status-dot warn';
+    $('statusText').textContent=`FDR incomplète — ${missing.length} champ(s) manquant(s)`;
+    $('statusPct').textContent=pct+'%';
+  }
+
+  // Signature
+  if(complete){
+    $('sigLocked').style.display='none';
+    $('sigUnlocked').style.display='block';
+  } else {
+    $('sigLocked').style.display='block';
+    $('sigUnlocked').style.display='none';
+    const ml=$('missingList'); ml.innerHTML='';
+    missing.slice(0,8).forEach(m=>{
+      const li=document.createElement('li'); li.textContent=m; ml.appendChild(li);
+    });
+    if(missing.length>8){
+      const li=document.createElement('li'); li.textContent=`… et ${missing.length-8} autre(s)`; ml.appendChild(li);
+    }
+  }
+
+  // Remplir les champs du livret
+  setField('d_dateDebut', fmtDate(data.dateDebut));
+  setField('d_dateFin', fmtDate(data.dateFin));
+  setField('d_dureeHebdo', data.dureeHebdo ? data.dureeHebdo + 'h / semaine' : '');
+  setField('d_typeContrat', typeContratLabel(data.typeContrat));
+  setField('d_tuteurNom', data.tuteurNom);
+  setField('d_tuteurPrenom', data.tuteurPrenom);
+  setField('d_tuteurFonction', data.tuteurFonction);
+  setField('d_tuteurMail', data.tuteurMail);
+  setField('d_tuteurTel', data.tuteurTel);
+  setField('d_altNom', data.altNom);
+  setField('d_altPrenom', data.altPrenom);
+  setField('d_altPoste', data.altPoste);
+  setField('d_altMail', data.altMail);
+  setField('d_altTel', data.altTel);
+  setField('d_altAdresse', data.altAdresse);
+  setField('d_raisonSociale', data.raisonSociale);
+  setField('d_siret', data.siret);
+  setField('d_adresseSiege', data.adresseExecution || data.adresseSiege);
+  setField('d_telEntreprise', data.telEntreprise);
+  setField('d_presentationEntreprise', data.presentationEntreprise);
+  setField('d_secteurActivite', data.secteurActivite);
+  setField('d_presentationService', data.presentationService);
+  setField('d_orgService', data.orgService);
+  setField('d_pctSmic', data.pctSmic);
+  setField('d_remu1a1', data.remu1a1 ? data.remu1a1 + ' €' : '');
+  setField('d_remu1a2', data.remu1a2 ? data.remu1a2 + ' €' : '');
+  setField('d_remu2a1', data.remu2a1 ? data.remu2a1 + ' €' : '');
+  setField('d_remu2a2', data.remu2a2 ? data.remu2a2 + ' €' : '');
+
+  // Missions
+  const ml2=$('d_missions'); ml2.innerHTML='';
+  if(data.missions && data.missions.length){
+    data.missions.forEach(m=>{
+      if(m){ const li=document.createElement('li'); li.textContent=m; ml2.appendChild(li); }
+    });
+  } else {
+    ml2.innerHTML='<li style="font-style:italic;color:var(--grey)">— Non renseignées —</li>';
+  }
+
+  // Noms sur la signature
+  if(complete){
+    $('sig_tuteurNom').textContent = (data.tuteurNom||'') + ' ' + (data.tuteurPrenom||'');
+    $('sig_tuteurFonction').textContent = data.tuteurFonction||'';
+    $('sig_altNom').textContent = (data.altNom||'') + ' ' + (data.altPrenom||'');
+    $('sig_altPoste').textContent = data.altPoste||'';
+  }
+
+  // Date du jour par défaut
+  const today=new Date().toISOString().split('T')[0];
+  ['sigDate1','sigDate2','sigDate3'].forEach(id=>{ const el=$(id); if(el) el.value=today; });
+}
+
+/* ═══════════ SIGNATURE PAD ═══════════ */
+const sigStates = {1:{drawing:false,signed:false},2:{drawing:false,signed:false},3:{drawing:false,signed:false}};
+
+function initSig(n){
+  const canvas = $(`sigCanvas${n}`);
+  const label = $(`sigLabel${n}`);
+  const box = $(`sigBox${n}`);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle='#1A1A1A'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round';
+
+  function getPos(e){
+    const rect=canvas.getBoundingClientRect();
+    const scaleX=canvas.width/rect.width, scaleY=canvas.height/rect.height;
+    if(e.touches){
+      return {x:(e.touches[0].clientX-rect.left)*scaleX, y:(e.touches[0].clientY-rect.top)*scaleY};
+    }
+    return {x:(e.clientX-rect.left)*scaleX, y:(e.clientY-rect.top)*scaleY};
+  }
+
+  function start(e){ e.preventDefault(); sigStates[n].drawing=true; const p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); }
+  function draw(e){ e.preventDefault(); if(!sigStates[n].drawing) return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); sigStates[n].signed=true; label.style.display='none'; }
+  function end(){ sigStates[n].drawing=false; }
+
+  canvas.addEventListener('mousedown',start); canvas.addEventListener('mousemove',draw); canvas.addEventListener('mouseup',end); canvas.addEventListener('mouseleave',end);
+  canvas.addEventListener('touchstart',start,{passive:false}); canvas.addEventListener('touch
