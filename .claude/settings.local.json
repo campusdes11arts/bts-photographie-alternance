@@ -11,7 +11,8 @@
       "Bash(sed 's|/etudiant/login.html|/entreprise/login.html|g' \"/Users/simonhidier/Desktop/Site BTS /app-etudiant/api.js\")",
       "Bash(\"/Users/simonhidier/Desktop/Site BTS /app-entreprise/api.js\")",
       "Bash(npm uninstall:*)",
-      "Bash(gh auth:*)"
+      "Bash(gh auth:*)",
+      "Bash(git config:*)"
     ],
     "additionalDirectories": [
       "/Users/simonhidier/Desktop/Site BTS ",
