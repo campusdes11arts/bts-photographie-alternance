@@ -21,7 +21,7 @@ const ROOT = path.join(__dirname, '..');
 
 app.use('/admin',      express.static(path.join(__dirname, 'dashboard')));
 app.get('/admin/{*splat}', (req, res) =>
-  res.sendFile(path.join(__dirname, 'dashboard', 'index.html')));
+  res.sendFile(path.join(__dirname, 'dashboard', 'login.html')));
 
 app.use('/etudiant',   express.static(path.join(ROOT, 'app-etudiant')));
 app.get('/etudiant/{*splat}', (req, res) =>
@@ -31,7 +31,7 @@ app.use('/entreprise', express.static(path.join(ROOT, 'app-entreprise')));
 app.get('/entreprise/{*splat}', (req, res) =>
   res.sendFile(path.join(ROOT, 'app-entreprise', 'login.html')));
 
-app.get('/', (req, res) => res.redirect('/admin'));
+app.get('/', (req, res) => res.redirect('/admin/login.html'));
 
 // ── ERREURS ───────────────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
