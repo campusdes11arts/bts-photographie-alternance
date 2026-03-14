@@ -29,10 +29,11 @@ const API = {
   del(url)         { return this.fetch(url, { method: 'DELETE' }); },
 
   async login(email, password) {
+    const body = password ? { email, password } : { email };
     const data = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify(body)
     }).then(r => r.json());
     if (data.token) {
       localStorage.setItem('token', data.token);

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUP-PHOTO — Visites entreprise</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f13; color: #e0e0e0; min-height: 100vh; }
+    nav { background: #1a1a24; border-bottom: 1px solid #2a2a3a; padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
+    nav h1 { font-size: 16px; font-weight: 700; color: #fff; flex: 1; }
+    nav select { background: #111118; border: 1px solid #2a2a3a; color: #e0e0e0; padding: 8px 12px; border-radius: 6px; font-size: 13px; }
+    nav a, nav button { background: none; border: 1px solid #2a2a3a; color: #aaa; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; }
+    main { padding: 32px 24px; max-width: 860px; margin: 0 auto; }
+    h2 { font-size: 20px; margin-bottom: 24px; color: #fff; }
+    .visite-card { background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .visite-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .visite-num { background: #7c3aed33; color: #a78bfa; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+    .visite-title { font-size: 16px; font-weight: 600; color: #fff; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+    .badge.planifiee { background: #78350f33; color: #fbbf24; border: 1px solid #78350f88; }
+    .badge.faite { background: #065f4633; color: #34d399; border: 1px solid #065f4688; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    label { display: block; font-size: 12px; font-weight: 500; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+    input[type="date"], select.statut-sel, textarea { width: 100%; background: #111118; border: 1px solid #2a2a3a; border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 14px; outline: none; transition: border-color .2s; font-family: inherit; }
+    input[type="date"]:focus, select.statut-sel:focus, textarea:focus { border-color: #7c3aed; }
+    textarea { min-height: 80px; resize: vertical; }
+    .btn-save { background: #7c3aed; color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .2s; }
+    .btn-save:hover { background: #6d28d9; }
+    .btn-save:disabled { background: #444; cursor: not-allowed; }
+    .status-msg { font-size: 12px; color: #34d399; margin-left: 10px; display: none; }
+    .empty-state { color: #555; text-align: center; margin-top: 60px; font-size: 14px; }
+    .alternant-bar { background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 10px; padding: 16px 20px; margin-bottom: 28px; font-size: 13px; color: #aaa; }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>📷 SUP-PHOTO — Visites entreprise</h1>
+    <select id="alternantSelect" onchange="loadVisites()">
+      <option value="">— Sélectionner un alternant —</option>
+    </select>
+    <a href="/entreprise/espace.html">← Mon espace</a>
+    <button onclick="API.logout()">Déconnexion</button>
+  </nav>
+
+  <main>
+    <div id="content">
+      <p class="empty-state">Sélectionnez un alternant pour voir ses visites.</p>
+    </div>
+  </main>
+
+  <script src="/entreprise/api.js"></script>
+  <script>
+    if (!API.requireRole('entreprise')) throw new Error();
+
+    let _alternantId = null;
+
+    // Charger la liste des alternants
+    API.get('/api/entreprise/alternants').then(list => {
+      const sel = document.getElementById('alternantSelect');
+      list.forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.id;
+        opt.textContent = a.prenom + ' ' + a.nom;
+        sel.appendChild(opt);
+      });
+    });
+
+    async function loadVisites() {
+      const sel = document.getElementById('alternantSelect');
+      _alternantId = sel.value;
+      const content = document.getElementById('content');
+
+      if (!_alternantId) {
+        content.innerHTML = '<p class="empty-state">Sélectionnez un alternant pour voir ses visites.</p>';
+        return;
+      }
+
+      content.innerHTML = '<p class="empty-state">Chargement…</p>';
+
+      try {
+        const visites = await API.get(`/api/entreprise/alternants/${_alternantId}/visites`);
+        renderVisites(visites);
+      } catch(e) {
+        content.innerHTML = '<p class="empty-state" style="color:#f87171">Erreur de chargement</p>';
+      }
+    }
+
+    function renderVisites(visites) {
+      const content = document.getElementById('content');
+      const map = {};
+      visites.forEach(v => map[v.numero] = v);
+
+      content.innerHTML = [1,2,3,4].map(n => {
+        const v = map[n] || {};
+        const statut = v.statut || 'planifiee';
+        return `
+        <div class="visite-card">
+          <div class="visite-header">
+            <div class="visite-num">${n}</div>
+            <div>
+              <div class="visite-title">Visite ${n} <span class="badge ${statut}" id="badge-${n}">${statut}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label>Date de la visite</label>
+              <input type="date" id="date-${n}" value="${v.date_visite ? v.date_visite.slice(0,10) : ''}">
+            </div>
+            <div>
+              <label>Statut</label>
+              <select class="statut-sel" id="statut-${n}" onchange="updateBadge(${n})">
+                <option value="planifiee" ${statut==='planifiee'?'selected':''}>Planifiée</option>
+                <option value="faite" ${statut==='faite'?'selected':''}>Faite</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label>Compte-rendu / Observations</label>
+            <textarea id="cr-${n}" placeholder="Notes sur la visite, points abordés, évaluations…">${v.compte_rendu || ''}</textarea>
+          </div>
+          <div style="margin-top:16px;display:flex;align-items:center">
+            <button class="btn-save" onclick="saveVisite(${n})">Enregistrer visite ${n}</button>
+            <span class="status-msg" id="msg-${n}">✓ Sauvegardé</span>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function updateBadge(n) {
+      const sel = document.getElementById(`statut-${n}`);
+      const badge = document.getElementById(`badge-${n}`);
+      if (!badge || !sel) return;
+      badge.className = `badge ${sel.value}`;
+      badge.textContent = sel.value;
+    }
+
+    async function saveVisite(n) {
+      if (!_alternantId) return;
+      const btn = document.querySelector(`.visite-card:nth-child(${n}) .btn-save`);
+      const msg = document.getElementById(`msg-${n}`);
+      const payload = {
+        date_visite:  document.getElementById(`date-${n}`)?.value || null,
+        compte_rendu: document.getElementById(`cr-${n}`)?.value || null,
+        statut:       document.getElementById(`statut-${n}`)?.value || 'planifiee'
+      };
+
+      if (btn) btn.disabled = true;
+      try {
+        await API.put(`/api/entreprise/alternants/${_alternantId}/visites/${n}`, payload);
+        if (msg) { msg.style.display = 'inline'; setTimeout(() => msg.style.display = 'none', 2500); }
+        updateBadge(n);
+      } catch(e) {
+        alert('Erreur lors de la sauvegarde');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

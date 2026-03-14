@@ -7,13 +7,19 @@ const pool    = require('../database/db');
 router.post('/login', async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
+    if (!email) return res.status(400).json({ error: 'Email requis' });
 
     const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email.trim().toLowerCase()]);
     const user = rows[0];
-    if (!user || !bcrypt.compareSync(password, user.password_hash)) {
-      return res.status(401).json({ error: 'Identifiants incorrects' });
+    if (!user) return res.status(401).json({ error: 'Compte introuvable' });
+
+    // Les admins doivent toujours fournir un mot de passe
+    if (user.role === 'admin') {
+      if (!password || !bcrypt.compareSync(password, user.password_hash)) {
+        return res.status(401).json({ error: 'Identifiants incorrects' });
+      }
     }
+    // Étudiants et entreprises : connexion par email seul
 
     const token = jwt.sign(
       { id: user.id, role: user.role },

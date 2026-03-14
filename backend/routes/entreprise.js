@@ -29,15 +29,129 @@ router.get('/alternants', async (req, res, next) => {
     if (!entreprise) return res.status(404).json({ error: 'Entreprise introuvable' });
 
     const { rows } = await pool.query(`
-      SELECT e.nom, e.prenom, e.mail, e.type_contrat, e.date_debut, e.date_fin,
-             d.statut, d.annee_promo, ent.score_conformite
+      SELECT e.id, e.nom, e.prenom, e.mail, e.type_contrat, e.date_debut, e.date_fin,
+             d.id as dossier_id, d.statut, d.annee_promo, ent.score_conformite
       FROM etudiants e
-      LEFT JOIN dossiers d    ON d.etudiant_id = e.id
+      LEFT JOIN dossiers d      ON d.etudiant_id = e.id
       LEFT JOIN entreprises ent ON ent.id = e.entreprise_id
       WHERE e.entreprise_id = $1
       ORDER BY e.nom
     `, [entreprise.id]);
     res.json(rows);
+  } catch (e) { next(e); }
+});
+
+// PUT /api/entreprise/conformite
+router.put('/conformite', async (req, res, next) => {
+  try {
+    const { score_conformite, verdict_conformite } = req.body;
+    await pool.query(
+      'UPDATE entreprises SET score_conformite=$1, verdict_conformite=$2 WHERE user_id=$3',
+      [score_conformite, verdict_conformite, req.user.id]
+    );
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
+// ── Helpers pour vérifier qu'un alternant appartient à cette entreprise ─────
+async function getEntrepriseId(userId) {
+  const { rows: [ent] } = await pool.query('SELECT id FROM entreprises WHERE user_id = $1', [userId]);
+  return ent ? ent.id : null;
+}
+async function checkAlternant(entrepriseId, alternantId) {
+  const { rows: [e] } = await pool.query(
+    'SELECT id FROM etudiants WHERE id = $1 AND entreprise_id = $2', [alternantId, entrepriseId]
+  );
+  return !!e;
+}
+
+// GET /api/entreprise/alternants/:id/dossier
+router.get('/alternants/:id/dossier', async (req, res, next) => {
+  try {
+    const entId = await getEntrepriseId(req.user.id);
+    if (!entId) return res.status(404).json({ error: 'Entreprise introuvable' });
+    if (!await checkAlternant(entId, req.params.id)) return res.status(403).json({ error: 'Accès refusé' });
+
+    const { rows: [e] } = await pool.query(
+      `SELECT e.id, e.nom, e.prenom, d.fdr_json, d.cerfa_json, d.statut
+       FROM etudiants e LEFT JOIN dossiers d ON d.etudiant_id = e.id
+       WHERE e.id = $1`, [req.params.id]
+    );
+    res.json(e || {});
+  } catch (e) { next(e); }
+});
+
+// PUT /api/entreprise/alternants/:id/fdr
+router.put('/alternants/:id/fdr', async (req, res, next) => {
+  try {
+    const entId = await getEntrepriseId(req.user.id);
+    if (!entId) return res.status(404).json({ error: 'Entreprise introuvable' });
+    if (!await checkAlternant(entId, req.params.id)) return res.status(403).json({ error: 'Accès refusé' });
+
+    await pool.query(
+      'UPDATE dossiers SET fdr_json=$1, updated_at=CURRENT_TIMESTAMP WHERE etudiant_id=$2',
+      [JSON.stringify(req.body), req.params.id]
+    );
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
+// PUT /api/entreprise/alternants/:id/cerfa
+router.put('/alternants/:id/cerfa', async (req, res, next) => {
+  try {
+    const entId = await getEntrepriseId(req.user.id);
+    if (!entId) return res.status(404).json({ error: 'Entreprise introuvable' });
+    if (!await checkAlternant(entId, req.params.id)) return res.status(403).json({ error: 'Accès refusé' });
+
+    await pool.query(
+      'UPDATE dossiers SET cerfa_json=$1, updated_at=CURRENT_TIMESTAMP WHERE etudiant_id=$2',
+      [JSON.stringify(req.body), req.params.id]
+    );
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
+// GET /api/entreprise/alternants/:id/visites
+router.get('/alternants/:id/visites', async (req, res, next) => {
+  try {
+    const entId = await getEntrepriseId(req.user.id);
+    if (!entId) return res.status(404).json({ error: 'Entreprise introuvable' });
+    if (!await checkAlternant(entId, req.params.id)) return res.status(403).json({ error: 'Accès refusé' });
+
+    const { rows: [dossier] } = await pool.query('SELECT id FROM dossiers WHERE etudiant_id = $1', [req.params.id]);
+    if (!dossier) return res.json([]);
+    const { rows: visites } = await pool.query('SELECT * FROM visites WHERE dossier_id = $1 ORDER BY numero', [dossier.id]);
+    res.json(visites);
+  } catch (e) { next(e); }
+});
+
+// PUT /api/entreprise/alternants/:id/visites/:num
+router.put('/alternants/:id/visites/:num', async (req, res, next) => {
+  try {
+    const entId = await getEntrepriseId(req.user.id);
+    if (!entId) return res.status(404).json({ error: 'Entreprise introuvable' });
+    if (!await checkAlternant(entId, req.params.id)) return res.status(403).json({ error: 'Accès refusé' });
+
+    const { rows: [dossier] } = await pool.query('SELECT id FROM dossiers WHERE etudiant_id = $1', [req.params.id]);
+    if (!dossier) return res.status(404).json({ error: 'Dossier introuvable' });
+
+    const { date_visite, compte_rendu, statut } = req.body;
+    const num = parseInt(req.params.num);
+    const { rows: [existing] } = await pool.query(
+      'SELECT id FROM visites WHERE dossier_id = $1 AND numero = $2', [dossier.id, num]
+    );
+    if (existing) {
+      await pool.query(
+        'UPDATE visites SET date_visite=$1, compte_rendu=$2, statut=$3 WHERE id=$4',
+        [date_visite || null, compte_rendu || null, statut || 'planifiee', existing.id]
+      );
+    } else {
+      await pool.query(
+        'INSERT INTO visites (dossier_id, numero, date_visite, compte_rendu, statut) VALUES ($1,$2,$3,$4,$5)',
+        [dossier.id, num, date_visite || null, compte_rendu || null, statut || 'planifiee']
+      );
+    }
+    res.json({ ok: true });
   } catch (e) { next(e); }
 });
 

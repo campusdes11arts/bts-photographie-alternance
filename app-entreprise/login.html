@@ -131,12 +131,9 @@
 
     <form id="form">
       <label for="email">Adresse email</label>
-      <input type="email" id="email" placeholder="vous@sup-photo.fr" required autocomplete="email">
+      <input type="email" id="email" placeholder="vous@entreprise.fr" required autocomplete="email">
 
-      <label for="password">Mot de passe</label>
-      <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
-
-      <button type="submit" id="btn">Se connecter</button>
+      <button type="submit" id="btn">Accéder à mon espace</button>
     </form>
 
     <p class="footer">SUP-PHOTO © 2025-2027 — Données stockées localement</p>
@@ -169,16 +166,15 @@
 
       try {
         const data = await API.login(
-          document.getElementById('email').value,
-          document.getElementById('password').value
+          document.getElementById('email').value
         );
         if (data.error) throw new Error(data.error);
         redirect(data.user.role);
       } catch (ex) {
-        err.textContent = ex.message || 'Identifiants incorrects';
+        err.textContent = ex.message || 'Email introuvable';
         err.style.display = 'block';
         btn.disabled = false;
-        btn.textContent = 'Se connecter';
+        btn.textContent = 'Accéder à mon espace';
       }
     });
   </script>

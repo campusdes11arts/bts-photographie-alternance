@@ -34,11 +34,12 @@ router.post('/etudiants', async (req, res, next) => {
   const client = await pool.connect();
   try {
     const { email, password, nom, prenom, annee_promo, ...rest } = req.body;
-    if (!email || !password || !nom || !prenom)
-      return res.status(400).json({ error: 'email, password, nom, prenom requis' });
+    if (!email || !nom || !prenom)
+      return res.status(400).json({ error: 'email, nom, prenom requis' });
 
     await client.query('BEGIN');
-    const hash = bcrypt.hashSync(password, 10);
+    // Mot de passe optionnel — les étudiants se connectent par email seul
+    const hash = bcrypt.hashSync(password || Math.random().toString(36), 10);
 
     const { rows: [u] } = await client.query(
       'INSERT INTO users (email, password_hash, role) VALUES ($1, $2, $3) RETURNING id',
@@ -134,11 +135,12 @@ router.post('/entreprises', async (req, res, next) => {
   const client = await pool.connect();
   try {
     const { email, password, raison_sociale, siret, adresse, tel, mail, tuteur_nom, tuteur_prenom, tuteur_fonction } = req.body;
-    if (!email || !password || !raison_sociale)
-      return res.status(400).json({ error: 'email, password, raison_sociale requis' });
+    if (!email || !raison_sociale)
+      return res.status(400).json({ error: 'email, raison_sociale requis' });
 
     await client.query('BEGIN');
-    const hash = bcrypt.hashSync(password, 10);
+    // Mot de passe optionnel — les entreprises se connectent par email seul
+    const hash = bcrypt.hashSync(password || Math.random().toString(36), 10);
     const { rows: [u] } = await client.query(
       'INSERT INTO users (email, password_hash, role) VALUES ($1,$2,$3) RETURNING id',
       [email.toLowerCase(), hash, 'entreprise']
