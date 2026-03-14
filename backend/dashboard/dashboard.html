@@ -99,6 +99,7 @@
           <th>SIRET</th>
           <th>Tuteur</th>
           <th>Conformité</th>
+          <th>Alternants</th>
         </tr>
       </thead>
       <tbody id="tbody-entreprises">
@@ -106,6 +107,23 @@
       </tbody>
     </table>
   </main>
+
+  <!-- Modal lier étudiant à entreprise (depuis entreprise) -->
+  <div class="modal-bg" id="modal-lier-etudiant">
+    <div class="modal">
+      <h3>Lier un étudiant à cette entreprise</h3>
+      <p style="font-size:13px;color:#888;margin-bottom:20px">Sélectionne l'étudiant à rattacher.</p>
+      <input type="hidden" id="lier-entreprise-id">
+      <label>Étudiant</label>
+      <select id="lier-etudiant-select">
+        <option value="">— Choisir un étudiant —</option>
+      </select>
+      <div class="modal-footer">
+        <button class="btn secondary" onclick="closeModal('lier-etudiant')">Annuler</button>
+        <button class="btn" onclick="lierEtudiantEntreprise()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal étudiant -->
   <div class="modal-bg" id="modal-etudiant">
@@ -208,15 +226,21 @@
 
       // Tableau entreprises
       const tbodyEnt = document.getElementById('tbody-entreprises');
-      tbodyEnt.innerHTML = ents.length ? ents.map(en => `
+      tbodyEnt.innerHTML = ents.length ? ents.map(en => {
+        const alternants = etudiants.filter(e => e.entreprise_id === en.id);
+        return `
         <tr>
           <td><strong>${en.raison_sociale}</strong></td>
           <td style="color:#888">${en.email || '—'}</td>
           <td style="color:#666">${en.siret || '—'}</td>
           <td>${en.tuteur_prenom ? en.tuteur_prenom + ' ' + en.tuteur_nom : '—'}</td>
           <td>${en.score_conformite != null ? en.score_conformite + '/100' : '—'}</td>
-        </tr>
-      `).join('') : '<tr><td colspan="5" style="color:#555;text-align:center;padding:32px">Aucune entreprise</td></tr>';
+          <td>
+            ${alternants.map(a => `<span style="font-size:12px;color:#a78bfa">${a.prenom} ${a.nom}</span>`).join(', ') || '<span style="color:#555">Aucun</span>'}
+            <span class="tag-lier" onclick="openLierEtudiant(${en.id})">+ Lier</span>
+          </td>
+        </tr>`;
+      }).join('') : '<tr><td colspan="6" style="color:#555;text-align:center;padding:32px">Aucune entreprise</td></tr>';
     }
 
     function openModal(type) { document.getElementById('modal-' + type).classList.add('open'); }
@@ -235,6 +259,25 @@
       const entrepriseId = document.getElementById('lier-entreprise-select').value;
       await API.patch(`/api/admin/etudiants/${etudiantId}`, { entreprise_id: entrepriseId || null });
       closeModal('lier');
+      loadData();
+    }
+
+    function openLierEtudiant(entrepriseId) {
+      document.getElementById('lier-entreprise-id').value = entrepriseId;
+      const sel = document.getElementById('lier-etudiant-select');
+      sel.innerHTML = '<option value="">— Choisir un étudiant —</option>';
+      // Étudiants sans entreprise ou déjà liés à celle-ci
+      const disponibles = etudiants.filter(e => !e.entreprise_id || e.entreprise_id === entrepriseId);
+      disponibles.forEach(e => sel.innerHTML += `<option value="${e.id}">${e.prenom} ${e.nom}</option>`);
+      openModal('lier-etudiant');
+    }
+
+    async function lierEtudiantEntreprise() {
+      const entrepriseId = document.getElementById('lier-entreprise-id').value;
+      const etudiantId   = document.getElementById('lier-etudiant-select').value;
+      if (!etudiantId) return;
+      await API.patch(`/api/admin/etudiants/${etudiantId}`, { entreprise_id: entrepriseId });
+      closeModal('lier-etudiant');
       loadData();
     }
 
