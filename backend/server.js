@@ -33,20 +33,6 @@ app.get('/entreprise/{*splat}', (req, res) =>
 
 app.get('/', (req, res) => res.redirect('/admin'));
 
-// ── SEED TEMPORAIRE (à supprimer après usage) ─────────────────────────────────
-app.get('/setup-admin-xk9q2', async (req, res) => {
-  try {
-    const bcrypt = require('bcryptjs');
-    const pool   = require('./database/db');
-    const hash   = bcrypt.hashSync('admin123', 10);
-    const r      = await pool.query(
-      'INSERT INTO users (email, password_hash, role) VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING RETURNING id',
-      ['admin@sup-photo.fr', hash, 'admin']
-    );
-    res.json(r.rowCount ? { ok: true, message: 'Admin créé : admin@sup-photo.fr / admin123' } : { ok: true, message: 'Admin déjà existant' });
-  } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
 // ── ERREURS ───────────────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error(err);
