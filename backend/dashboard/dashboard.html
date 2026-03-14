@@ -6,136 +6,51 @@
   <title>SUP-PHOTO — Dashboard Admin</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0f0f13;
-      color: #e0e0e0;
-      min-height: 100vh;
-    }
-
-    nav {
-      background: #1a1a24;
-      border-bottom: 1px solid #2a2a3a;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f13; color: #e0e0e0; min-height: 100vh; }
+    nav { background: #1a1a24; border-bottom: 1px solid #2a2a3a; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
     nav h1 { font-size: 16px; font-weight: 700; color: #fff; }
-    nav span { font-size: 13px; color: #888; }
-
-    .logout-btn {
-      background: none;
-      border: 1px solid #2a2a3a;
-      color: #aaa;
-      padding: 6px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-    }
+    .logout-btn { background: none; border: 1px solid #2a2a3a; color: #aaa; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }
     .logout-btn:hover { color: #fff; border-color: #555; }
-
     main { padding: 32px 24px; max-width: 1100px; margin: 0 auto; }
-
     h2 { font-size: 20px; margin-bottom: 20px; color: #fff; }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin-bottom: 40px;
-    }
-
-    .stat-card {
-      background: #1a1a24;
-      border: 1px solid #2a2a3a;
-      border-radius: 12px;
-      padding: 20px;
-    }
-
+    h3.section-title { font-size: 15px; color: #a78bfa; margin: 36px 0 16px; font-weight: 600; border-bottom: 1px solid #2a2a3a; padding-bottom: 10px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 12px; padding: 20px; }
     .stat-card .label { font-size: 12px; color: #777; text-transform: uppercase; letter-spacing: .5px; }
     .stat-card .value { font-size: 36px; font-weight: 700; color: #fff; margin-top: 6px; }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 28px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      background: #7c3aed;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
+    .actions { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .btn { background: #7c3aed; color: #fff; border: none; border-radius: 8px; padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; }
     .btn:hover { background: #6d28d9; }
     .btn.secondary { background: #1a1a24; border: 1px solid #2a2a3a; color: #ccc; }
     .btn.secondary:hover { border-color: #555; color: #fff; }
-
-    table { width: 100%; border-collapse: collapse; }
-    th {
-      text-align: left;
-      font-size: 12px;
-      color: #777;
-      text-transform: uppercase;
-      letter-spacing: .5px;
-      padding: 10px 12px;
-      border-bottom: 1px solid #2a2a3a;
-    }
-    td {
-      padding: 12px;
-      border-bottom: 1px solid #1e1e2a;
-      font-size: 14px;
-    }
+    .btn.green { background: #065f46; }
+    .btn.green:hover { background: #047857; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    th { text-align: left; font-size: 12px; color: #777; text-transform: uppercase; letter-spacing: .5px; padding: 10px 12px; border-bottom: 1px solid #2a2a3a; }
+    td { padding: 11px 12px; border-bottom: 1px solid #1e1e2a; font-size: 14px; }
     tr:hover td { background: #1a1a24; }
-
-    .badge-statut {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .badge-statut.en_cours  { background: #78350f33; color: #fbbf24; border: 1px solid #78350f88; }
-    .badge-statut.complet   { background: #065f4633; color: #34d399; border: 1px solid #065f4688; }
-    .badge-statut.valide    { background: #1e3a5f33; color: #60a5fa; border: 1px solid #1e3a5f88; }
-
-    .modal-bg {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.7); z-index: 100;
-      align-items: center; justify-content: center;
-    }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge.en_cours { background: #78350f33; color: #fbbf24; border: 1px solid #78350f88; }
+    .badge.complet  { background: #065f4633; color: #34d399; border: 1px solid #065f4688; }
+    .badge.valide   { background: #1e3a5f33; color: #60a5fa; border: 1px solid #1e3a5f88; }
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 100; align-items: center; justify-content: center; }
     .modal-bg.open { display: flex; }
-    .modal {
-      background: #1a1a24;
-      border: 1px solid #2a2a3a;
-      border-radius: 14px;
-      padding: 32px;
-      width: 480px;
-      max-width: 95vw;
-    }
+    .modal { background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 14px; padding: 32px; width: 500px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
     .modal h3 { margin-bottom: 20px; color: #fff; }
     .modal label { display: block; font-size: 13px; color: #aaa; margin-bottom: 5px; }
-    .modal input, .modal select {
-      width: 100%; background: #111118; border: 1px solid #2a2a3a;
-      border-radius: 7px; padding: 10px 12px; color: #fff; font-size: 14px;
-      margin-bottom: 14px; outline: none;
-    }
+    .modal input, .modal select { width: 100%; background: #111118; border: 1px solid #2a2a3a; border-radius: 7px; padding: 10px 12px; color: #fff; font-size: 14px; margin-bottom: 14px; outline: none; }
+    .modal input:focus, .modal select:focus { border-color: #7c3aed; }
+    .modal select option { background: #1a1a24; }
     .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+    .tag-lier { display: inline-block; background: #7c3aed33; color: #a78bfa; border: 1px solid #7c3aed55; border-radius: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; margin-left: 8px; }
+    .tag-lier:hover { background: #7c3aed55; }
   </style>
 </head>
 <body>
   <nav>
     <h1>📷 SUP-PHOTO — Administration</h1>
     <div style="display:flex;align-items:center;gap:16px">
-      <span id="userInfo"></span>
+      <span id="userInfo" style="font-size:13px;color:#888"></span>
       <button class="logout-btn" onclick="API.logout()">Déconnexion</button>
     </div>
   </nav>
@@ -143,31 +58,51 @@
   <main>
     <h2>Tableau de bord</h2>
 
-    <div class="stats" id="stats">
+    <div class="stats">
       <div class="stat-card"><div class="label">Total dossiers</div><div class="value" id="s-total">—</div></div>
       <div class="stat-card"><div class="label">Complets</div><div class="value" id="s-complets">—</div></div>
       <div class="stat-card"><div class="label">Validés</div><div class="value" id="s-valides">—</div></div>
       <div class="stat-card"><div class="label">Visites effectuées</div><div class="value" id="s-visites">—</div></div>
     </div>
 
+    <!-- ÉTUDIANTS -->
+    <h3 class="section-title">🎓 Étudiants</h3>
     <div class="actions">
       <button class="btn" onclick="openModal('etudiant')">+ Ajouter un étudiant</button>
-      <button class="btn secondary" onclick="openModal('entreprise')">+ Ajouter une entreprise</button>
     </div>
-
     <table>
       <thead>
         <tr>
           <th>Étudiant</th>
           <th>Email</th>
-          <th>Entreprise</th>
+          <th>Entreprise liée</th>
           <th>Promo</th>
           <th>Statut</th>
-          <th>Mis à jour</th>
+          <th>Maj</th>
         </tr>
       </thead>
-      <tbody id="tbody">
+      <tbody id="tbody-etudiants">
         <tr><td colspan="6" style="color:#555;text-align:center;padding:32px">Chargement…</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ENTREPRISES -->
+    <h3 class="section-title">🏢 Entreprises</h3>
+    <div class="actions">
+      <button class="btn secondary" onclick="openModal('entreprise')">+ Ajouter une entreprise</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Raison sociale</th>
+          <th>Email</th>
+          <th>SIRET</th>
+          <th>Tuteur</th>
+          <th>Conformité</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-entreprises">
+        <tr><td colspan="5" style="color:#555;text-align:center;padding:32px">Chargement…</td></tr>
       </tbody>
     </table>
   </main>
@@ -181,6 +116,10 @@
       <label>Email de connexion</label><input id="e-email" type="email" placeholder="etudiant@email.com">
       <label>Mot de passe provisoire</label><input id="e-password" type="password" placeholder="••••••••">
       <label>Promotion</label><input id="e-promo" placeholder="2025-2027">
+      <label>Entreprise d'accueil (optionnel)</label>
+      <select id="e-entreprise">
+        <option value="">— Aucune pour l'instant —</option>
+      </select>
       <div id="e-error" style="color:#fca5a5;font-size:13px;margin-bottom:10px;display:none"></div>
       <div class="modal-footer">
         <button class="btn secondary" onclick="closeModal('etudiant')">Annuler</button>
@@ -197,10 +136,30 @@
       <label>Email de connexion</label><input id="en-email" type="email" placeholder="contact@entreprise.fr">
       <label>Mot de passe provisoire</label><input id="en-password" type="password" placeholder="••••••••">
       <label>SIRET</label><input id="en-siret" placeholder="12345678901234">
+      <label>Tuteur — Nom</label><input id="en-tuteur-nom" placeholder="Nom du tuteur">
+      <label>Tuteur — Prénom</label><input id="en-tuteur-prenom" placeholder="Prénom du tuteur">
+      <label>Fonction du tuteur</label><input id="en-tuteur-fonction" placeholder="Ex: Directeur artistique">
       <div id="en-error" style="color:#fca5a5;font-size:13px;margin-bottom:10px;display:none"></div>
       <div class="modal-footer">
         <button class="btn secondary" onclick="closeModal('entreprise')">Annuler</button>
-        <button class="btn" onclick="createEntreprise()">Créer</button>
+        <button class="btn green" onclick="createEntreprise()">Créer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal lier étudiant à entreprise -->
+  <div class="modal-bg" id="modal-lier">
+    <div class="modal">
+      <h3>Lier à une entreprise</h3>
+      <p style="font-size:13px;color:#888;margin-bottom:20px">Sélectionne l'entreprise d'accueil pour cet étudiant.</p>
+      <input type="hidden" id="lier-etudiant-id">
+      <label>Entreprise</label>
+      <select id="lier-entreprise-select">
+        <option value="">— Aucune —</option>
+      </select>
+      <div class="modal-footer">
+        <button class="btn secondary" onclick="closeModal('lier')">Annuler</button>
+        <button class="btn" onclick="lierEntreprise()">Enregistrer</button>
       </div>
     </div>
   </div>
@@ -208,58 +167,92 @@
   <script src="/admin/api.js"></script>
   <script>
     if (!API.requireRole('admin')) throw new Error('Non autorisé');
+    document.getElementById('userInfo').textContent = API.currentUser().email;
 
-    const u = API.currentUser();
-    document.getElementById('userInfo').textContent = u.email;
+    let entreprises = [];
 
     async function loadData() {
-      const [stats, etudiants] = await Promise.all([
+      const [stats, etudiants, ents] = await Promise.all([
         API.get('/api/admin/stats'),
-        API.get('/api/admin/etudiants')
+        API.get('/api/admin/etudiants'),
+        API.get('/api/admin/entreprises')
       ]);
+      entreprises = ents;
 
-      document.getElementById('s-total').textContent   = stats.total;
+      // Stats
+      document.getElementById('s-total').textContent    = stats.total;
       document.getElementById('s-complets').textContent = stats.complets;
       document.getElementById('s-valides').textContent  = stats.valides;
       document.getElementById('s-visites').textContent  = stats.visites;
 
-      const tbody = document.getElementById('tbody');
-      if (!etudiants.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="color:#555;text-align:center;padding:32px">Aucun dossier</td></tr>';
-        return;
-      }
-      tbody.innerHTML = etudiants.map(e => `
-        <tr style="cursor:pointer" onclick="window.location='/admin/dossier.html?id=${e.id}'">
+      // Select entreprise dans modal étudiant
+      const sel = document.getElementById('e-entreprise');
+      sel.innerHTML = '<option value="">— Aucune pour l\'instant —</option>';
+      ents.forEach(en => sel.innerHTML += `<option value="${en.id}">${en.raison_sociale}</option>`);
+
+      // Tableau étudiants
+      const tbody = document.getElementById('tbody-etudiants');
+      tbody.innerHTML = etudiants.length ? etudiants.map(e => `
+        <tr>
           <td>${e.prenom} ${e.nom}</td>
           <td style="color:#888">${e.email || '—'}</td>
-          <td>${e.raison_sociale || '—'}</td>
+          <td>
+            ${e.raison_sociale || '<span style="color:#555">Non liée</span>'}
+            <span class="tag-lier" onclick="openLier(${e.id})">Lier</span>
+          </td>
           <td>${e.annee_promo || '—'}</td>
-          <td><span class="badge-statut ${e.statut || 'en_cours'}">${e.statut || 'en_cours'}</span></td>
+          <td><span class="badge ${e.statut || 'en_cours'}">${e.statut || 'en_cours'}</span></td>
           <td style="color:#666">${e.updated_at ? e.updated_at.slice(0,10) : '—'}</td>
         </tr>
-      `).join('');
+      `).join('') : '<tr><td colspan="6" style="color:#555;text-align:center;padding:32px">Aucun étudiant</td></tr>';
+
+      // Tableau entreprises
+      const tbodyEnt = document.getElementById('tbody-entreprises');
+      tbodyEnt.innerHTML = ents.length ? ents.map(en => `
+        <tr>
+          <td><strong>${en.raison_sociale}</strong></td>
+          <td style="color:#888">${en.email || '—'}</td>
+          <td style="color:#666">${en.siret || '—'}</td>
+          <td>${en.tuteur_prenom ? en.tuteur_prenom + ' ' + en.tuteur_nom : '—'}</td>
+          <td>${en.score_conformite != null ? en.score_conformite + '/100' : '—'}</td>
+        </tr>
+      `).join('') : '<tr><td colspan="5" style="color:#555;text-align:center;padding:32px">Aucune entreprise</td></tr>';
     }
 
     function openModal(type) { document.getElementById('modal-' + type).classList.add('open'); }
     function closeModal(type) { document.getElementById('modal-' + type).classList.remove('open'); }
+
+    function openLier(etudiantId) {
+      document.getElementById('lier-etudiant-id').value = etudiantId;
+      const sel = document.getElementById('lier-entreprise-select');
+      sel.innerHTML = '<option value="">— Aucune —</option>';
+      entreprises.forEach(en => sel.innerHTML += `<option value="${en.id}">${en.raison_sociale}</option>`);
+      openModal('lier');
+    }
+
+    async function lierEntreprise() {
+      const etudiantId   = document.getElementById('lier-etudiant-id').value;
+      const entrepriseId = document.getElementById('lier-entreprise-select').value;
+      await API.patch(`/api/admin/etudiants/${etudiantId}`, { entreprise_id: entrepriseId || null });
+      closeModal('lier');
+      loadData();
+    }
 
     async function createEtudiant() {
       const err = document.getElementById('e-error');
       err.style.display = 'none';
       try {
         await API.post('/api/admin/etudiants', {
-          prenom:      document.getElementById('e-prenom').value,
-          nom:         document.getElementById('e-nom').value,
-          email:       document.getElementById('e-email').value,
-          password:    document.getElementById('e-password').value,
-          annee_promo: document.getElementById('e-promo').value
+          prenom:        document.getElementById('e-prenom').value,
+          nom:           document.getElementById('e-nom').value,
+          email:         document.getElementById('e-email').value,
+          password:      document.getElementById('e-password').value,
+          annee_promo:   document.getElementById('e-promo').value,
+          entreprise_id: document.getElementById('e-entreprise').value || null
         });
         closeModal('etudiant');
         loadData();
-      } catch (ex) {
-        err.textContent = ex.message;
-        err.style.display = 'block';
-      }
+      } catch (ex) { err.textContent = ex.message; err.style.display = 'block'; }
     }
 
     async function createEntreprise() {
@@ -267,17 +260,17 @@
       err.style.display = 'none';
       try {
         await API.post('/api/admin/entreprises', {
-          raison_sociale: document.getElementById('en-raison').value,
-          email:          document.getElementById('en-email').value,
-          password:       document.getElementById('en-password').value,
-          siret:          document.getElementById('en-siret').value
+          raison_sociale:   document.getElementById('en-raison').value,
+          email:            document.getElementById('en-email').value,
+          password:         document.getElementById('en-password').value,
+          siret:            document.getElementById('en-siret').value,
+          tuteur_nom:       document.getElementById('en-tuteur-nom').value,
+          tuteur_prenom:    document.getElementById('en-tuteur-prenom').value,
+          tuteur_fonction:  document.getElementById('en-tuteur-fonction').value
         });
         closeModal('entreprise');
         loadData();
-      } catch (ex) {
-        err.textContent = ex.message;
-        err.style.display = 'block';
-      }
+      } catch (ex) { err.textContent = ex.message; err.style.display = 'block'; }
     }
 
     loadData();

@@ -45,12 +45,13 @@ router.post('/etudiants', async (req, res, next) => {
       [email.toLowerCase(), hash, 'etudiant']
     );
     const { rows: [e] } = await client.query(`
-      INSERT INTO etudiants (user_id, nom, prenom, ddn, secu, adresse, tel, mail, statut_avant, type_contrat, date_debut, date_fin, salaire)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING id
+      INSERT INTO etudiants (user_id, nom, prenom, ddn, secu, adresse, tel, mail, statut_avant, type_contrat, date_debut, date_fin, salaire, entreprise_id)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING id
     `, [u.id, nom, prenom,
         rest.ddn||null, rest.secu||null, rest.adresse||null, rest.tel||null,
         rest.mail||null, rest.statut_avant||null, rest.type_contrat||null,
-        rest.date_debut||null, rest.date_fin||null, rest.salaire||null]);
+        rest.date_debut||null, rest.date_fin||null, rest.salaire||null,
+        rest.entreprise_id||null]);
 
     await client.query(
       'INSERT INTO dossiers (etudiant_id, annee_promo) VALUES ($1, $2)',
@@ -90,7 +91,13 @@ router.get('/etudiants/:id', async (req, res, next) => {
 // PATCH /api/admin/etudiants/:id
 router.patch('/etudiants/:id', async (req, res, next) => {
   try {
-    const { statut, conformite_json, fdr_json, cerfa_json } = req.body;
+    const { statut, conformite_json, fdr_json, cerfa_json, entreprise_id } = req.body;
+
+    // Lier/délier une entreprise à l'étudiant
+    if (entreprise_id !== undefined) {
+      await pool.query('UPDATE etudiants SET entreprise_id=$1 WHERE id=$2', [entreprise_id || null, req.params.id]);
+    }
+
     const sets = [], vals = [];
     let i = 1;
     if (statut)          { sets.push(`statut=$${i++}`);          vals.push(statut); }
