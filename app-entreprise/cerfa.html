@@ -938,22 +938,25 @@ window.addEventListener('DOMContentLoaded',()=>{
 // ── AUTH ─────────────────────────────────────────────────────────────────────
 if (!API.requireRole('entreprise')) { throw new Error('Non autorisé'); }
 
-// Si les données ne sont pas en localStorage, essayer l'API (alternant sélectionné)
+// Toujours essayer de charger depuis l'API si un alternant est dans l'URL
 window.addEventListener('DOMContentLoaded', () => {
-  const raw = localStorage.getItem('supphoto_fdr_v3');
-  if (!raw) {
-    // Essayer de charger depuis l'URL param alternantId
-    const params = new URLSearchParams(window.location.search);
-    const altId = params.get('alternant');
-    if (altId) {
-      API.get(`/api/entreprise/alternants/${altId}/dossier`).then(d => {
-        if (d.fdr_json) {
-          const fdr = typeof d.fdr_json === 'string' ? JSON.parse(d.fdr_json) : d.fdr_json;
-          localStorage.setItem('supphoto_fdr_v3', JSON.stringify(fdr));
-          loadData();
-        }
-      }).catch(() => {});
-    }
+  const params = new URLSearchParams(window.location.search);
+  const altId = params.get('alternant');
+  if (altId) {
+    // Priorité à la base de données (données les plus fraîches)
+    API.get(`/api/entreprise/alternants/${altId}/dossier`).then(d => {
+      if (d.fdr_json) {
+        const fdr = typeof d.fdr_json === 'string' ? JSON.parse(d.fdr_json) : d.fdr_json;
+        localStorage.setItem('supphoto_fdr_v3', JSON.stringify(fdr));
+        loadData();
+      }
+    }).catch(() => {
+      // Fallback : si pas en base, essayer localStorage
+      if (!localStorage.getItem('supphoto_fdr_v3')) {
+        $('sbDot').style.background = 'var(--orange)';
+        $('sbMsg').textContent = '⚠ Aucune FDR trouvée pour cet alternant — remplissez et sauvegardez la FDR.';
+      }
+    });
   }
 });
 </script>

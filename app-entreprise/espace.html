@@ -24,6 +24,8 @@
     .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
     .badge.en_cours { background: #78350f33; color: #fbbf24; border: 1px solid #78350f88; }
     .badge.complet  { background: #065f4633; color: #34d399; border: 1px solid #065f4688; }
+    .btn-link { display: inline-block; background: #1e1e2e; border: 1px solid #3a3a5a; border-radius: 6px; padding: 3px 10px; font-size: 11px; color: #a78bfa; text-decoration: none; margin-left: 6px; white-space: nowrap; }
+    .btn-link:hover { background: #2a2a3a; }
   </style>
 </head>
 <body>
@@ -74,7 +76,7 @@
           ${alternants.length === 0 ? '<p style="color:#555;font-size:14px">Aucun alternant lié</p>' : `
           <table>
             <thead>
-              <tr><th>Nom</th><th>Contrat</th><th>Période</th><th>Statut dossier</th></tr>
+              <tr><th>Nom</th><th>Contrat</th><th>Période</th><th>Statut dossier</th><th>Actions</th></tr>
             </thead>
             <tbody>
               ${alternants.map(a => `
@@ -83,6 +85,11 @@
                   <td style="color:#888">${a.type_contrat || '—'}</td>
                   <td style="color:#888">${a.date_debut || '—'} → ${a.date_fin || '—'}</td>
                   <td><span class="badge ${a.statut || 'en_cours'}">${a.statut || 'en_cours'}</span></td>
+                  <td>
+                    <a class="btn-link" href="/entreprise/fdr.html?alternant=${a.id}">📄 FDR</a>
+                    <a class="btn-link" href="/entreprise/cerfa.html?alternant=${a.id}">📃 CERFA</a>
+                    <a class="btn-link" href="/entreprise/visites.html">🗓 Visites</a>
+                  </td>
                 </tr>
               `).join('')}
             </tbody>

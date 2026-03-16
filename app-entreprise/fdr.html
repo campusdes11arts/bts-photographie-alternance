@@ -1185,8 +1185,10 @@ function updateProgress(){
 
   const livretBtn = $('btnLivret');
   const cerfaBtn  = $('btnCerfa');
-  if(pct===100){ livretBtn.classList.remove('locked'); if(cerfaBtn) cerfaBtn.classList.remove('locked'); }
-  else { livretBtn.classList.add('locked'); if(cerfaBtn) cerfaBtn.classList.add('locked'); }
+  // Livret : 100% requis. CERFA : accessible dès que des données sont présentes (> 0%)
+  if(pct===100){ livretBtn.classList.remove('locked'); }
+  else { livretBtn.classList.add('locked'); }
+  if(cerfaBtn){ if(pct > 0) cerfaBtn.classList.remove('locked'); else cerfaBtn.classList.add('locked'); }
 }
 
 /* ═══════════ SAVE / LOAD ═══════════ */
@@ -1527,6 +1529,12 @@ API.get('/api/entreprise/alternants').then(list => {
     opt.textContent = a.prenom + ' ' + a.nom;
     sel.appendChild(opt);
   });
+  // Auto-sélectionner depuis ?alternant=ID dans l'URL
+  const urlAlt = new URLSearchParams(window.location.search).get('alternant');
+  if (urlAlt) {
+    sel.value = urlAlt;
+    onAlternantChange();
+  }
 }).catch(() => {});
 
 function goToCerfa() {
