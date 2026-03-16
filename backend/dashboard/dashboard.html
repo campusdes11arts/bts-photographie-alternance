@@ -44,6 +44,12 @@
     .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
     .tag-lier { display: inline-block; background: #7c3aed33; color: #a78bfa; border: 1px solid #7c3aed55; border-radius: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; margin-left: 8px; }
     .tag-lier:hover { background: #7c3aed55; }
+    .tag-edit { display: inline-block; background: #1e3a5f33; color: #60a5fa; border: 1px solid #1e3a5f88; border-radius: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; margin-left: 4px; }
+    .tag-edit:hover { background: #1e3a5f55; }
+    .tag-del { display: inline-block; background: #7f1d1d33; color: #f87171; border: 1px solid #7f1d1d88; border-radius: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; margin-left: 4px; }
+    .tag-del:hover { background: #7f1d1d55; }
+    .btn.danger { background: #7f1d1d; }
+    .btn.danger:hover { background: #991b1b; }
   </style>
 </head>
 <body>
@@ -101,6 +107,7 @@
           <th>Tuteur</th>
           <th>Conformité</th>
           <th>Alternants</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody id="tbody-entreprises">
@@ -183,6 +190,27 @@
     </div>
   </div>
 
+  <!-- Modal modifier entreprise -->
+  <div class="modal-bg" id="modal-edit-entreprise">
+    <div class="modal">
+      <h3>Modifier l'entreprise</h3>
+      <input type="hidden" id="edit-en-id">
+      <label>Raison sociale</label><input id="edit-en-raison" placeholder="Nom de l'entreprise">
+      <label>SIRET</label><input id="edit-en-siret" placeholder="12345678901234">
+      <label>Adresse</label><input id="edit-en-adresse" placeholder="Adresse">
+      <label>Téléphone</label><input id="edit-en-tel" placeholder="Téléphone">
+      <label>Email entreprise</label><input id="edit-en-mail" type="email" placeholder="contact@entreprise.fr">
+      <label>Tuteur — Nom</label><input id="edit-en-tuteur-nom" placeholder="Nom du tuteur">
+      <label>Tuteur — Prénom</label><input id="edit-en-tuteur-prenom" placeholder="Prénom du tuteur">
+      <label>Fonction du tuteur</label><input id="edit-en-tuteur-fonction" placeholder="Ex: Directeur artistique">
+      <div id="edit-en-error" style="color:#fca5a5;font-size:13px;margin-bottom:10px;display:none"></div>
+      <div class="modal-footer">
+        <button class="btn secondary" onclick="closeModal('edit-entreprise')">Annuler</button>
+        <button class="btn" onclick="saveEditEntreprise()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/admin/api.js"></script>
   <script>
     if (!API.requireRole('admin')) throw new Error('Non autorisé');
@@ -242,6 +270,10 @@
             ${alternants.map(a => `<span style="font-size:12px;color:#a78bfa">${a.prenom} ${a.nom}</span>`).join(', ') || '<span style="color:#555">Aucun</span>'}
             <span class="tag-lier" onclick="openLierEtudiant(${en.id})">+ Lier</span>
           </td>
+          <td style="white-space:nowrap">
+            <span class="tag-edit" onclick="openEditEntreprise(${en.id})">✏ Modifier</span>
+            <span class="tag-del" onclick="deleteEntreprise(${en.id}, '${en.raison_sociale.replace(/'/g,"\\'")}')">🗑 Supprimer</span>
+          </td>
         </tr>`;
       }).join('') : '<tr><td colspan="6" style="color:#555;text-align:center;padding:32px">Aucune entreprise</td></tr>';
     }
@@ -299,6 +331,50 @@
         closeModal('etudiant');
         loadData();
       } catch (ex) { err.textContent = ex.message; err.style.display = 'block'; }
+    }
+
+    function openEditEntreprise(id) {
+      const en = entreprises.find(e => e.id === id);
+      if (!en) return;
+      document.getElementById('edit-en-id').value = en.id;
+      document.getElementById('edit-en-raison').value = en.raison_sociale || '';
+      document.getElementById('edit-en-siret').value = en.siret || '';
+      document.getElementById('edit-en-adresse').value = en.adresse || '';
+      document.getElementById('edit-en-tel').value = en.tel || '';
+      document.getElementById('edit-en-mail').value = en.mail || '';
+      document.getElementById('edit-en-tuteur-nom').value = en.tuteur_nom || '';
+      document.getElementById('edit-en-tuteur-prenom').value = en.tuteur_prenom || '';
+      document.getElementById('edit-en-tuteur-fonction').value = en.tuteur_fonction || '';
+      document.getElementById('edit-en-error').style.display = 'none';
+      openModal('edit-entreprise');
+    }
+
+    async function saveEditEntreprise() {
+      const err = document.getElementById('edit-en-error');
+      err.style.display = 'none';
+      const id = document.getElementById('edit-en-id').value;
+      try {
+        await API.patch(`/api/admin/entreprises/${id}`, {
+          raison_sociale:  document.getElementById('edit-en-raison').value,
+          siret:           document.getElementById('edit-en-siret').value,
+          adresse:         document.getElementById('edit-en-adresse').value,
+          tel:             document.getElementById('edit-en-tel').value,
+          mail:            document.getElementById('edit-en-mail').value,
+          tuteur_nom:      document.getElementById('edit-en-tuteur-nom').value,
+          tuteur_prenom:   document.getElementById('edit-en-tuteur-prenom').value,
+          tuteur_fonction: document.getElementById('edit-en-tuteur-fonction').value
+        });
+        closeModal('edit-entreprise');
+        loadData();
+      } catch (ex) { err.textContent = ex.message; err.style.display = 'block'; }
+    }
+
+    async function deleteEntreprise(id, nom) {
+      if (!confirm(`Supprimer l'entreprise "${nom}" ? Cette action est irréversible.\nLes alternants liés seront déliés.`)) return;
+      try {
+        await API.del(`/api/admin/entreprises/${id}`);
+        loadData();
+      } catch (ex) { alert('Erreur : ' + ex.message); }
     }
 
     async function createEntreprise() {

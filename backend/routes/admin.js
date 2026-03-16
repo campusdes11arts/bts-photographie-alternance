@@ -166,6 +166,45 @@ router.get('/entreprises', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
+// PATCH /api/admin/entreprises/:id
+router.patch('/entreprises/:id', async (req, res, next) => {
+  try {
+    const { raison_sociale, siret, adresse, tel, mail, tuteur_nom, tuteur_prenom, tuteur_fonction } = req.body;
+    await pool.query(`
+      UPDATE entreprises SET
+        raison_sociale   = COALESCE($1, raison_sociale),
+        siret            = COALESCE($2, siret),
+        adresse          = COALESCE($3, adresse),
+        tel              = COALESCE($4, tel),
+        mail             = COALESCE($5, mail),
+        tuteur_nom       = COALESCE($6, tuteur_nom),
+        tuteur_prenom    = COALESCE($7, tuteur_prenom),
+        tuteur_fonction  = COALESCE($8, tuteur_fonction)
+      WHERE id = $9
+    `, [raison_sociale||null, siret||null, adresse||null, tel||null, mail||null,
+        tuteur_nom||null, tuteur_prenom||null, tuteur_fonction||null, req.params.id]);
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
+// DELETE /api/admin/entreprises/:id
+router.delete('/entreprises/:id', async (req, res, next) => {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const { rows: [ent] } = await client.query('SELECT user_id FROM entreprises WHERE id = $1', [req.params.id]);
+    if (!ent) return res.status(404).json({ error: 'Entreprise introuvable' });
+    // Délier les étudiants avant suppression
+    await client.query('UPDATE etudiants SET entreprise_id = NULL WHERE entreprise_id = $1', [req.params.id]);
+    await client.query('DELETE FROM entreprises WHERE id = $1', [req.params.id]);
+    if (ent.user_id) await client.query('DELETE FROM users WHERE id = $1', [ent.user_id]);
+    await client.query('COMMIT');
+    res.json({ ok: true });
+  } catch (err) {
+    await client.query('ROLLBACK'); next(err);
+  } finally { client.release(); }
+});
+
 // PUT /api/admin/etudiants/:id/visites/:num
 router.put('/etudiants/:id/visites/:num', async (req, res, next) => {
   try {
