@@ -69,6 +69,7 @@
     <h3 class="section-title">🎓 Étudiants</h3>
     <div class="actions">
       <button class="btn" onclick="openModal('etudiant')">+ Ajouter un étudiant</button>
+      <button class="btn secondary" onclick="loadData()">↻ Actualiser</button>
     </div>
     <table>
       <thead>
@@ -188,14 +189,16 @@
     document.getElementById('userInfo').textContent = API.currentUser().email;
 
     let entreprises = [];
+    let etudiants = [];
 
     async function loadData() {
-      const [stats, etudiants, ents] = await Promise.all([
+      const [stats, _etudiants, ents] = await Promise.all([
         API.get('/api/admin/stats'),
         API.get('/api/admin/etudiants'),
         API.get('/api/admin/entreprises')
       ]);
       entreprises = ents;
+      etudiants = _etudiants;
 
       // Stats
       document.getElementById('s-total').textContent    = stats.total;

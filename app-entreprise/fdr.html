@@ -1196,7 +1196,7 @@ function collectData(){
     if(el.name && el.name!=='mission[]') data[el.name]=el.value;
   });
   // Radio
-  ['nationalite','rqth','statutAvant','typeContrat'].forEach(n=>{
+  ['nationalite','rqth','statutAvant','typeContrat','typeEmployeur','altSexe','altSportifHN','altProjetEntreprise','machinesDangereuses'].forEach(n=>{
     const el=document.querySelector(`input[name="${n}"]:checked`);
     data[n]=el?el.value:'';
   });
@@ -1212,7 +1212,7 @@ function applyData(data){
     if(el){ el.value=v; markFilled(el); }
   });
   // Radios
-  ['nationalite','rqth','statutAvant','typeContrat'].forEach(n=>{
+  ['nationalite','rqth','statutAvant','typeContrat','typeEmployeur','altSexe','altSportifHN','altProjetEntreprise','machinesDangereuses'].forEach(n=>{
     if(data[n]){
       const el=document.querySelector(`input[name="${n}"][value="${data[n]}"]`);
       if(el) el.checked=true;
