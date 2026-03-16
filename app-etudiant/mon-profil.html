@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SUP-PHOTO — Mon profil FDR</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f13; color: #e0e0e0; min-height: 100vh; }
+
+    nav {
+      background: #1a1a24; border-bottom: 1px solid #2a2a3a;
+      padding: 14px 24px; display: flex; align-items: center; justify-content: space-between;
+    }
+    nav h1 { font-size: 16px; font-weight: 700; color: #fff; }
+    .nav-links { display: flex; align-items: center; gap: 12px; }
+    .nav-link {
+      color: #a78bfa; font-size: 13px; text-decoration: none;
+      padding: 6px 14px; border-radius: 6px; border: 1px solid #3a2a5a;
+      transition: background 0.2s;
+    }
+    .nav-link:hover { background: #2a1a4a; }
+    .logout-btn {
+      background: none; border: 1px solid #2a2a3a; color: #aaa;
+      padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px;
+    }
+    .logout-btn:hover { border-color: #a78bfa; color: #e0e0e0; }
+
+    main { padding: 32px 24px; max-width: 860px; margin: 0 auto; }
+
+    .page-title { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .page-subtitle { font-size: 14px; color: #666; margin-bottom: 28px; }
+
+    .identity-card {
+      background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 12px;
+      padding: 20px 24px; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .identity-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .identity-name { font-size: 18px; font-weight: 600; color: #fff; }
+    .identity-label { font-size: 12px; color: #666; margin-top: 2px; }
+
+    .section {
+      background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 12px;
+      padding: 24px; margin-bottom: 20px;
+    }
+    .section h3 {
+      font-size: 13px; color: #a78bfa; margin-bottom: 20px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      padding-bottom: 10px; border-bottom: 1px solid #2a2a3a;
+    }
+
+    .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field-full { grid-column: 1 / -1; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.08em; }
+    .field input, .field select, .field textarea {
+      background: #12121a; border: 1px solid #2a2a3a; border-radius: 8px;
+      padding: 10px 14px; color: #e0e0e0; font-size: 14px; font-family: inherit;
+      outline: none; transition: border-color 0.2s;
+      width: 100%;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: #7c3aed;
+    }
+    .field select { appearance: none; cursor: pointer; }
+    .field textarea { resize: vertical; min-height: 80px; }
+
+    .radio-group { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+    .radio-group label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: #e0e0e0; cursor: pointer;
+      text-transform: none; letter-spacing: 0;
+      font-weight: 500;
+    }
+    .radio-group input[type="radio"] { accent-color: #a78bfa; width: 16px; height: 16px; cursor: pointer; }
+
+    .btn-save {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: #fff; border: none; border-radius: 8px;
+      padding: 12px 28px; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: opacity 0.2s; margin-top: 8px;
+    }
+    .btn-save:hover { opacity: 0.9; }
+    .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      padding: 14px 22px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999;
+    }
+    .toast.ok { background: #065f46; color: #34d399; border: 1px solid #34d39940; }
+    .toast.err { background: #7f1d1d; color: #f87171; border: 1px solid #f8717140; }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>📷 SUP-PHOTO — Mon profil FDR</h1>
+    <div class="nav-links">
+      <a href="/etudiant/dossier.html" class="nav-link">← Mon dossier</a>
+      <button class="logout-btn" onclick="API.logout()">Déconnexion</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-title">Mon profil — Fiche de Renseignements</div>
+    <div class="page-subtitle">Ces informations seront intégrées dans la FDR de votre contrat d'apprentissage.</div>
+
+    <div class="identity-card" id="identityCard">
+      <div class="identity-avatar" id="avatarInitials">…</div>
+      <div>
+        <div class="identity-name" id="identityName">Chargement…</div>
+        <div class="identity-label">Informations issues de votre dossier (non modifiables ici)</div>
+      </div>
+    </div>
+
+    <form id="profileForm" onsubmit="return false;">
+
+      <!-- Identité -->
+      <div class="section">
+        <h3>Identité</h3>
+        <div class="fields-grid">
+          <div class="field">
+            <label for="altNomUsage">Nom d'usage</label>
+            <input type="text" id="altNomUsage" name="altNomUsage" placeholder="Nom d'usage si différent du nom de naissance">
+          </div>
+          <div class="field">
+            <label for="altDdn">Date de naissance</label>
+            <input type="date" id="altDdn" name="altDdn">
+          </div>
+          <div class="field">
+            <label for="altLieuNaissance">Commune de naissance</label>
+            <input type="text" id="altLieuNaissance" name="altLieuNaissance" placeholder="Ville de naissance">
+          </div>
+          <div class="field">
+            <label for="altDepNaissance">Département de naissance</label>
+            <input type="text" id="altDepNaissance" name="altDepNaissance" placeholder="Ex : 75">
+          </div>
+          <div class="field">
+            <label>Sexe</label>
+            <div class="radio-group">
+              <label><input type="radio" name="altSexe" value="M"> Masculin</label>
+              <label><input type="radio" name="altSexe" value="F"> Féminin</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="nationalite">Nationalité</label>
+            <select id="nationalite" name="nationalite">
+              <option value="">— Sélectionner —</option>
+              <option value="Française">Française</option>
+              <option value="Autre UE">Autre UE</option>
+              <option value="Hors UE">Hors UE</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="altSecu">N° de sécurité sociale</label>
+            <input type="text" id="altSecu" name="altSecu" placeholder="15 chiffres" maxlength="15">
+          </div>
+          <div class="field">
+            <label for="altRegimeSocial">Régime social</label>
+            <select id="altRegimeSocial" name="altRegimeSocial">
+              <option value="">— Sélectionner —</option>
+              <option value="1">1 — Régime général</option>
+              <option value="2">2 — MSA</option>
+              <option value="3">3 — Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Sportif de haut niveau</label>
+            <div class="radio-group">
+              <label><input type="radio" name="altSportifHN" value="NON"> Non</label>
+              <label><input type="radio" name="altSportifHN" value="OUI"> Oui</label>
+            </div>
+          </div>
+          <div class="field">
+            <label>RQTH (Reconnaissance Qualité Travailleur Handicapé)</label>
+            <div class="radio-group">
+              <label><input type="radio" name="rqth" value="NON"> Non</label>
+              <label><input type="radio" name="rqth" value="OUI"> Oui</label>
+            </div>
+          </div>
+          <div class="field field-full">
+            <label>Projet de création d'entreprise</label>
+            <div class="radio-group">
+              <label><input type="radio" name="altProjetEntreprise" value="NON"> Non</label>
+              <label><input type="radio" name="altProjetEntreprise" value="OUI"> Oui</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coordonnées -->
+      <div class="section">
+        <h3>Coordonnées</h3>
+        <div class="fields-grid">
+          <div class="field field-full">
+            <label for="altAdresse">Adresse</label>
+            <textarea id="altAdresse" name="altAdresse" placeholder="Numéro, rue, code postal, ville"></textarea>
+          </div>
+          <div class="field">
+            <label for="altTel">Téléphone</label>
+            <input type="tel" id="altTel" name="altTel" placeholder="06 00 00 00 00">
+          </div>
+          <div class="field">
+            <label for="altMail">Email</label>
+            <input type="email" id="altMail" name="altMail" placeholder="votre@email.fr">
+          </div>
+        </div>
+      </div>
+
+      <!-- Situation avant le contrat -->
+      <div class="section">
+        <h3>Situation avant le contrat</h3>
+        <div class="fields-grid">
+          <div class="field field-full">
+            <label for="statutAvant">Situation avant le contrat</label>
+            <select id="statutAvant" name="statutAvant">
+              <option value="">— Sélectionner —</option>
+              <option value="00">00 — Scolaire</option>
+              <option value="01">01 — En prépa apprentissage</option>
+              <option value="11">11 — Étudiant</option>
+              <option value="31">31 — Salarié</option>
+              <option value="33">33 — Sans emploi</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diplômes -->
+      <div class="section">
+        <h3>Diplômes et formation</h3>
+        <div class="fields-grid">
+          <div class="field">
+            <label for="altDiplomeObtenu">Diplôme le plus élevé obtenu</label>
+            <input type="text" id="altDiplomeObtenu" name="altDiplomeObtenu" placeholder="Ex : Baccalauréat">
+          </div>
+          <div class="field">
+            <label for="altDiplomePrepare">Dernier diplôme préparé</label>
+            <input type="text" id="altDiplomePrepare" name="altDiplomePrepare" placeholder="Ex : BTS">
+          </div>
+          <div class="field field-full">
+            <label for="altDiplomePrecis">Intitulé précis du dernier diplôme préparé</label>
+            <input type="text" id="altDiplomePrecis" name="altDiplomePrecis" placeholder="Ex : BTS Photographie">
+          </div>
+          <div class="field">
+            <label for="altDerniereClasse">Dernière classe / année suivie</label>
+            <input type="text" id="altDerniereClasse" name="altDerniereClasse" placeholder="Ex : Terminale / 1ère année BTS">
+          </div>
+        </div>
+      </div>
+
+      <!-- Représentant légal -->
+      <div class="section">
+        <h3>Représentant légal (si mineur)</h3>
+        <div class="fields-grid">
+          <div class="field">
+            <label for="repLegalNom">Nom et prénom du représentant légal</label>
+            <input type="text" id="repLegalNom" name="repLegalNom" placeholder="Nom Prénom">
+          </div>
+          <div class="field">
+            <label for="repLegalMail">Email du représentant légal</label>
+            <input type="email" id="repLegalMail" name="repLegalMail" placeholder="email@exemple.fr">
+          </div>
+          <div class="field field-full">
+            <label for="repLegalAdresse">Adresse du représentant légal</label>
+            <input type="text" id="repLegalAdresse" name="repLegalAdresse" placeholder="Adresse complète">
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="btn-save" id="saveBtn" onclick="saveProfile()">Enregistrer mon profil</button>
+    </form>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/etudiant/api.js"></script>
+  <script>
+    if (!API.requireRole('etudiant')) throw new Error();
+
+    // Champs radio à gérer manuellement
+    const RADIO_FIELDS = ['altSexe', 'altSportifHN', 'rqth', 'altProjetEntreprise'];
+
+    function showToast(msg, type) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast ' + type + ' show';
+      setTimeout(() => { t.className = 'toast ' + type; }, 3500);
+    }
+
+    function setRadio(name, value) {
+      const radios = document.querySelectorAll(`input[name="${name}"]`);
+      radios.forEach(r => { r.checked = (r.value === value); });
+    }
+
+    function getRadio(name) {
+      const checked = document.querySelector(`input[name="${name}"]:checked`);
+      return checked ? checked.value : '';
+    }
+
+    function prefillForm(fdr) {
+      const form = document.getElementById('profileForm');
+      const fields = form.querySelectorAll('input:not([type="radio"]), select, textarea');
+      fields.forEach(el => {
+        if (el.name && fdr[el.name] !== undefined) {
+          el.value = fdr[el.name];
+        }
+      });
+      RADIO_FIELDS.forEach(name => {
+        if (fdr[name] !== undefined) setRadio(name, fdr[name]);
+      });
+    }
+
+    // Chargement initial
+    Promise.all([
+      API.get('/api/etudiant/dossier'),
+      API.get('/api/etudiant/dossier/fdr')
+    ]).then(([dossierData, fdr]) => {
+      // Afficher identité
+      const nom = dossierData.nom || '';
+      const prenom = dossierData.prenom || '';
+      document.getElementById('identityName').textContent = prenom + ' ' + nom;
+      const initials = (prenom[0] || '') + (nom[0] || '');
+      document.getElementById('avatarInitials').textContent = initials.toUpperCase() || '?';
+
+      // Pré-remplir le formulaire avec les données existantes de la FDR
+      if (fdr && Object.keys(fdr).length > 0) {
+        prefillForm(fdr);
+      }
+    }).catch(err => {
+      console.error(err);
+      document.getElementById('identityName').textContent = 'Erreur de chargement';
+    });
+
+    async function saveProfile() {
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      btn.textContent = 'Enregistrement…';
+
+      try {
+        // Collecter les champs du formulaire
+        const form = document.getElementById('profileForm');
+        const formData = {};
+        const fields = form.querySelectorAll('input:not([type="radio"]), select, textarea');
+        fields.forEach(el => {
+          if (el.name) formData[el.name] = el.value;
+        });
+        RADIO_FIELDS.forEach(name => {
+          formData[name] = getRadio(name);
+        });
+
+        // Récupérer la FDR existante (pour le merge côté client avant envoi)
+        const existingFdr = await API.get('/api/etudiant/dossier/fdr');
+
+        // Fusionner : les champs du formulaire écrasent les valeurs étudiant,
+        // mais les champs entreprise (non présents dans formData) restent intacts
+        const merged = { ...existingFdr, ...formData };
+
+        // Sauvegarder
+        await API.put('/api/etudiant/dossier/fdr', merged);
+
+        showToast('Profil enregistré avec succès !', 'ok');
+      } catch (err) {
+        console.error(err);
+        showToast('Erreur lors de l\'enregistrement', 'err');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Enregistrer mon profil';
+      }
+    }
+  </script>
+</body>
+</html>
