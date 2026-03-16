@@ -74,7 +74,7 @@ router.get('/alternants/:id/dossier', async (req, res, next) => {
 
     const { rows: [e] } = await pool.query(
       `SELECT e.id, e.nom, e.prenom, e.mail, e.tel,
-              d.fdr_json, d.cerfa_json, d.statut
+              d.fdr_json, d.cerfa_json, d.statut, d.signatures_json
        FROM etudiants e LEFT JOIN dossiers d ON d.etudiant_id = e.id
        WHERE e.id = $1`, [req.params.id]
     );
@@ -122,6 +122,29 @@ router.put('/alternants/:id/cerfa', async (req, res, next) => {
     await pool.query(
       'UPDATE dossiers SET cerfa_json=$1, updated_at=CURRENT_TIMESTAMP WHERE etudiant_id=$2',
       [JSON.stringify(req.body), req.params.id]
+    );
+    res.json({ ok: true });
+  } catch (e) { next(e); }
+});
+
+// PUT /api/entreprise/alternants/:id/signature-employeur
+router.put('/alternants/:id/signature-employeur', async (req, res, next) => {
+  try {
+    const entId = await getEntrepriseId(req.user.id);
+    if (!entId) return res.status(404).json({ error: 'Entreprise introuvable' });
+    if (!await checkAlternant(entId, req.params.id)) return res.status(403).json({ error: 'Accès refusé' });
+
+    const { signature } = req.body;
+    if (!signature) return res.status(400).json({ error: 'Signature manquante' });
+
+    const { rows: [dossier] } = await pool.query('SELECT signatures_json FROM dossiers WHERE etudiant_id = $1', [req.params.id]);
+    let existing = {};
+    try { existing = (dossier && dossier.signatures_json) ? JSON.parse(dossier.signatures_json) : {}; } catch (_) {}
+
+    const merged = { ...existing, employeur: signature, employeur_at: new Date().toISOString() };
+    await pool.query(
+      'UPDATE dossiers SET signatures_json=$1, updated_at=CURRENT_TIMESTAMP WHERE etudiant_id=$2',
+      [JSON.stringify(merged), req.params.id]
     );
     res.json({ ok: true });
   } catch (e) { next(e); }

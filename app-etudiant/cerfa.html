@@ -5,134 +5,112 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CERFA N°10103*14 — Contrat d'apprentissage — SUP-PHOTO</title>
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="/entreprise/api.js"></script>
+<script src="/etudiant/api.js"></script>
 <style>
 /* ── APP SHELL ── */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --red:#E8003D;--bg:#F7F6F3;--border:#E0DDD8;
-  --text:#1A1A1A;--mid:#555550;--grey:#888885;
-  --white:#FFFFFF;--green:#1a7a43;--orange:#C96B00;
+  --purple:#7c3aed;--purple-light:#a78bfa;--bg:#0f0f13;
+  --card:#1a1a24;--border:#2a2a3a;--text:#e0e0e0;
+  --green:#34d399;--green-bg:#065f4633;--green-border:#065f4688;
+  --red:#f87171;--orange:#fbbf24;
   --sans:'Open Sans',sans-serif;
-  --navy:#1e3a5f;
 }
-body{font-family:var(--sans);background:var(--bg);color:var(--text)}
-nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;height:64px}
-.nav-logo img{height:34px}
-.nav-actions{display:flex;gap:12px;align-items:center}
-.btn-print{background:var(--red);color:#fff;border:none;padding:10px 24px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
-.btn-back{background:none;border:1.5px solid var(--border);padding:9px 18px;font-family:var(--sans);font-size:12px;font-weight:600;color:var(--mid);cursor:pointer;text-decoration:none;display:inline-block}
-.status-bar{background:#fff;border-bottom:1px solid var(--border);padding:10px 32px}
-.sb-inner{max-width:820px;margin:0 auto;display:flex;align-items:center;gap:12px}
-.sb-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.sb-msg{font-size:13px;font-weight:600}
-.screen-wrap{max-width:860px;margin:28px auto 48px;padding:0 24px}
-.screen-note{background:var(--text);color:#fff;padding:16px 22px;margin-bottom:24px;font-size:13px;line-height:1.7}
-.screen-note strong{font-weight:700}
-.screen-actions{display:flex;gap:16px;margin-top:24px}
-.btn-dl{background:var(--green);color:#fff;border:none;padding:14px 28px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
 
-/* ════════════════════════════════════
+/* ── NAV ── */
+nav{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
+.nav-logo{font-size:16px;font-weight:700;color:#fff}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.btn-back{background:none;border:1px solid var(--border);color:var(--purple-light);padding:7px 16px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;border-radius:6px;text-decoration:none;display:inline-block}
+.btn-back:hover{background:#2a1a4a}
+.btn-print{background:var(--purple);color:#fff;border:none;padding:8px 18px;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border-radius:6px}
+.btn-print:hover{background:#6d28d9}
+.logout-btn{background:none;border:1px solid var(--border);color:#aaa;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px}
+
+/* ── STATUS BAR ── */
+.status-bar{background:var(--card);border-bottom:1px solid var(--border);padding:10px 24px}
+.sb-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.sb-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;background:#444}
+.sb-msg{font-size:13px;font-weight:600;color:var(--text)}
+
+/* ── SIGNATURE STATUS BANNER ── */
+.sig-status-banner{background:var(--card);border-bottom:1px solid var(--border);padding:14px 24px}
+.sig-status-inner{max-width:860px;margin:0 auto;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.sig-step{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:8px 14px;border:1px solid var(--border);border-radius:6px;background:#12121a;color:#888}
+.sig-step.done{border-color:var(--green-border);background:var(--green-bg);color:var(--green)}
+.sig-step.pending{border-color:var(--border);color:#555}
+.sig-step-num{width:22px;height:22px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
+
+/* ── SCREEN WRAP ── */
+.screen-wrap{max-width:900px;margin:24px auto 48px;padding:0 24px}
+
+/* ── INFO NOTE ── */
+.screen-note{background:#1e1e2a;border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.7;color:var(--text)}
+.screen-note strong{font-weight:700;color:#fff}
+
+/* ── STUDENT SIGNATURE PAD ── */
+.alt-sig-section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:24px}
+.alt-sig-title{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple-light);margin-bottom:4px}
+.alt-sig-sub{font-size:13px;color:#888;margin-bottom:14px}
+.alt-sig-canvas-wrap{border:1.5px dashed var(--border);height:130px;position:relative;cursor:crosshair;background:#12121a;border-radius:6px;margin-bottom:12px}
+.alt-sig-canvas-wrap canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.alt-sig-hint{font-size:11px;color:#444;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap}
+.sig-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn-sign-alt{background:linear-gradient(135deg,var(--purple),#6d28d9);color:#fff;border:none;padding:12px 24px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;border-radius:8px;letter-spacing:.04em}
+.btn-sign-alt:hover{opacity:.9}
+.btn-sign-alt:disabled{opacity:.4;cursor:not-allowed}
+.btn-clear{background:none;border:1px solid var(--border);padding:11px 18px;cursor:pointer;font-size:12px;color:#888;border-radius:6px;font-family:var(--sans)}
+.btn-clear:hover{border-color:#555;color:#bbb}
+.sig-done-msg{padding:14px 18px;background:var(--green-bg);border:1px solid var(--green-border);color:var(--green);font-size:13px;font-weight:600;border-radius:8px;margin-top:4px}
+
+/* ── EMPLOYER SIG IMAGE (display only) ── */
+.emp-sig-display{background:#12121a;border:1px dashed var(--border);border-radius:6px;padding:12px;margin-bottom:10px;text-align:center}
+.emp-sig-display img{max-height:80px;filter:invert(1)}
+.emp-sig-display .emp-sig-label{font-size:11px;color:#555;margin-top:6px}
+
+/* ═══════════════════════════════════
    CERFA SHEET — reproduit le CERFA officiel
-════════════════════════════════════ */
+═══════════════════════════════════ */
 .cerfa-sheet{
-  background:#fff;
-  border:1px solid #ccc;
+  background:#fff;border:1px solid #ccc;
   font-family:Arial,Helvetica,sans-serif;
-  font-size:9.5pt;
-  color:#000;
-  width:100%;
+  font-size:9.5pt;color:#000;width:100%;
+  border-radius:4px;overflow:hidden;
 }
 
 /* ── HEADER OFFICIEL ── */
-.cerfa-topbar{
-  display:grid;
-  grid-template-columns:110px 1fr 110px;
-  border-bottom:1.5px solid #000;
-  min-height:52px;
-}
-.cerfa-topbar-left{
-  border-right:1px solid #000;
-  padding:5px 6px;
-  display:flex;flex-direction:column;gap:2px;
-}
-.cerfa-ministry-logo{
-  display:flex;align-items:flex-start;gap:4px;
-}
+.cerfa-topbar{display:grid;grid-template-columns:110px 1fr 110px;border-bottom:1.5px solid #000;min-height:52px}
+.cerfa-topbar-left{border-right:1px solid #000;padding:5px 6px;display:flex;flex-direction:column;gap:2px}
+.cerfa-ministry-logo{display:flex;align-items:flex-start;gap:4px}
 .logo-tricolor{display:flex;flex-direction:column;width:10px;gap:1px;flex-shrink:0;margin-top:1px}
 .logo-tricolor span{height:4px;display:block}
 .logo-tricolor .bl{background:#002395}
-.logo-tricolor .wh{background:#fff;border:0.5px solid #ccc}
+.logo-tricolor .wh{background:#fff;border:.5px solid #ccc}
 .logo-tricolor .rd{background:#ED2939}
 .ministry-text{font-size:6.5pt;font-weight:700;line-height:1.35;color:#000}
 .liberty-words{font-size:5.5pt;color:#555;line-height:1.3;font-style:italic;margin-top:2px}
-.cerfa-topbar-center{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:6px 10px;text-align:center;
-}
+.cerfa-topbar-center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 10px;text-align:center}
 .cerfa-main-title{font-size:14pt;font-weight:700;line-height:1.1}
 .cerfa-subtitle{font-size:7.5pt;color:#000;margin-top:2px}
 .cerfa-notice-inline{font-size:7pt;font-style:italic;margin-top:3px;color:#333}
-.cerfa-topbar-right{
-  border-left:1px solid #000;
-  padding:5px 6px;
-  display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;
-}
-.cerfa-logo-img{font-size:20pt;font-weight:900;font-style:italic;color:var(--navy);letter-spacing:-1px}
+.cerfa-topbar-right{border-left:1px solid #000;padding:5px 6px;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between}
+.cerfa-logo-img{font-size:20pt;font-weight:900;font-style:italic;color:#1e3a5f;letter-spacing:-1px}
 .cerfa-numero{font-size:8.5pt;font-weight:700;color:#000;text-align:right}
 
 /* ── MODE CONTRACTUEL ── */
-.cerfa-mode-bar{
-  text-align:center;
-  font-size:9.5pt;
-  font-weight:700;
-  padding:4px 0;
-  border-bottom:1.5px solid #000;
-  letter-spacing:.05em;
-}
+.cerfa-mode-bar{text-align:center;font-size:9.5pt;font-weight:700;padding:4px 0;border-bottom:1.5px solid #000;letter-spacing:.05em}
 
 /* ── SECTION HEADER ── */
-.sec-head{
-  background:#000;
-  color:#fff;
-  font-size:9pt;
-  font-weight:700;
-  text-align:center;
-  padding:3px 8px;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  border-bottom:1px solid #000;
-}
+.sec-head{background:#000;color:#fff;font-size:9pt;font-weight:700;text-align:center;padding:3px 8px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #000}
 
 /* ── FORM TABLE LAYOUT ── */
 .ftable{width:100%;border-collapse:collapse}
-.ftable td,.ftable th{
-  border:1px solid #555;
-  padding:2px 5px;
-  vertical-align:top;
-  font-size:9pt;
-}
-.ftable .lbl{
-  font-size:7.5pt;
-  font-weight:700;
-  color:#000;
-  display:block;
-  line-height:1.2;
-  margin-bottom:1px;
-}
-.ftable .val{
-  font-size:9.5pt;
-  font-weight:400;
-  min-height:14px;
-  display:block;
-  border-bottom:1px solid #999;
-  line-height:1.4;
-  padding-bottom:1px;
-}
+.ftable td,.ftable th{border:1px solid #555;padding:2px 5px;vertical-align:top;font-size:9pt}
+.ftable .lbl{font-size:7.5pt;font-weight:700;color:#000;display:block;line-height:1.2;margin-bottom:1px}
+.ftable .val{font-size:9.5pt;font-weight:400;min-height:14px;display:block;border-bottom:1px solid #999;line-height:1.4;padding-bottom:1px}
 .ftable .val.big{font-size:10pt;font-weight:700}
 .ftable .val.empty{color:#aaa;font-style:italic;font-weight:400;font-size:8.5pt}
-.no-border{border:none!important}
-.no-pad{padding:0!important}
 .bg-light{background:#f0f0f0}
 .bold{font-weight:700}
 .center{text-align:center}
@@ -140,12 +118,7 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
 /* ── CHECKBOXES ── */
 .cb-row{display:flex;gap:10px;align-items:center;margin-top:2px;flex-wrap:wrap}
 .cb-item{display:flex;align-items:center;gap:3px;font-size:9pt;white-space:nowrap}
-.cb-box{
-  width:11px;height:11px;border:1.5px solid #333;
-  display:inline-flex;align-items:center;justify-content:center;
-  font-size:9pt;font-weight:700;flex-shrink:0;
-  line-height:1;
-}
+.cb-box{width:11px;height:11px;border:1.5px solid #333;display:inline-flex;align-items:center;justify-content:center;font-size:9pt;font-weight:700;flex-shrink:0;line-height:1}
 .cb-box.on{background:#000;color:#fff;border-color:#000}
 
 /* ── SECTION SEPARATOR ── */
@@ -164,36 +137,31 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
 .sig-title{font-size:7.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#000;margin-bottom:5px}
 .sig-name{font-size:9pt;font-weight:700;margin-bottom:3px;min-height:14px}
 .sig-role{font-size:8pt;color:#333;margin-bottom:4px}
-.sig-canvas-wrap{
-  border:1px dashed #bbb;
-  height:75px;
-  background:#fafafa;
-  position:relative;
-  cursor:crosshair;
-  margin-top:4px;
-}
-.sig-canvas-wrap canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-.sig-hint{font-size:7pt;color:#bbb;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap}
-.sig-clear{font-size:7.5pt;color:var(--red);cursor:pointer;text-align:right;margin-top:2px;font-weight:700}
-.sig-clear:hover{text-decoration:underline}
+.sig-canvas-display{border:1px dashed #bbb;height:75px;background:#fafafa;position:relative;display:flex;align-items:center;justify-content:center;margin-top:4px}
+.sig-canvas-display img{max-height:70px;max-width:100%}
+.sig-canvas-display .sig-empty{font-size:7.5pt;color:#bbb;font-style:italic}
 
 /* ── CADRE RÉSERVÉ ── */
 .cadre-wrap{border:1.5px solid #000;border-top:none;padding:6px 8px;background:#f7f7f7}
 .cadre-title{font-size:7.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#000;margin-bottom:6px;border-bottom:1px solid #ccc;padding-bottom:3px}
 .cadre-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 12px}
 .cadre-field label{font-size:7pt;color:#555;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:1px}
-.cadre-field input{border:none;border-bottom:1px solid #999;font-size:9pt;font-family:Arial,sans-serif;background:transparent;width:100%;outline:none;padding:1px 0}
+.cadre-field span{display:block;font-size:9pt;font-family:Arial,sans-serif;border-bottom:1px solid #999;min-height:16px;padding:1px 0;color:#333}
 
 /* ── FOOTER NOTE ── */
 .cerfa-footer-note{font-size:7pt;color:#555;font-style:italic;padding:4px 8px;border-top:1px solid #ccc;text-align:center}
 
+/* ── SCREEN ACTIONS ── */
+.screen-actions{display:flex;gap:12px;margin-top:20px}
+.btn-dl{background:var(--purple);color:#fff;border:none;padding:13px 24px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;border-radius:8px}
+.btn-dl:hover{background:#6d28d9}
+
 /* ── PRINT ── */
 @media print{
-  nav,.status-bar,.screen-wrap>.screen-note,.screen-actions,.btn-print,.btn-back,.sig-clear,.cadre-wrap{display:none!important}
+  nav,.status-bar,.sig-status-banner,.screen-wrap>.screen-note,.alt-sig-section,.screen-actions{display:none!important}
   .screen-wrap{margin:0;padding:0;max-width:100%}
-  body{background:#fff}
+  body{background:#fff;color:#000}
   .cerfa-sheet{border:none;font-size:9pt}
-  .sig-canvas-wrap{cursor:default}
   .sec-wrap{page-break-inside:avoid}
 }
 </style>
@@ -201,44 +169,25 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
 <body>
 
 <nav>
-  <a class="nav-logo" href="/entreprise/espace.html">
-    <img src="/entreprise/logo-color.png" onerror="this.style.display='none'" alt="SUP-PHOTO">
-  </a>
+  <div class="nav-logo">📷 SUP-PHOTO — CERFA Contrat d'apprentissage</div>
   <div class="nav-actions">
-    <a href="/entreprise/fdr.html" class="btn-back">← Retour FDR</a>
+    <a href="/etudiant/dossier.html" class="btn-back">← Mon dossier</a>
     <button class="btn-print" onclick="window.print()">🖨 Imprimer / PDF</button>
+    <button class="logout-btn" onclick="API.logout()">Déconnexion</button>
   </div>
 </nav>
 
 <div class="status-bar">
   <div class="sb-inner">
-    <div class="sb-dot" id="sbDot" style="background:var(--grey)"></div>
+    <div class="sb-dot" id="sbDot"></div>
     <div class="sb-msg" id="sbMsg">Chargement des données…</div>
   </div>
 </div>
 
-<style>
-.sig-status-banner{background:#fff;border-bottom:2px solid var(--border);padding:14px 32px}
-.sig-status-inner{max-width:820px;margin:0 auto;display:flex;gap:24px;flex-wrap:wrap;align-items:center}
-.sig-step{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:8px 16px;border:1px solid var(--border);border-radius:4px;background:#fafafa}
-.sig-step.done{border-color:var(--green);background:#f0faf4;color:var(--green)}
-.sig-step.pending{border-color:var(--grey);color:var(--grey)}
-.sig-step-num{width:22px;height:22px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0}
-.emp-sig-section{background:#fff;border:2px solid var(--border);border-radius:4px;padding:20px 24px;margin-bottom:24px}
-.emp-sig-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mid);margin-bottom:16px}
-.emp-sig-canvas-wrap{border:1.5px dashed var(--border);height:120px;position:relative;cursor:crosshair;background:#fafafa;border-radius:2px;margin-bottom:10px}
-.emp-sig-canvas-wrap canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-.emp-sig-hint{font-size:11px;color:#bbb;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;white-space:nowrap}
-.btn-sign-emp{background:var(--navy,#1e3a5f);color:#fff;border:none;padding:12px 28px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.06em}
-.btn-sign-emp:hover{background:#2a4e7a}
-.btn-sign-emp:disabled{background:var(--grey);cursor:not-allowed}
-.sig-done-msg{padding:12px 16px;background:#f0faf4;border:1px solid var(--green);color:var(--green);font-size:13px;font-weight:600;border-radius:4px;margin-top:10px}
-</style>
-
 <div class="sig-status-banner">
-  <div class="sig-status-inner" id="sigStatusInner">
+  <div class="sig-status-inner">
     <div class="sig-step pending" id="sigStep1"><div class="sig-step-num">1</div><span>En attente de signature employeur</span></div>
-    <div class="sig-step pending" id="sigStep2"><div class="sig-step-num">2</div><span>En attente de signature alternant(e)</span></div>
+    <div class="sig-step pending" id="sigStep2"><div class="sig-step-num">2</div><span>En attente de votre signature</span></div>
     <div class="sig-step pending" id="sigStep3"><div class="sig-step-num">3</div><span>En attente de signature CFA</span></div>
   </div>
 </div>
@@ -247,22 +196,36 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
 
   <div class="screen-note">
     <strong>CERFA N°10103*14 — Contrat d'apprentissage</strong><br>
-    Ce document est pré-rempli depuis la Fiche de Renseignements. Vérifiez chaque champ avant impression.
-    Une fois signé par les trois parties, déposez-le auprès de l'OPCO dans les <strong>5 jours ouvrables</strong> suivant la date de début d'exécution du contrat.
+    Ce document est pré-rempli depuis la Fiche de Renseignements. Vérifiez chaque information avant de signer.
+    Une fois signé par les trois parties (employeur, vous-même, et le CFA), le contrat sera déposé auprès de l'OPCO.
   </div>
 
-  <!-- ════ SIGNATURE EMPLOYEUR ════ -->
-  <div class="emp-sig-section" id="empSigSection">
-    <div class="emp-sig-title">Signature employeur — À apposer avant envoi à l'alternant(e)</div>
-    <div id="empSigDoneMsg" style="display:none" class="sig-done-msg"></div>
-    <div id="empSigPad">
-      <div class="emp-sig-canvas-wrap" id="empSigBox">
-        <canvas id="empSigCanvas"></canvas>
-        <div class="emp-sig-hint">Signez ici avec votre souris ou votre doigt</div>
+  <!-- ════ VOTRE SIGNATURE ════ -->
+  <div class="alt-sig-section" id="altSigSection">
+    <div class="alt-sig-title">Votre signature — Alternant(e)</div>
+    <div class="alt-sig-sub" id="altSigSubMsg">Signez ci-dessous pour valider votre contrat d'apprentissage.</div>
+
+    <!-- Message si déjà signé -->
+    <div id="altSigDoneMsg" style="display:none" class="sig-done-msg"></div>
+
+    <!-- Afficher la signature de l'employeur si disponible -->
+    <div id="empSigDisplayWrap" style="display:none;margin-bottom:12px">
+      <div style="font-size:11px;color:#666;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Signature de l'employeur (reçue)</div>
+      <div class="emp-sig-display">
+        <img id="empSigImg" src="" alt="Signature employeur">
+        <div class="emp-sig-label" id="empSigDate"></div>
       </div>
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <button class="btn-sign-emp" id="btnSignEmp" onclick="saveEmployeurSignature()">Signer en tant qu'employeur</button>
-        <button style="background:none;border:1px solid var(--border);padding:10px 18px;cursor:pointer;font-size:12px;color:var(--grey)" onclick="clearEmpSig()">Effacer</button>
+    </div>
+
+    <!-- Pad de signature -->
+    <div id="altSigPad">
+      <div class="alt-sig-canvas-wrap" id="altSigBox">
+        <canvas id="altSigCanvas"></canvas>
+        <div class="alt-sig-hint">Signez ici avec votre souris ou votre doigt</div>
+      </div>
+      <div class="sig-actions">
+        <button class="btn-sign-alt" id="btnSignAlt" onclick="saveAlternantSignature()">Signer en tant qu'alternant(e)</button>
+        <button class="btn-clear" onclick="clearAltSig()">Effacer</button>
       </div>
     </div>
   </div>
@@ -296,7 +259,6 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
     <div class="sec-head">L'Employeur</div>
     <div class="sec-wrap">
       <table class="ftable">
-        <!-- Type employeur -->
         <tr>
           <td colspan="2">
             <span class="lbl">Type d'employeur</span>
@@ -306,7 +268,6 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
             </div>
           </td>
         </tr>
-        <!-- Nom + SIRET -->
         <tr>
           <td style="width:60%">
             <span class="lbl">Nom et prénom ou dénomination :</span>
@@ -317,7 +278,6 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
             <span class="val" id="c-siret"></span>
           </td>
         </tr>
-        <!-- Adresse + Type/APE/Effectif/IDCC -->
         <tr>
           <td rowspan="3">
             <span class="lbl">Adresse de l'établissement d'exécution du contrat :</span>
@@ -352,7 +312,6 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
             <span class="val" id="c-codeIdcc"></span>
           </td>
         </tr>
-        <!-- Secteur public -->
         <tr>
           <td colspan="2" style="font-size:8pt;font-style:italic;padding:3px 6px">
             *Pour les employeurs du secteur public, adhésion de l'apprenti au régime spécifique d'assurance chômage :&nbsp;
@@ -390,7 +349,6 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
             <span class="val" id="c-altSecu"></span>
           </td>
         </tr>
-        <!-- Adresse apprenti | naissance + extras -->
         <tr>
           <td style="width:55%" rowspan="4">
             <span class="lbl">Adresse de l'apprenti(e) :</span>
@@ -402,7 +360,6 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
             <span class="lbl">Courriel :</span>
             <span class="val" id="c-altMail"></span>
             <br><br>
-            <!-- Représentant légal -->
             <span class="lbl" style="font-size:8pt">Représentant légal <em>(à renseigner si l'apprenti est mineur non émancipé)</em></span>
             <span class="lbl">Nom de naissance et prénom :</span>
             <span class="val" id="c-repLegalNom"></span>
@@ -548,17 +505,17 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
             <span class="val big" id="c-typeContrat"></span>
           </td>
           <td style="width:33%">
-            <span class="lbl">Type de dérogation : <em style="font-weight:400;font-size:7.5pt">à renseigner si une dérogation existe</em></span>
+            <span class="lbl">Type de dérogation :</span>
             <span class="val" id="c-typeDerogation"></span>
           </td>
           <td>
-            <span class="lbl">Numéro du contrat précédent ou du contrat sur lequel porte l'avenant :</span>
+            <span class="lbl">Numéro du contrat précédent :</span>
             <span class="val" id="c-numAncienContrat"></span>
           </td>
         </tr>
         <tr>
           <td>
-            <span class="lbl">Date de conclusion :<br><em style="font-weight:400;font-size:7.5pt">(Date de signatures du présent contrat)</em></span>
+            <span class="lbl">Date de conclusion :</span>
             <span class="val" id="c-dateConclusionContrat"></span>
           </td>
           <td>
@@ -572,7 +529,7 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
         </tr>
         <tr>
           <td>
-            <span class="lbl">Date de fin du contrat ou de la période d'apprentissage :</span>
+            <span class="lbl">Date de fin du contrat :</span>
             <span class="val" id="c-dateFin"></span>
           </td>
           <td>
@@ -587,7 +544,6 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
             </div>
           </td>
         </tr>
-        <!-- RÉMUNÉRATION -->
         <tr>
           <td colspan="3" style="padding:3px 6px;font-size:8pt;font-weight:700;background:#f0f0f0">
             Rémunération * — Indiquer SMIC ou SMC (salaire minimum conventionnel)
@@ -698,18 +654,17 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
             </span>
           </td>
         </tr>
-        <!-- Organisation formation -->
         <tr>
           <td colspan="2" style="background:#f0f0f0;font-weight:700;font-size:8.5pt;padding:3px 6px">Organisation de la formation en CFA</td>
         </tr>
         <tr>
           <td>
             <span class="lbl">Date de début de formation en CFA :</span>
-            <input type="date" id="inp-dateDebutCFA" style="font-size:9.5pt;font-family:Arial;border:none;border-bottom:1px solid #999;width:100%;background:transparent;outline:none;padding:1px 0">
+            <span class="val" id="c-dateDebutCFA">—</span>
           </td>
           <td>
             <span class="lbl">Date prévue de fin des épreuves ou examens :</span>
-            <input type="date" id="inp-dateFinEpreuves" style="font-size:9.5pt;font-family:Arial;border:none;border-bottom:1px solid #999;width:100%;background:transparent;outline:none;padding:1px 0">
+            <span class="val" id="c-dateFinEpreuves">—</span>
           </td>
         </tr>
         <tr>
@@ -722,11 +677,12 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
             <span class="val">0 heure</span>
           </td>
         </tr>
-        <!-- Visa CFA + attestation -->
         <tr>
           <td>
             <span class="lbl">Visa du CFA (cachet et signature du directeur) :</span>
-            <div style="border:1px dashed #bbb;height:55px;margin-top:4px;background:#fafafa;display:flex;align-items:center;justify-content:center;font-size:7.5pt;color:#bbb">Cachet + signature directeur CFA</div>
+            <div id="cfaSigDisplay" class="sig-canvas-display" style="height:55px;margin-top:4px">
+              <span class="sig-empty">En attente signature CFA</span>
+            </div>
           </td>
           <td style="vertical-align:middle;font-size:8.5pt;font-style:italic;padding:8px">
             <span class="cb-box" style="display:inline-flex;width:10px;height:10px;font-size:8pt"></span>
@@ -747,30 +703,24 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
           <div class="sig-title">Signature de l'employeur</div>
           <div class="sig-name" id="sig-employeur-name"></div>
           <div class="sig-role" id="sig-employeur-info"></div>
-          <div class="sig-canvas-wrap" id="sigBox1">
-            <canvas id="sigCanvas1"></canvas>
-            <div class="sig-hint">Signer ici</div>
+          <div class="sig-canvas-display" id="sigDisplay1">
+            <span class="sig-empty">En attente de signature</span>
           </div>
-          <div class="sig-clear" onclick="clearSig(1)">✕ Effacer</div>
         </td>
         <td>
           <div class="sig-title">Signature de l'apprenti(e)</div>
           <div class="sig-name" id="sig-apprenti-name"></div>
           <div class="sig-role" style="font-size:8pt;color:#555">Date de naissance : <span id="sig-apprenti-ddn"></span></div>
-          <div class="sig-canvas-wrap" id="sigBox2">
-            <canvas id="sigCanvas2"></canvas>
-            <div class="sig-hint">Signer ici</div>
+          <div class="sig-canvas-display" id="sigDisplay2">
+            <span class="sig-empty">En attente de votre signature</span>
           </div>
-          <div class="sig-clear" onclick="clearSig(2)">✕ Effacer</div>
         </td>
         <td>
           <div class="sig-title">Signature du représentant légal <span style="font-size:7.5pt;font-weight:400">(si apprenti(e) mineur(e))</span></div>
           <div class="sig-name" id="sig-repleg-name"></div>
-          <div class="sig-canvas-wrap" id="sigBox3">
-            <canvas id="sigCanvas3"></canvas>
-            <div class="sig-hint">Signer ici si applicable</div>
+          <div class="sig-canvas-display" id="sigDisplay3">
+            <span class="sig-empty">Signature représentant légal</span>
           </div>
-          <div class="sig-clear" onclick="clearSig(3)">✕ Effacer</div>
         </td>
       </tr>
     </table>
@@ -779,12 +729,12 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
     <div class="cadre-wrap">
       <div class="cadre-title">Cadre réservé à l'organisme en charge du dépôt du contrat</div>
       <div class="cadre-grid">
-        <div class="cadre-field"><label>Nom de l'organisme</label><input type="text" placeholder="OPCO…"></div>
-        <div class="cadre-field"><label>Date de réception du dossier complet</label><input type="date"></div>
-        <div class="cadre-field"><label>N° de dépôt</label><input type="text" placeholder="N°…"></div>
-        <div class="cadre-field"><label>N° SIRET de l'organisme</label><input type="text" placeholder="14 chiffres"></div>
-        <div class="cadre-field"><label>Date de la décision</label><input type="date"></div>
-        <div class="cadre-field"><label>Numéro d'avenant</label><input type="text" placeholder="Si avenant…"></div>
+        <div class="cadre-field"><label>Nom de l'organisme</label><span></span></div>
+        <div class="cadre-field"><label>Date de réception du dossier complet</label><span></span></div>
+        <div class="cadre-field"><label>N° de dépôt</label><span></span></div>
+        <div class="cadre-field"><label>N° SIRET de l'organisme</label><span></span></div>
+        <div class="cadre-field"><label>Date de la décision</label><span></span></div>
+        <div class="cadre-field"><label>Numéro d'avenant</label><span></span></div>
       </div>
     </div>
 
@@ -794,20 +744,26 @@ nav{background:#fff;border-bottom:2px solid var(--red);padding:0 32px;display:fl
 
   <div class="screen-actions">
     <button class="btn-dl" onclick="window.print()">🖨 Imprimer / Enregistrer en PDF</button>
-    <a href="fdr-complete.html" class="btn-back" style="padding:14px 28px;font-size:13px">← Modifier la FDR</a>
+    <a href="/etudiant/dossier.html" class="btn-back" style="padding:13px 24px;font-size:13px">← Mon dossier</a>
   </div>
 
 </div><!-- /screen-wrap -->
 
 <script>
-const STORE_KEY = 'supphoto_fdr_v3';
+if (!API.requireRole('etudiant')) throw new Error('Non autorisé');
+
 const $ = id => document.getElementById(id);
 
+/* ── HELPERS ── */
 function fmtDate(v){
   if(!v) return '—';
   const p = v.split('-');
   if(p.length===3) return `${p[2]}/${p[1]}/${p[0]}`;
   return v;
+}
+function fmtDateSig(iso){
+  if(!iso) return '';
+  return new Date(iso).toLocaleDateString('fr-FR');
 }
 function setVal(id, val, fallback='—'){
   const el=$(id); if(!el) return;
@@ -820,17 +776,15 @@ function checkBox(id, checked){
   el.textContent = checked ? '✓' : '';
   el.classList.toggle('on', !!checked);
 }
+function showSigImage(displayEl, dataUrl){
+  if(!displayEl || !dataUrl) return;
+  displayEl.innerHTML = `<img src="${dataUrl}" alt="Signature" style="max-height:70px;max-width:100%">`;
+}
 
-function loadData(){
-  const raw = localStorage.getItem(STORE_KEY);
-  if(!raw){
-    $('sbDot').style.background='var(--orange)';
-    $('sbMsg').textContent='⚠ Aucune donnée FDR trouvée — retournez à la FDR pour la compléter.';
-    return;
-  }
-  const d = JSON.parse(raw);
-  $('sbDot').style.background='var(--green)';
-  $('sbMsg').textContent='✓ CERFA pré-rempli depuis la FDR — vérifiez chaque champ avant signature et impression.';
+/* ── CERFA DATA FILL ── */
+function loadData(d){
+  $('sbDot').style.background = '#34d399';
+  $('sbMsg').textContent = 'CERFA pré-rempli depuis la Fiche de Renseignements. Vérifiez chaque champ avant signature.';
 
   // ── EMPLOYEUR
   checkBox('cbPrivé', d.typeEmployeur !== 'Public');
@@ -936,7 +890,7 @@ function loadData(){
   $('c-remu1a2').textContent = d.remu1a2 ? extractPct(d.remu1a2) : '—';
   $('c-remu2a1').textContent = extractPct(d.remu2a1)||'—';
 
-  // ── SIGNATURES
+  // ── SIGNATURES ZONE
   setVal('c-faitA', d.faitA||'Nice');
   setVal('c-dateConclusion2', fmtDate(d.dateConclusionContrat||d.dateDebut));
   $('sig-employeur-name').textContent = d.representantNom||'';
@@ -946,11 +900,60 @@ function loadData(){
   $('sig-repleg-name').textContent    = d.repLegalNom||'';
 }
 
-/* ── SIGNATURE PADS ── */
-function initSig(n){
-  const canvas=$(`sigCanvas${n}`), box=$(`sigBox${n}`);
+/* ── LOAD SIGNATURES ── */
+async function loadSignatures(sigs){
+  if(!sigs) sigs={};
+
+  const step1=$('sigStep1'), step2=$('sigStep2'), step3=$('sigStep3');
+
+  // Étape 1 : employeur
+  if(sigs.employeur){
+    if(step1){ step1.className='sig-step done'; step1.querySelector('span').textContent='Employeur signé le '+fmtDateSig(sigs.employeur_at); }
+    // Afficher la signature de l'employeur dans le display inline et le grand pad
+    showSigImage($('sigDisplay1'), sigs.employeur);
+    const wrap = $('empSigDisplayWrap');
+    const img  = $('empSigImg');
+    const dateEl = $('empSigDate');
+    if(wrap && img){ img.src=sigs.employeur; wrap.style.display='block'; }
+    if(dateEl){ dateEl.textContent = 'Signé le ' + fmtDateSig(sigs.employeur_at); }
+  } else {
+    if(step1){ step1.className='sig-step pending'; step1.querySelector('span').textContent='En attente de signature employeur'; }
+  }
+
+  // Étape 2 : alternant
+  if(sigs.alternant){
+    if(step2){ step2.className='sig-step done'; step2.querySelector('span').textContent='Signé le '+fmtDateSig(sigs.alternant_at); }
+    showSigImage($('sigDisplay2'), sigs.alternant);
+    showAltSigDone(sigs.alternant_at);
+  } else {
+    if(step2){ step2.className='sig-step pending'; step2.querySelector('span').textContent='En attente de votre signature'; }
+  }
+
+  // Étape 3 : CFA
+  if(sigs.cfa){
+    if(step3){ step3.className='sig-step done'; step3.querySelector('span').textContent='CFA signé le '+fmtDateSig(sigs.cfa_at); }
+    showSigImage($('cfaSigDisplay'), sigs.cfa);
+  } else {
+    if(step3){ step3.className='sig-step pending'; step3.querySelector('span').textContent='En attente de signature CFA'; }
+  }
+}
+
+function showAltSigDone(at){
+  const date = at ? fmtDateSig(at) : new Date().toLocaleDateString('fr-FR');
+  const doneMsg = $('altSigDoneMsg');
+  const pad     = $('altSigPad');
+  if(doneMsg){
+    doneMsg.textContent = 'Vous avez signé le ' + date + '. L\'école va valider le contrat.';
+    doneMsg.style.display = 'block';
+  }
+  if(pad){ pad.style.display = 'none'; }
+}
+
+/* ── STUDENT SIGNATURE PAD ── */
+function initAltSig(){
+  const canvas=$('altSigCanvas'), box=$('altSigBox');
   if(!canvas||!box) return;
-  canvas.width=box.offsetWidth; canvas.height=box.offsetHeight;
+  canvas.width=box.offsetWidth||500; canvas.height=box.offsetHeight||130;
   const ctx=canvas.getContext('2d');
   let drawing=false,lx=0,ly=0;
   function pos(e){
@@ -958,133 +961,70 @@ function initSig(n){
     if(e.touches) return{x:(e.touches[0].clientX-r.left)*sx,y:(e.touches[0].clientY-r.top)*sy};
     return{x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};
   }
-  function start(e){e.preventDefault();drawing=true;const p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.arc(lx,ly,1,0,Math.PI*2);ctx.fillStyle='#000';ctx.fill();}
-  function draw(e){e.preventDefault();if(!drawing)return;const p=pos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#000';ctx.lineWidth=1.5;ctx.lineCap='round';ctx.stroke();lx=p.x;ly=p.y;}
+  function start(e){e.preventDefault();drawing=true;const p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.arc(lx,ly,1,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();}
+  function draw(e){e.preventDefault();if(!drawing)return;const p=pos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();lx=p.x;ly=p.y;}
   function end(){drawing=false;}
   canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',draw);canvas.addEventListener('mouseup',end);canvas.addEventListener('mouseleave',end);
   canvas.addEventListener('touchstart',start,{passive:false});canvas.addEventListener('touchmove',draw,{passive:false});canvas.addEventListener('touchend',end);
 }
-function clearSig(n){const c=$(`sigCanvas${n}`);if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);}
+function clearAltSig(){const c=$('altSigCanvas');if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);}
 
-/* ── EMPLOYER SIGNATURE PAD ── */
-function initEmpSig(){
-  const canvas=$('empSigCanvas'), box=$('empSigBox');
-  if(!canvas||!box) return;
-  canvas.width=box.offsetWidth||400; canvas.height=box.offsetHeight||120;
-  const ctx=canvas.getContext('2d');
-  let drawing=false,lx=0,ly=0;
-  function pos(e){
-    const r=canvas.getBoundingClientRect(),sx=canvas.width/r.width,sy=canvas.height/r.height;
-    if(e.touches) return{x:(e.touches[0].clientX-r.left)*sx,y:(e.touches[0].clientY-r.top)*sy};
-    return{x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};
-  }
-  function start(e){e.preventDefault();drawing=true;const p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.arc(lx,ly,1,0,Math.PI*2);ctx.fillStyle='#000';ctx.fill();}
-  function draw(e){e.preventDefault();if(!drawing)return;const p=pos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();lx=p.x;ly=p.y;}
-  function end(){drawing=false;}
-  canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',draw);canvas.addEventListener('mouseup',end);canvas.addEventListener('mouseleave',end);
-  canvas.addEventListener('touchstart',start,{passive:false});canvas.addEventListener('touchmove',draw,{passive:false});canvas.addEventListener('touchend',end);
-}
-function clearEmpSig(){const c=$('empSigCanvas');if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);}
-
-async function saveEmployeurSignature(){
-  const canvas=$('empSigCanvas');
-  if(!canvas){return;}
+async function saveAlternantSignature(){
+  const canvas=$('altSigCanvas');
+  if(!canvas) return;
   const sig=canvas.toDataURL('image/png');
   const blank=document.createElement('canvas');blank.width=canvas.width;blank.height=canvas.height;
-  if(sig===blank.toDataURL('image/png')){ alert('Veuillez apposer votre signature avant de valider.'); return; }
-  const altId=new URLSearchParams(window.location.search).get('alternant');
-  if(!altId){ alert('Aucun alternant sélectionné.'); return; }
+  if(sig===blank.toDataURL('image/png')){
+    alert('Veuillez apposer votre signature avant de valider.');
+    return;
+  }
+  const btn=$('btnSignAlt');
+  if(btn){ btn.disabled=true; btn.textContent='Enregistrement…'; }
   try{
-    await API.put(`/api/entreprise/alternants/${altId}/signature-employeur`,{signature:sig});
-    showSigDone();
-    await loadSignatures(altId);
+    await API.put('/api/etudiant/dossier/signature-alternant',{signature:sig});
+    // Mettre à jour l'affichage inline CERFA
+    showSigImage($('sigDisplay2'), sig);
+    showAltSigDone(null);
+    // Recharger les signatures pour mettre à jour les étapes
+    const sigs = await API.get('/api/etudiant/dossier/signatures');
+    await loadSignatures(sigs);
   } catch(e){
-    alert('Erreur lors de la sauvegarde de la signature: '+e.message);
+    alert('Erreur lors de la sauvegarde : '+e.message);
+    if(btn){ btn.disabled=false; btn.textContent='Signer en tant qu\'alternant(e)'; }
   }
 }
 
-function showSigDone(){
-  const date=new Date().toLocaleDateString('fr-FR');
-  const doneMsg=$('empSigDoneMsg');
-  const pad=$('empSigPad');
-  if(doneMsg){ doneMsg.textContent='Vous avez signé le '+date+'. En attente de la signature de l\'alternant(e).'; doneMsg.style.display='block'; }
-  if(pad){ pad.style.display='none'; }
-}
+/* ── INITIALISATION ── */
+window.addEventListener('DOMContentLoaded', async () => {
+  initAltSig();
 
-function fmtDateSig(iso){
-  if(!iso) return '';
-  const d=new Date(iso);
-  return d.toLocaleDateString('fr-FR');
-}
-
-async function loadSignatures(altId){
-  if(!altId) return;
-  try{
-    const d=await API.get(`/api/entreprise/alternants/${altId}/dossier`);
-    let sigs={};
-    try{ sigs=d.signatures_json?(typeof d.signatures_json==='string'?JSON.parse(d.signatures_json):d.signatures_json):{}; }catch(_){}
-
-    const step1=$('sigStep1'),step2=$('sigStep2'),step3=$('sigStep3');
-    if(sigs.employeur){
-      if(step1){ step1.className='sig-step done'; step1.querySelector('span').textContent='Employeur signé le '+fmtDateSig(sigs.employeur_at); }
-      // Show signed state
-      showSigDone();
-    } else {
-      if(step1){ step1.className='sig-step pending'; step1.querySelector('span').textContent='En attente de signature employeur'; }
-    }
-    if(sigs.alternant){
-      if(step2){ step2.className='sig-step done'; step2.querySelector('span').textContent='Alternant(e) signé le '+fmtDateSig(sigs.alternant_at); }
-    } else {
-      if(step2){ step2.className='sig-step pending'; step2.querySelector('span').textContent='En attente de signature alternant(e)'; }
-    }
-    if(sigs.cfa){
-      if(step3){ step3.className='sig-step done'; step3.querySelector('span').textContent='CFA signé le '+fmtDateSig(sigs.cfa_at); }
-    } else {
-      if(step3){ step3.className='sig-step pending'; step3.querySelector('span').textContent='En attente de signature CFA'; }
-    }
-  } catch(e){ /* ignore */ }
-}
-
-window.addEventListener('DOMContentLoaded',()=>{
-  loadData();
-  [1,2,3].forEach(initSig);
-  initEmpSig();
-  window.addEventListener('resize',()=>{
-    [1,2,3].forEach(n=>{
-      const c=$(`sigCanvas${n}`),b=$(`sigBox${n}`);
-      if(c&&b){c.width=b.offsetWidth;c.height=b.offsetHeight;}
-    });
-    const ec=$('empSigCanvas'),eb=$('empSigBox');
-    if(ec&&eb){ec.width=eb.offsetWidth;ec.height=eb.offsetHeight;}
+  window.addEventListener('resize', ()=>{
+    const c=$('altSigCanvas'), b=$('altSigBox');
+    if(c&&b){ c.width=b.offsetWidth; c.height=b.offsetHeight; }
   });
-});
-</script>
 
-<script>
-// ── AUTH ─────────────────────────────────────────────────────────────────────
-if (!API.requireRole('entreprise')) { throw new Error('Non autorisé'); }
+  try{
+    const [cerfa, sigs] = await Promise.all([
+      API.get('/api/etudiant/dossier/cerfa'),
+      API.get('/api/etudiant/dossier/signatures')
+    ]);
 
-// Toujours essayer de charger depuis l'API si un alternant est dans l'URL
-window.addEventListener('DOMContentLoaded', () => {
-  const params = new URLSearchParams(window.location.search);
-  const altId = params.get('alternant');
-  if (altId) {
-    // Priorité à la base de données (données les plus fraîches)
-    API.get(`/api/entreprise/alternants/${altId}/dossier`).then(d => {
-      if (d.fdr_json) {
-        const fdr = typeof d.fdr_json === 'string' ? JSON.parse(d.fdr_json) : d.fdr_json;
-        localStorage.setItem('supphoto_fdr_v3', JSON.stringify(fdr));
-        loadData();
-      }
-      // Load signature status
-      loadSignatures(altId);
-    }).catch(() => {
-      // Fallback : si pas en base, essayer localStorage
-      if (!localStorage.getItem('supphoto_fdr_v3')) {
-        $('sbDot').style.background = 'var(--orange)';
-        $('sbMsg').textContent = '⚠ Aucune FDR trouvée pour cet alternant — remplissez et sauvegardez la FDR.';
-      }
-    });
+    // Charger FDR dans CERFA
+    const fdr = cerfa.fdr_json || {};
+    if(Object.keys(fdr).length === 0){
+      $('sbDot').style.background='#fbbf24';
+      $('sbMsg').textContent='⚠ La Fiche de Renseignements est incomplète — contactez votre entreprise.';
+    } else {
+      loadData(fdr);
+    }
+
+    // Charger les signatures
+    await loadSignatures(sigs);
+
+  } catch(e){
+    console.error(e);
+    $('sbDot').style.background='#f87171';
+    $('sbMsg').textContent='Erreur de chargement des données.';
   }
 });
 </script>

@@ -145,6 +145,22 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
 .cp-item.todo{border-color:var(--orange);background:var(--orange-bg)}
 .cp-item.todo .cp-name{color:var(--orange)}
 
+/* ── DUAL STATUS ── */
+.dual-status{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.dual-status-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+.pct-badge{padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700}
+.pct-badge.green{background:var(--green);color:#fff}
+.pct-badge.orange{background:var(--orange);color:#fff}
+.pct-badge.grey{background:var(--grey);color:#fff}
+
+/* ── STUDENT ZONE NOTICE ── */
+.student-zone-notice{background:#78350f22;border:1px solid #92400e;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#fbbf24}
+
+/* ── CERFA ALERT ── */
+.cerfa-alert{background:rgba(201,107,0,.12);border:1px solid rgba(201,107,0,.4);border-left:3px solid var(--orange);padding:12px 16px;font-size:13px;font-weight:600;color:var(--orange);margin-top:8px}
+.btn-cerfa.ready{background:var(--green)!important;pointer-events:auto!important;cursor:pointer!important}
+.btn-cerfa.ready:hover{background:#15613a!important}
+
 /* ── CONTRAT CARDS ── */
 .contrat-cards{display:flex;flex-direction:column;gap:12px}
 .contrat-card{display:flex;align-items:flex-start;gap:16px;padding:18px 20px;border:2px solid var(--border);cursor:pointer;transition:all .2s;background:var(--white);position:relative}
@@ -261,12 +277,16 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
 <!-- PANEL COMPLÉTION -->
 <div class="completion-panel">
   <div class="cp-title">État de complétion par section</div>
+  <div class="dual-status">
+    <div class="dual-status-item">Entreprise : <span class="pct-badge grey" id="entPctBadge">0%</span></div>
+    <div class="dual-status-item">Alternant(e) : <span class="pct-badge grey" id="altPctBadge">0%</span></div>
+  </div>
   <div class="cp-grid" id="cpGrid">
     <div class="cp-item todo" id="cp1"><span class="cp-icon">○</span><span class="cp-name">Société</span></div>
     <div class="cp-item todo" id="cp2"><span class="cp-icon">○</span><span class="cp-name">Entreprise / Livret</span></div>
     <div class="cp-item todo" id="cp3"><span class="cp-icon">○</span><span class="cp-name">Maître d'apprentissage</span></div>
-    <span id="cp4" style="display:none"><span class="cp-icon"></span></span>
-<div class="cp-item todo" id="cp5"><span class="cp-icon">○</span><span class="cp-name">Contrat</span></div>
+    <div class="cp-item todo" id="cp4"><span class="cp-icon">○</span><span class="cp-name">Alternant(e)</span></div>
+    <div class="cp-item todo" id="cp5"><span class="cp-icon">○</span><span class="cp-name">Contrat</span></div>
     <div class="cp-item todo" id="cp6"><span class="cp-icon">○</span><span class="cp-name">Missions</span></div>
   </div>
 </div>
@@ -550,59 +570,63 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
   </div>
 </div>
 
-<!-- Section 4 (alternant info) supprimée — remplie par l'étudiant dans son espace -->
-<!-- Éléments fantômes pour que updateProgress() ne plante pas -->
-<span id="s4status" style="display:none"></span>
-<div class="form-section" style="display:none">
-  <div class="section-head">
+<!-- ═══════════════════════════════════════════════
+     SECTION 4 — INFORMATIONS SUR L'ALTERNANT(E)
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
     <div class="section-num">4</div>
     <div class="section-title">Informations sur l'Alternant(e)</div>
+    <span class="section-status todo" id="s4status">À compléter</span>
     <span class="section-chevron">▾</span>
   </div>
   <div class="section-body hidden" id="sb4">
+    <div class="student-zone-notice">
+      Ces informations sont renseignées par l'alternant(e) dans son espace personnel. Elles s'affichent ici en lecture seule dès que l'alternant(e) les a complétées.
+    </div>
     <div class="fields-grid">
       <div class="field">
         <label>NOM de naissance <span class="req">*</span></label>
-        <input type="text" name="altNom" data-section="4" required placeholder="NOM (majuscules)">
+        <input type="text" name="altNom" data-section="4" required placeholder="NOM (majuscules)" disabled>
       </div>
       <div class="field">
         <label>Nom d'usage <span style="font-size:11px;color:var(--grey)">(si différent du nom de naissance)</span></label>
-        <input type="text" name="altNomUsage" data-section="4" placeholder="Laisser vide si identique au nom de naissance">
+        <input type="text" name="altNomUsage" data-section="4" placeholder="Laisser vide si identique au nom de naissance" disabled>
       </div>
       <div class="field">
         <label>Premier prénom selon l'état civil <span class="req">*</span></label>
-        <input type="text" name="altPrenom" data-section="4" required placeholder="Prénom">
+        <input type="text" name="altPrenom" data-section="4" required placeholder="Prénom" disabled>
       </div>
       <div class="field">
         <label>Sexe <span class="req">*</span></label>
         <div class="radio-group">
-          <label class="radio-item"><input type="radio" name="altSexe" value="M" data-section="4" required> M</label>
-          <label class="radio-item"><input type="radio" name="altSexe" value="F"> F</label>
+          <label class="radio-item"><input type="radio" name="altSexe" value="M" data-section="4" required disabled> M</label>
+          <label class="radio-item"><input type="radio" name="altSexe" value="F" disabled> F</label>
         </div>
       </div>
       <div class="field">
         <label>Intitulé du poste <span class="req">*</span></label>
-        <input type="text" name="altPoste" data-section="4" required placeholder="Ex : Assistant(e) photographe, Opérateur numérique…">
+        <input type="text" name="altPoste" data-section="4" required placeholder="Ex : Assistant(e) photographe, Opérateur numérique…" disabled>
       </div>
       <div class="field">
         <label>Date de naissance <span class="req">*</span></label>
-        <input type="date" name="altDdn" data-section="4" required>
+        <input type="date" name="altDdn" data-section="4" required disabled>
       </div>
       <div class="field">
         <label>Lieu de naissance <span class="req">*</span></label>
-        <input type="text" name="altLieuNaissance" data-section="4" required placeholder="Ville de naissance">
+        <input type="text" name="altLieuNaissance" data-section="4" required placeholder="Ville de naissance" disabled>
       </div>
       <div class="field">
         <label>Département de naissance <span class="req">*</span></label>
-        <input type="text" name="altDepNaissance" data-section="4" required placeholder="Ex : 06 – Alpes-Maritimes">
+        <input type="text" name="altDepNaissance" data-section="4" required placeholder="Ex : 06 – Alpes-Maritimes" disabled>
       </div>
       <div class="field">
         <label>Numéro de sécurité sociale (NIR) <span class="req">*</span></label>
-        <input type="text" name="altSecu" data-section="4" required placeholder="15 chiffres" maxlength="17">
+        <input type="text" name="altSecu" data-section="4" required placeholder="15 chiffres" maxlength="17" disabled>
       </div>
       <div class="field">
         <label>Régime social <span class="req">*</span></label>
-        <select name="altRegimeSocial" data-section="4" required>
+        <select name="altRegimeSocial" data-section="4" required disabled>
           <option value="">— Sélectionner —</option>
           <option value="1">Régime général</option>
           <option value="2">MSA (agricole)</option>
@@ -612,24 +636,24 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
       </div>
       <div class="field field-full">
         <label>Adresse postale <span class="req">*</span></label>
-        <input type="text" name="altAdresse" data-section="4" required placeholder="N° voie, rue, code postal, ville">
+        <input type="text" name="altAdresse" data-section="4" required placeholder="N° voie, rue, code postal, ville" disabled>
       </div>
       <div class="field">
         <label>N° de téléphone <span class="req">*</span></label>
-        <input type="tel" name="altTel" data-section="4" required placeholder="0X XX XX XX XX">
+        <input type="tel" name="altTel" data-section="4" required placeholder="0X XX XX XX XX" disabled>
       </div>
       <div class="field">
         <label>Adresse e-mail <span class="req">*</span></label>
-        <input type="email" name="altMail" data-section="4" required placeholder="prenom.nom@email.com">
+        <input type="email" name="altMail" data-section="4" required placeholder="prenom.nom@email.com" disabled>
       </div>
     </div>
 
     <div class="sub-section">
       <div class="sub-title">Nationalité & Régime</div>
       <div class="radio-group">
-        <label class="radio-item"><input type="radio" name="nationalite" value="Française" data-section="4" required> Française</label>
-        <label class="radio-item"><input type="radio" name="nationalite" value="Union Européenne"> Union Européenne</label>
-        <label class="radio-item"><input type="radio" name="nationalite" value="Étranger hors Union Européenne"> Étranger hors UE</label>
+        <label class="radio-item"><input type="radio" name="nationalite" value="Française" data-section="4" required disabled> Française</label>
+        <label class="radio-item"><input type="radio" name="nationalite" value="Union Européenne" disabled> Union Européenne</label>
+        <label class="radio-item"><input type="radio" name="nationalite" value="Étranger hors Union Européenne" disabled> Étranger hors UE</label>
       </div>
     </div>
 
@@ -639,15 +663,15 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
         <div class="field">
           <label>Sportif de haut niveau ? <span class="req">*</span></label>
           <div class="radio-group">
-            <label class="radio-item"><input type="radio" name="altSportifHN" value="NON" data-section="4" required> NON</label>
-            <label class="radio-item"><input type="radio" name="altSportifHN" value="OUI"> OUI</label>
+            <label class="radio-item"><input type="radio" name="altSportifHN" value="NON" data-section="4" required disabled> NON</label>
+            <label class="radio-item"><input type="radio" name="altSportifHN" value="OUI" disabled> OUI</label>
           </div>
         </div>
         <div class="field">
           <label>Projet de création/reprise d'entreprise ? <span class="req">*</span></label>
           <div class="radio-group">
-            <label class="radio-item"><input type="radio" name="altProjetEntreprise" value="NON" data-section="4" required> NON</label>
-            <label class="radio-item"><input type="radio" name="altProjetEntreprise" value="OUI"> OUI</label>
+            <label class="radio-item"><input type="radio" name="altProjetEntreprise" value="NON" data-section="4" required disabled> NON</label>
+            <label class="radio-item"><input type="radio" name="altProjetEntreprise" value="OUI" disabled> OUI</label>
           </div>
         </div>
       </div>
@@ -659,20 +683,20 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
         <div class="field">
           <label>Reconnaissance RQTH ? <span class="req">*</span></label>
           <div class="radio-group">
-            <label class="radio-item"><input type="radio" name="rqth" value="OUI" data-section="4" required> OUI</label>
-            <label class="radio-item"><input type="radio" name="rqth" value="NON"> NON</label>
+            <label class="radio-item"><input type="radio" name="rqth" value="OUI" data-section="4" required disabled> OUI</label>
+            <label class="radio-item"><input type="radio" name="rqth" value="NON" disabled> NON</label>
           </div>
         </div>
         <div class="field" id="rqthDetailsWrap" style="display:none">
           <label>Si NON à la RQTH — Droits attachés ?</label>
           <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
-            <label class="radio-item"><input type="checkbox" name="altEquivalenceJeunes"> Équivalence jeunes</label>
-            <label class="radio-item"><input type="checkbox" name="altExtensionBOE"> Extension BOE (Bénéficiaire de l'Obligation d'Emploi)</label>
+            <label class="radio-item"><input type="checkbox" name="altEquivalenceJeunes" disabled> Équivalence jeunes</label>
+            <label class="radio-item"><input type="checkbox" name="altExtensionBOE" disabled> Extension BOE (Bénéficiaire de l'Obligation d'Emploi)</label>
           </div>
         </div>
         <div class="field">
           <label>Disposition médicale particulière</label>
-          <input type="text" name="dispMedicale" data-section="4" placeholder="Si applicable (allergies, adaptation, aménagement…)">
+          <input type="text" name="dispMedicale" data-section="4" placeholder="Si applicable (allergies, adaptation, aménagement…)" disabled>
         </div>
       </div>
     </div>
@@ -683,30 +707,30 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
         <div class="field">
           <label>Statut avant ce contrat <span class="req">*</span></label>
           <div class="radio-group">
-            <label class="radio-item"><input type="radio" name="statutAvant" value="Étudiant(e)" data-section="4" required> Étudiant(e)</label>
-            <label class="radio-item"><input type="radio" name="statutAvant" value="Alternant(e)"> Alternant(e)</label>
-            <label class="radio-item"><input type="radio" name="statutAvant" value="Salarié(e)"> Salarié(e)</label>
+            <label class="radio-item"><input type="radio" name="statutAvant" value="Étudiant(e)" data-section="4" required disabled> Étudiant(e)</label>
+            <label class="radio-item"><input type="radio" name="statutAvant" value="Alternant(e)" disabled> Alternant(e)</label>
+            <label class="radio-item"><input type="radio" name="statutAvant" value="Salarié(e)" disabled> Salarié(e)</label>
           </div>
         </div>
         <div class="field">
           <label>Si ancien contrat d'alternance : joindre ancien CERFA + rupture</label>
-          <input type="text" name="ancienCerfa" data-section="4" placeholder="Numéro de l'ancien contrat (si applicable)">
+          <input type="text" name="ancienCerfa" data-section="4" placeholder="Numéro de l'ancien contrat (si applicable)" disabled>
         </div>
         <div class="field">
           <label>Dernière classe / année suivie <span class="req">*</span></label>
-          <input type="text" name="altDerniereClasse" data-section="4" required placeholder="Ex : Terminale STD2A, BTS 1ère année Design Graphique…">
+          <input type="text" name="altDerniereClasse" data-section="4" required placeholder="Ex : Terminale STD2A, BTS 1ère année Design Graphique…" disabled>
         </div>
         <div class="field">
           <label>NOM du dernier diplôme ou titre préparé <span class="req">*</span></label>
-          <input type="text" name="altDiplomePrepare" data-section="4" required placeholder="Ex : BTS Design Graphique – non validé">
+          <input type="text" name="altDiplomePrepare" data-section="4" required placeholder="Ex : BTS Design Graphique – non validé" disabled>
         </div>
         <div class="field">
           <label>Intitulé précis du dernier diplôme préparé <span class="req">*</span></label>
-          <input type="text" name="altDiplomePrecis" data-section="4" required placeholder="Intitulé exact (comme sur le relevé de notes)">
+          <input type="text" name="altDiplomePrecis" data-section="4" required placeholder="Intitulé exact (comme sur le relevé de notes)" disabled>
         </div>
         <div class="field">
           <label>Diplôme ou titre le plus élevé obtenu <span class="req">*</span></label>
-          <input type="text" name="altDiplomeObtenu" data-section="4" required placeholder="Ex : Baccalauréat STD2A, DNSEP…">
+          <input type="text" name="altDiplomeObtenu" data-section="4" required placeholder="Ex : Baccalauréat STD2A, DNSEP…" disabled>
         </div>
       </div>
     </div>
@@ -717,15 +741,15 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
       <div class="fields-grid">
         <div class="field">
           <label>NOM et Prénom du représentant légal <span id="repLegalReq"></span></label>
-          <input type="text" name="repLegalNom" data-section="4" placeholder="NOM Prénom (père, mère, tuteur légal…)">
+          <input type="text" name="repLegalNom" data-section="4" placeholder="NOM Prénom (père, mère, tuteur légal…)" disabled>
         </div>
         <div class="field field-full">
           <label>Adresse du représentant légal</label>
-          <input type="text" name="repLegalAdresse" data-section="4" placeholder="N° voie, rue, code postal, ville (si différente de l'alternant)">
+          <input type="text" name="repLegalAdresse" data-section="4" placeholder="N° voie, rue, code postal, ville (si différente de l'alternant)" disabled>
         </div>
         <div class="field">
           <label>E-mail du représentant légal</label>
-          <input type="email" name="repLegalMail" data-section="4" placeholder="email@exemple.fr">
+          <input type="email" name="repLegalMail" data-section="4" placeholder="email@exemple.fr" disabled>
         </div>
       </div>
     </div>
@@ -1075,6 +1099,7 @@ main{max-width:var(--max);margin:0 auto;padding:48px var(--pad)}
 <!-- ═══════════════════════════════════════════════
      ACTIONS
 ════════════════════════════════════════════════ -->
+<div id="cerfaAlertZone"></div>
 <div class="actions">
   <button type="button" class="btn-save" id="btnSave" onclick="saveFDR()">💾 Enregistrer la FDR</button>
   <button type="button" class="btn-cerfa locked" id="btnCerfa" onclick="goToCerfa()">📄 Générer le CERFA →</button>
@@ -1139,12 +1164,17 @@ const REQUIRED = {
   1:['typeEmployeur','formeJuridique','raisonSociale','representantNom','representantFonction','adresseSiege','telEntreprise','mailEntreprise','siret','codeNaf','codeIdcc','nbSalaries','convCollective','activitePrincipale','caisseRetraite','opcoNom'],
   2:['presentationEntreprise','secteurActivite','presentationService','orgService'],
   3:['tuteurNom','tuteurPrenom','tuteurFonction','tuteurDdn','tuteurSecu','tuteurTel','tuteurMail','tuteurDiplome','tuteurNiveau'],
-  4:[], // rempli côté étudiant
+  4:['altNom','altPrenom','altPoste','altDdn','altLieuNaissance','altDepNaissance','altSecu','altRegimeSocial','altAdresse','altTel','altMail','altDiplomeObtenu','altDiplomePrepare','altDiplomePrecis','altDerniereClasse','nationalite','rqth','altSexe','altSportifHN','altProjetEntreprise','statutAvant'],
   5:['typeContrat','dateConclusionContrat','dateDebut','dateDebutPratique','dateFin','dureeHebdo','pctSmic','salaireEmbaucheBrut','machinesDangereuses','faitA'],
   6:['mission_count']
 };
 
-const RADIO_FIELDS = new Set(['typeContrat','typeEmployeur','machinesDangereuses']);
+const RADIO_FIELDS = new Set(['nationalite','rqth','statutAvant','typeContrat','typeEmployeur','altSexe','altSportifHN','altProjetEntreprise','machinesDangereuses']);
+
+// Enterprise sections (filled by enterprise)
+const ENT_SECTIONS = [1,2,3,5,6];
+// Student section (filled by student)
+const ALT_SECTIONS = [4];
 
 function getSectionCompletion(sec){
   const fields = REQUIRED[sec] || [];
@@ -1166,41 +1196,82 @@ function getSectionCompletion(sec){
 }
 
 function updateProgress(){
-  let totalDone=0, totalReq=0;
+  let entDone=0, entReq=0, altDone=0, altReq=0;
+
   [1,2,3,4,5,6].forEach(i=>{
     const {done,total,pct}=getSectionCompletion(i);
-    totalDone+=done; totalReq+=total;
     const cp=$(`cp${i}`), st=$(`s${i}status`);
-    if(pct===100){
-      cp.className='cp-item done'; cp.querySelector('.cp-icon').textContent='✓';
-      st.className='section-status done'; st.textContent='Complété';
-    } else {
-      cp.className='cp-item todo'; cp.querySelector('.cp-icon').textContent='○';
-      st.className='section-status todo'; st.textContent=pct>0?`${pct}%`:'À compléter';
+    if(cp){
+      if(pct===100){
+        cp.className='cp-item done'; cp.querySelector('.cp-icon').textContent='✓';
+      } else {
+        cp.className='cp-item todo'; cp.querySelector('.cp-icon').textContent='○';
+      }
     }
+    if(st){
+      if(pct===100){ st.className='section-status done'; st.textContent='Complété'; }
+      else { st.className='section-status todo'; st.textContent=pct>0?`${pct}%`:'À compléter'; }
+    }
+    if(ENT_SECTIONS.includes(i)){ entDone+=done; entReq+=total; }
+    else { altDone+=done; altReq+=total; }
   });
-  const pct = Math.round(totalDone/totalReq*100);
-  $('progressFill').style.width=pct+'%';
-  $('progressText').textContent=pct+'%';
 
-  const livretBtn = $('btnLivret');
-  const cerfaBtn  = $('btnCerfa');
-  // Livret : 100% requis. CERFA : accessible dès que des données sont présentes (> 0%)
-  if(pct===100){ livretBtn.classList.remove('locked'); }
-  else { livretBtn.classList.add('locked'); }
-  if(cerfaBtn){ if(pct > 0) cerfaBtn.classList.remove('locked'); else cerfaBtn.classList.add('locked'); }
+  const entPct = entReq>0 ? Math.round(entDone/entReq*100) : 100;
+  const altPct = altReq>0 ? Math.round(altDone/altReq*100) : 0;
+  const totalPct = Math.round((entDone+altDone)/(entReq+altReq)*100);
+
+  $('progressFill').style.width=totalPct+'%';
+  $('progressText').textContent=totalPct+'%';
+
+  // Update dual status badges
+  const entBadge = $('entPctBadge');
+  const altBadge = $('altPctBadge');
+  if(entBadge){
+    entBadge.textContent = entPct+'%';
+    entBadge.className = 'pct-badge ' + (entPct===100 ? 'green' : entPct>0 ? 'orange' : 'grey');
+  }
+  if(altBadge){
+    altBadge.textContent = altPct+'%';
+    altBadge.className = 'pct-badge ' + (altPct===100 ? 'green' : altPct>0 ? 'orange' : 'grey');
+  }
+
+  // CERFA button logic: only enabled when BOTH enterprise AND student parts are 100%
+  const cerfaBtn = $('btnCerfa');
+  const alertZone = $('cerfaAlertZone');
+  if(cerfaBtn){
+    if(entPct===100 && altPct===100){
+      cerfaBtn.classList.remove('locked');
+      cerfaBtn.classList.add('ready');
+      cerfaBtn.style.background='';
+      if(alertZone) alertZone.innerHTML='';
+    } else {
+      cerfaBtn.classList.add('locked');
+      cerfaBtn.classList.remove('ready');
+      const missing=[];
+      if(entPct<100) missing.push(`Entreprise : ${entPct}% (manque ${100-entPct}%)`);
+      if(altPct<100) missing.push(`Alternant(e) : ${altPct}%`);
+      if(alertZone) alertZone.innerHTML=`<div class="cerfa-alert">⚠ Pour générer le CERFA, la FDR doit être complète à 100% par l'entreprise ET par l'alternant(e).<br><small style="font-weight:400;opacity:.8">${missing.join(' — ')}</small></div>`;
+    }
+  }
 }
 
 /* ═══════════ SAVE / LOAD ═══════════ */
+const ALL_RADIO_NAMES = ['nationalite','rqth','statutAvant','typeContrat','typeEmployeur','altSexe','altSportifHN','altProjetEntreprise','machinesDangereuses'];
+
 function collectData(){
   const data={};
-  document.querySelectorAll('input:not([type=radio]),select,textarea').forEach(el=>{
+  document.querySelectorAll('input:not([type=radio]):not([type=checkbox]),select,textarea').forEach(el=>{
     if(el.name && el.name!=='mission[]') data[el.name]=el.value;
   });
   // Radio
-  ['typeContrat','typeEmployeur','machinesDangereuses'].forEach(n=>{
+  ALL_RADIO_NAMES.forEach(n=>{
     const el=document.querySelector(`input[name="${n}"]:checked`);
     data[n]=el?el.value:'';
+  });
+  // Checkboxes
+  ['altEquivalenceJeunes','altExtensionBOE'].forEach(n=>{
+    const el=document.querySelector(`input[name="${n}"]`);
+    data[n]=el?el.checked:false;
   });
   // Missions
   data.missions=[...document.querySelectorAll('#missionsList input')].map(i=>i.value.trim()).filter(Boolean);
@@ -1210,11 +1281,13 @@ function collectData(){
 function applyData(data){
   Object.entries(data).forEach(([k,v])=>{
     if(k==='missions') return;
+    if(ALL_RADIO_NAMES.includes(k)) return; // handled below
     const el=document.querySelector(`[name="${k}"]`);
-    if(el){ el.value=v; markFilled(el); }
+    if(el && el.type!=='checkbox'){ el.value=v; markFilled(el); }
+    if(el && el.type==='checkbox'){ el.checked=!!v; }
   });
   // Radios
-  ['typeContrat','typeEmployeur','machinesDangereuses'].forEach(n=>{
+  ALL_RADIO_NAMES.forEach(n=>{
     if(data[n]){
       const el=document.querySelector(`input[name="${n}"][value="${data[n]}"]`);
       if(el) el.checked=true;
@@ -1279,8 +1352,32 @@ document.querySelectorAll('input[name="typeContrat"]').forEach(r=>{
   r.addEventListener('change', updateContratUI);
 });
 
-/* checkMineur / updateRQTHDetails supprimés (section 4 retirée) */
-function checkMineur(){} // no-op
+/* ═══════════ MINEUR + RQTH TOGGLES ═══════════ */
+function checkMineur(){
+  const ddn = document.querySelector('[name="altDdn"]')?.value;
+  const deb = document.querySelector('[name="dateDebut"]')?.value || new Date().toISOString().split('T')[0];
+  const alert = $('repLegalAlert');
+  const req   = $('repLegalReq');
+  if(!ddn || !alert) return;
+  const age = calcAge(ddn, deb);
+  if(age < 18){
+    alert.style.display = 'block';
+    if(req) req.innerHTML = '<span class="req">*</span>';
+  } else {
+    alert.style.display = 'none';
+    if(req) req.innerHTML = '';
+  }
+}
+
+function updateRQTHDetails(){
+  const val = document.querySelector('input[name="rqth"]:checked')?.value;
+  const wrap = $('rqthDetailsWrap');
+  if(wrap) wrap.style.display = (val === 'NON') ? 'block' : 'none';
+}
+document.querySelectorAll('input[name="rqth"]').forEach(r=>{
+  r.addEventListener('change', updateRQTHDetails);
+});
+document.querySelector('[name="altDdn"]')?.addEventListener('change', checkMineur);
 
 /* ═══════════ REMU MODE TOGGLE ═══════════ */
 function getRemuMode(){ return document.querySelector('input[name="remuMode"]:checked')?.value || 'auto'; }
@@ -1477,6 +1574,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   updateContratUI();
   computeRemu();
   updateRemuModeUI();
+  checkMineur();
+  updateRQTHDetails();
   document.querySelectorAll('input,select,textarea').forEach(el=>{
     el.addEventListener('input',()=>{ markFilled(el); updateProgress(); scheduleAutosave(); });
     el.addEventListener('change',()=>{ markFilled(el); updateProgress(); scheduleAutosave(); computeRemu(); updateContratUI(); });

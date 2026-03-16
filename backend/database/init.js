@@ -51,6 +51,7 @@ async function initDatabase() {
       fdr_json        TEXT DEFAULT '{}',
       cerfa_json      TEXT DEFAULT '{}',
       conformite_json TEXT DEFAULT '{}',
+      signatures_json TEXT DEFAULT '{}',
       statut          TEXT DEFAULT 'en_cours' CHECK(statut IN ('en_cours','complet','valide')),
       created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -66,6 +67,10 @@ async function initDatabase() {
       statut           TEXT DEFAULT 'planifiee' CHECK(statut IN ('planifiee','faite'))
     );
   `);
+  // Add signatures_json column if it doesn't exist (migration for existing databases)
+  await pool.query(`
+    ALTER TABLE dossiers ADD COLUMN IF NOT EXISTS signatures_json TEXT DEFAULT '{}';
+  `).catch(() => {});
   console.log('  ✅ Base de données initialisée');
 }
 

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ma FDR — BTS Photographie — SUP-PHOTO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet">
+<script src="/etudiant/api.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --red:#E8003D;--red-d:#C0002F;--red-bg:#FFF0F4;
+  --bg:#0f0f13;--bg2:#1a1a24;--border:#2a2a3a;
+  --text:#e0e0e0;--mid:#aaaaaa;--grey:#666;
+  --white:#FFFFFF;--green:#1a7a43;--green-bg:#0a1f12;
+  --orange:#C96B00;--orange-bg:#1a1200;
+  --purple:#7c3aed;--purple-light:#a78bfa;
+  --sans:'Open Sans',sans-serif;
+  --max:1100px;--pad:clamp(20px,5vw,72px);
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+nav{background:#1a1a24;border-bottom:2px solid var(--purple);padding:0 var(--pad);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;height:64px}
+.nav-logo{font-size:18px;font-weight:800;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.nav-label{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--grey)}
+.nav-links{display:flex;align-items:center;gap:10px}
+.nav-link{font-size:12px;color:var(--purple-light);text-decoration:none;padding:6px 14px;border:1px solid #3a2a5a;border-radius:6px}
+.nav-link:hover{background:#2a1a4a}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{background:#1a1a24;border-bottom:1px solid var(--border);padding:0 var(--pad);position:sticky;top:64px;z-index:90}
+.progress-inner{max-width:var(--max);margin:0 auto;padding:12px 0;display:flex;align-items:center;gap:16px}
+.progress-track{flex:1;height:6px;background:#0f0f1a;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--purple);border-radius:3px;transition:width .5s ease}
+.progress-text{font-size:12px;font-weight:700;color:var(--purple-light);white-space:nowrap;min-width:48px;text-align:right}
+.progress-label{font-size:11px;font-weight:600;color:var(--grey);letter-spacing:.08em;text-transform:uppercase}
+
+/* ── HERO ── */
+.hero{background:#1a1a24;color:var(--white);padding:48px var(--pad) 40px;border-bottom:4px solid var(--purple)}
+.hero-inner{max-width:var(--max);margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--purple);color:var(--white);font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:5px 12px;margin-bottom:20px}
+.hero-badge::before{content:'';display:block;width:6px;height:6px;background:var(--white);border-radius:50%}
+.hero h1{font-size:clamp(24px,4vw,40px);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:10px}
+.hero h1 span{color:var(--purple-light)}
+.hero p{font-size:14px;color:rgba(255,255,255,.6);max-width:600px;line-height:1.7}
+.hero-alert{margin-top:20px;background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.4);border-left:3px solid var(--purple);padding:12px 16px;font-size:13px;font-weight:600;color:rgba(255,255,255,.85)}
+
+/* ── MAIN ── */
+main{max-width:var(--max);margin:0 auto;padding:40px var(--pad)}
+
+/* ── SECTION ── */
+.form-section{background:#1a1a24;border:1px solid var(--border);margin-bottom:24px;overflow:hidden}
+.section-head{display:flex;align-items:center;gap:16px;padding:18px 24px;border-bottom:2px solid var(--purple);background:#12121e;cursor:pointer;user-select:none}
+.section-num{width:34px;height:34px;background:var(--purple);color:var(--white);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:4px}
+.section-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--white);flex:1}
+.section-status{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px}
+.section-status.done{background:var(--green);color:var(--white)}
+.section-status.todo{background:rgba(255,255,255,.1);color:rgba(255,255,255,.5)}
+.section-chevron{color:var(--white);font-size:18px;transition:transform .3s;flex-shrink:0}
+.section-head.collapsed .section-chevron{transform:rotate(-90deg)}
+.section-body{padding:24px;display:grid;gap:0}
+.section-body.hidden{display:none}
+
+/* ── GRID FIELDS ── */
+.fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fields-grid.one{grid-template-columns:1fr}
+.fields-grid.three{grid-template-columns:1fr 1fr 1fr}
+.field-full{grid-column:1/-1}
+
+/* ── FIELD ── */
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mid)}
+.field label .req{color:var(--purple-light)}
+.field input,.field select,.field textarea{
+  border:1.5px solid var(--border);padding:10px 14px;font-family:var(--sans);font-size:14px;color:var(--text);background:#12121a;outline:none;transition:border-color .2s,background .2s;width:100%;border-radius:4px
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--purple);background:#1a1030}
+.field input.filled,.field select.filled,.field textarea.filled{border-color:var(--green);background:var(--green-bg)}
+.field input.error,.field select.error,.field textarea.error{border-color:var(--orange)}
+.field input:disabled,.field select:disabled,.field textarea:disabled{opacity:.5;cursor:not-allowed;background:#0a0a10}
+.field textarea{resize:vertical;min-height:90px}
+.field select{cursor:pointer}
+.field .hint{font-size:11px;color:var(--grey);font-style:italic}
+
+/* ── RADIO GROUP ── */
+.radio-group{display:flex;gap:10px;flex-wrap:wrap}
+.radio-item{display:flex;align-items:center;gap:8px;padding:9px 14px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;font-size:13px;font-weight:600;color:var(--text);border-radius:4px}
+.radio-item:has(input:checked){border-color:var(--purple);background:rgba(124,58,237,.15);color:var(--purple-light)}
+.radio-item input{accent-color:var(--purple)}
+.radio-item:has(input:disabled){opacity:.5;cursor:not-allowed}
+
+/* ── MISSIONS ── */
+.missions-list{display:flex;flex-direction:column;gap:10px}
+.mission-row{display:flex;gap:8px;align-items:center}
+.mission-row input{flex:1;border:1.5px solid var(--border);padding:10px 14px;font-family:var(--sans);font-size:14px;background:#12121a;color:var(--text);border-radius:4px}
+.mission-row input:focus{outline:none;border-color:var(--purple)}
+.mission-row input.filled{border-color:var(--green);background:var(--green-bg)}
+.mission-row input:disabled{opacity:.5;cursor:not-allowed}
+.btn-rm{width:36px;height:36px;border:none;background:#1a1a24;cursor:pointer;font-size:18px;color:var(--grey);flex-shrink:0;transition:all .2s;border-radius:4px}
+.btn-rm:hover{background:var(--red);color:var(--white)}
+
+/* ── DIVIDER ── */
+.sub-section{margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+.sub-title{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--purple-light);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sub-title::after{content:'';flex:1;height:1px;background:rgba(124,58,237,.2)}
+
+/* ── ENTERPRISE ZONE NOTICE ── */
+.enterprise-zone-notice{background:#1e1a4a;border:1px solid #4338ca;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#a78bfa}
+
+/* ── DUAL STATUS ── */
+.dual-status{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.dual-status-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text)}
+.pct-badge{padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700}
+.pct-badge.green{background:var(--green);color:#fff}
+.pct-badge.orange{background:var(--orange);color:#fff}
+.pct-badge.grey{background:#333;color:#ccc}
+.pct-badge.purple{background:var(--purple);color:#fff}
+
+/* ── COMPLETION PANEL ── */
+.completion-panel{background:#1a1a24;border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:4px}
+.cp-title{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);margin-bottom:14px}
+.cp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.cp-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:4px}
+.cp-item .cp-icon{font-size:15px}
+.cp-item .cp-name{font-size:12px;font-weight:600;color:var(--mid)}
+.cp-item.done{border-color:var(--green);background:var(--green-bg)}
+.cp-item.done .cp-name{color:#4caf50}
+.cp-item.todo{border-color:var(--orange);background:var(--orange-bg)}
+.cp-item.todo .cp-name{color:var(--orange)}
+.cp-item.neutral{border-color:var(--border)}
+
+/* ── ACTIONS ── */
+.actions{display:flex;gap:14px;align-items:center;margin-top:40px;padding-top:28px;border-top:1px solid var(--border)}
+.btn-save{background:var(--purple);color:var(--white);border:none;padding:14px 36px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;border-radius:4px}
+.btn-save:hover{background:#6d28d9}
+.btn-save:disabled{background:#333;cursor:not-allowed}
+
+/* ── SUCCESS ALERT ── */
+.success-alert{background:#0a1f12;border:1px solid var(--green);border-left:4px solid var(--green);padding:14px 18px;font-size:13px;font-weight:600;color:#4caf50;margin-top:16px;border-radius:4px;display:none}
+
+/* ── REMU TABLE ── */
+.remu-table{border:1px solid var(--border);overflow:hidden;margin-top:8px}
+.remu-head{display:grid;grid-template-columns:1fr 1fr 1fr;background:#12121e;color:var(--white)}
+.remu-head div,.remu-row div{padding:10px 16px;font-size:12px;font-weight:700;letter-spacing:.06em}
+.remu-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--border)}
+.remu-row div:first-child{background:#0f0f13;font-weight:600;font-size:13px;color:var(--mid);display:flex;align-items:center}
+.remu-row input{border:none;border-left:1.5px solid var(--border);padding:10px 16px;font-family:var(--sans);font-size:14px;width:100%;background:#12121a;color:var(--text);outline:none}
+.remu-row input:disabled{opacity:.5}
+
+/* ── REMU EXPLAINER ── */
+.remu-explainer{background:#12121e;border:1px solid var(--border);overflow:hidden;margin-bottom:16px}
+.remu-explainer-head{background:#12121e;color:var(--white);padding:10px 18px;font-size:13px;font-weight:700;border-bottom:1px solid var(--border)}
+.remu-explainer-note{padding:10px 18px;font-size:13px;color:var(--mid);border-bottom:1px solid var(--border);line-height:1.6}
+.remu-grid-table{width:100%;border-collapse:collapse}
+.remu-grid-table th{background:var(--purple);color:var(--white);font-size:11px;font-weight:700;letter-spacing:.06em;padding:8px 14px;text-align:left}
+.remu-grid-table .subhead th{background:rgba(0,0,0,.4);font-size:10px}
+.remu-grid-table td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);font-weight:600;color:var(--text)}
+.remu-grid-table tr:last-child td{border-bottom:none}
+.remu-grid-table tr.active-row td{background:rgba(124,58,237,.15)}
+.tranche-badge{background:#1a1a24;color:var(--purple-light);font-size:11px;font-weight:700;padding:3px 8px;border-radius:2px;border:1px solid #3a2a5a;white-space:nowrap}
+.montant{font-weight:800;color:#4caf50}
+.remu-aide-note{padding:10px 18px;font-size:13px;background:rgba(26,122,67,.08);border-top:1px solid var(--border);color:var(--mid)}
+
+/* ── CONTRAT CARDS ── */
+.contrat-cards{display:flex;flex-direction:column;gap:10px}
+.contrat-card{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border:2px solid var(--border);transition:all .2s;background:#12121a;position:relative;border-radius:4px;opacity:.6}
+.contrat-card input{position:absolute;opacity:0;pointer-events:none}
+.cc-badge{width:38px;height:38px;background:#1a1a24;color:var(--white);font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:2px;border:1px solid var(--border)}
+.cc-content{flex:1}
+.cc-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:5px}
+.cc-desc{font-size:13px;color:var(--mid);line-height:1.5;margin-bottom:4px}
+.cc-check{width:22px;height:22px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;flex-shrink:0}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;right:28px;background:#1a1a24;color:var(--white);padding:14px 22px;font-size:13px;font-weight:600;z-index:9999;transform:translateY(100px);opacity:0;transition:all .4s;max-width:360px;border-radius:8px;border:1px solid var(--border)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-left:4px solid var(--green)}
+.toast.error{border-left:4px solid var(--red)}
+
+@media(max-width:700px){
+  .fields-grid,.fields-grid.three{grid-template-columns:1fr}
+  .actions{flex-direction:column;align-items:stretch}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/etudiant/dossier.html">📷 SUP-PHOTO</a>
+  <span class="nav-label">Ma Fiche de Renseignement</span>
+  <div class="nav-links">
+    <a href="/etudiant/cerfa.html" class="nav-link">Mon CERFA</a>
+    <a href="/etudiant/dossier.html" class="nav-link">← Mon dossier</a>
+  </div>
+</nav>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <span class="progress-label">Ma complétion (Section 4)</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-text" id="progressText">0%</span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Espace Alternant(e)</div>
+    <h1>Ma Fiche de <span>Renseignement</span></h1>
+    <p>BTS Photographie – Niveau 5 (BAC+2) – Années 2025-2026 / 2026-2027<br>
+    Renseignez vos informations personnelles (Section 4). Les sections 1, 2, 3, 5 et 6 sont complétées par votre entreprise d'accueil.</p>
+    <div class="hero-alert">Seule la Section 4 vous concerne. Complétez-la soigneusement — ces données alimenteront directement votre CERFA.</div>
+  </div>
+</div>
+
+<main>
+
+<!-- PANEL COMPLÉTION -->
+<div class="completion-panel">
+  <div class="cp-title">État de complétion</div>
+  <div class="dual-status">
+    <div class="dual-status-item">Votre partie (Section 4) : <span class="pct-badge grey" id="altPctBadge">0%</span></div>
+    <div class="dual-status-item">Entreprise (Sections 1,2,3,5,6) : <span class="pct-badge grey" id="entPctBadge">?%</span></div>
+  </div>
+  <div class="cp-grid" id="cpGrid">
+    <div class="cp-item neutral" id="cp1"><span class="cp-icon">—</span><span class="cp-name">Société (entreprise)</span></div>
+    <div class="cp-item neutral" id="cp2"><span class="cp-icon">—</span><span class="cp-name">Présentation (entreprise)</span></div>
+    <div class="cp-item neutral" id="cp3"><span class="cp-icon">—</span><span class="cp-name">Tuteur (entreprise)</span></div>
+    <div class="cp-item todo" id="cp4"><span class="cp-icon">○</span><span class="cp-name">Alternant(e) — Vous</span></div>
+    <div class="cp-item neutral" id="cp5"><span class="cp-icon">—</span><span class="cp-name">Contrat (entreprise)</span></div>
+    <div class="cp-item neutral" id="cp6"><span class="cp-icon">—</span><span class="cp-name">Missions (entreprise)</span></div>
+  </div>
+  <div class="success-alert" id="successAlert">
+    Votre section est complète à 100% ! L'entreprise peut maintenant générer le CERFA si elle aussi a tout complété.
+  </div>
+</div>
+
+<form id="fdrForm" novalidate>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 1 — INFORMATIONS SUR LA SOCIÉTÉ (lecture seule)
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">1</div>
+    <div class="section-title">Informations sur la Société</div>
+    <span class="section-status todo" id="s1status">Entreprise</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb1">
+    <div class="enterprise-zone-notice">
+      Ces informations sont renseignées par votre entreprise d'accueil. Elles s'affichent ici en lecture seule.
+    </div>
+    <div class="fields-grid">
+      <div class="field">
+        <label>Type d'employeur</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="typeEmployeur" value="Privé" data-section="1" disabled> Employeur privé</label>
+          <label class="radio-item"><input type="radio" name="typeEmployeur" value="Public" disabled> Employeur public</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Employeur spécifique</label>
+        <select name="employeurSpecifique" data-section="1" disabled>
+          <option value="">— Aucun / Non applicable —</option>
+          <option>Association</option><option>Fondation</option><option>Groupement d'employeurs</option>
+          <option>Travailleur indépendant</option><option>Entreprise d'insertion</option><option>Autre employeur spécifique</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Forme juridique</label>
+        <select name="formeJuridique" data-section="1" disabled>
+          <option value="">— Sélectionner —</option>
+          <option>SARL</option><option>SAS</option><option>SASU</option><option>SA</option><option>EURL</option><option>EI</option>
+          <option>SNC</option><option>Association (Loi 1901)</option><option>Auto-entrepreneur / Micro-entreprise</option>
+          <option>Société civile (SC / SCI)</option><option>Autre</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Raison sociale</label>
+        <input type="text" name="raisonSociale" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>NOM Prénom du représentant</label>
+        <input type="text" name="representantNom" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>Fonction du représentant</label>
+        <input type="text" name="representantFonction" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field field-full">
+        <label>Adresse du siège</label>
+        <input type="text" name="adresseSiege" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field field-full">
+        <label>Adresse d'exécution du contrat</label>
+        <input type="text" name="adresseExecution" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>Téléphone</label>
+        <input type="tel" name="telEntreprise" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" name="mailEntreprise" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>N° SIRET</label>
+        <input type="text" name="siret" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>Code NAF / APE</label>
+        <input type="text" name="codeNaf" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>Code IDCC</label>
+        <input type="text" name="codeIdcc" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>Nombre de salariés</label>
+        <select name="nbSalaries" data-section="1" disabled>
+          <option value="">—</option><option>1 à 4</option><option>5 à 9</option><option>10 à 19</option>
+          <option>20 à 49</option><option>50 à 249</option><option>250 et plus</option>
+        </select>
+      </div>
+      <div class="field field-full">
+        <label>Convention collective</label>
+        <input type="text" name="convCollective" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field field-full">
+        <label>Activité principale</label>
+        <input type="text" name="activitePrincipale" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>Caisse de retraite complémentaire</label>
+        <input type="text" name="caisseRetraite" data-section="1" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>NOM de l'OPCO</label>
+        <input type="text" name="opcoNom" data-section="1" disabled placeholder="—">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 2 — PRÉSENTATION ENTREPRISE (lecture seule)
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">2</div>
+    <div class="section-title">Présentation Entreprise — Livret d'Apprentissage</div>
+    <span class="section-status todo" id="s2status">Entreprise</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb2">
+    <div class="enterprise-zone-notice">
+      Ces informations sont renseignées par votre entreprise d'accueil.
+    </div>
+    <div class="fields-grid one">
+      <div class="field">
+        <label>Présentation générale de l'entreprise</label>
+        <textarea name="presentationEntreprise" data-section="2" disabled style="min-height:100px" placeholder="—"></textarea>
+      </div>
+      <div class="field">
+        <label>Secteur d'activité</label>
+        <input type="text" name="secteurActivite" data-section="2" disabled placeholder="—">
+      </div>
+      <div class="field">
+        <label>Présentation du service</label>
+        <textarea name="presentationService" data-section="2" disabled placeholder="—"></textarea>
+      </div>
+      <div class="field">
+        <label>Organisation du service</label>
+        <input type="text" name="orgService" data-section="2" disabled placeholder="—">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 3 — MAÎTRE D'APPRENTISSAGE (lecture seule)
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">3</div>
+    <div class="section-title">Maître d'Apprentissage / Tuteur(trice)</div>
+    <span class="section-status todo" id="s3status">Entreprise</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb3">
+    <div class="enterprise-zone-notice">
+      Ces informations sont renseignées par votre entreprise d'accueil.
+    </div>
+    <div class="fields-grid">
+      <div class="field"><label>NOM</label><input type="text" name="tuteurNom" data-section="3" disabled placeholder="—"></div>
+      <div class="field"><label>Prénom</label><input type="text" name="tuteurPrenom" data-section="3" disabled placeholder="—"></div>
+      <div class="field"><label>Fonction</label><input type="text" name="tuteurFonction" data-section="3" disabled placeholder="—"></div>
+      <div class="field"><label>Date de naissance</label><input type="date" name="tuteurDdn" data-section="3" disabled></div>
+      <div class="field"><label>N° de sécurité sociale</label><input type="text" name="tuteurSecu" data-section="3" disabled placeholder="—"></div>
+      <div class="field"><label>Téléphone</label><input type="tel" name="tuteurTel" data-section="3" disabled placeholder="—"></div>
+      <div class="field"><label>E-mail</label><input type="email" name="tuteurMail" data-section="3" disabled placeholder="—"></div>
+      <div class="field field-full"><label>Diplôme le plus élevé obtenu</label><input type="text" name="tuteurDiplome" data-section="3" disabled placeholder="—"></div>
+      <div class="field">
+        <label>Niveau de diplôme</label>
+        <select name="tuteurNiveau" data-section="3" disabled>
+          <option value="">—</option>
+          <option value="3">Niveau 3 – CAP/BEP</option><option value="4">Niveau 4 – BAC</option>
+          <option value="5">Niveau 5 – BTS/DUT/DEUST</option><option value="6">Niveau 6 – Licence/Bachelor</option>
+          <option value="7">Niveau 7 – Master/Mastère</option><option value="8">Niveau 8 – Doctorat</option>
+          <option value="exp">Expérience professionnelle</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 4 — INFORMATIONS SUR L'ALTERNANT(E) — VOTRE SECTION
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">4</div>
+    <div class="section-title">Informations sur l'Alternant(e) — Votre section</div>
+    <span class="section-status todo" id="s4status">À compléter</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body" id="sb4">
+    <div class="fields-grid">
+      <div class="field">
+        <label>NOM de naissance <span class="req">*</span></label>
+        <input type="text" name="altNom" data-section="4" required placeholder="NOM (majuscules)">
+      </div>
+      <div class="field">
+        <label>Nom d'usage <span style="font-size:11px;color:var(--grey)">(si différent)</span></label>
+        <input type="text" name="altNomUsage" data-section="4" placeholder="Laisser vide si identique">
+      </div>
+      <div class="field">
+        <label>Premier prénom selon l'état civil <span class="req">*</span></label>
+        <input type="text" name="altPrenom" data-section="4" required placeholder="Prénom">
+      </div>
+      <div class="field">
+        <label>Sexe <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="altSexe" value="M" data-section="4" required> M</label>
+          <label class="radio-item"><input type="radio" name="altSexe" value="F"> F</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Intitulé du poste <span class="req">*</span></label>
+        <input type="text" name="altPoste" data-section="4" required placeholder="Ex : Assistant(e) photographe…">
+      </div>
+      <div class="field">
+        <label>Date de naissance <span class="req">*</span></label>
+        <input type="date" name="altDdn" data-section="4" required>
+      </div>
+      <div class="field">
+        <label>Lieu de naissance <span class="req">*</span></label>
+        <input type="text" name="altLieuNaissance" data-section="4" required placeholder="Ville de naissance">
+      </div>
+      <div class="field">
+        <label>Département de naissance <span class="req">*</span></label>
+        <input type="text" name="altDepNaissance" data-section="4" required placeholder="Ex : 06 – Alpes-Maritimes">
+      </div>
+      <div class="field">
+        <label>Numéro de sécurité sociale (NIR) <span class="req">*</span></label>
+        <input type="text" name="altSecu" data-section="4" required placeholder="15 chiffres" maxlength="17">
+      </div>
+      <div class="field">
+        <label>Régime social <span class="req">*</span></label>
+        <select name="altRegimeSocial" data-section="4" required>
+          <option value="">— Sélectionner —</option>
+          <option value="1">Régime général</option>
+          <option value="2">MSA (agricole)</option>
+          <option value="3">Régime spécial</option>
+        </select>
+        <span class="hint">Généralement : Régime général</span>
+      </div>
+      <div class="field field-full">
+        <label>Adresse postale <span class="req">*</span></label>
+        <input type="text" name="altAdresse" data-section="4" required placeholder="N° voie, rue, code postal, ville">
+      </div>
+      <div class="field">
+        <label>N° de téléphone <span class="req">*</span></label>
+        <input type="tel" name="altTel" data-section="4" required placeholder="0X XX XX XX XX">
+      </div>
+      <div class="field">
+        <label>Adresse e-mail <span class="req">*</span></label>
+        <input type="email" name="altMail" data-section="4" required placeholder="prenom.nom@email.com">
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Nationalité & Régime</div>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="nationalite" value="Française" data-section="4" required> Française</label>
+        <label class="radio-item"><input type="radio" name="nationalite" value="Union Européenne"> Union Européenne</label>
+        <label class="radio-item"><input type="radio" name="nationalite" value="Étranger hors Union Européenne"> Étranger hors UE</label>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Déclarations CERFA</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>Sportif de haut niveau ? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="altSportifHN" value="NON" data-section="4" required> NON</label>
+            <label class="radio-item"><input type="radio" name="altSportifHN" value="OUI"> OUI</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Projet de création/reprise d'entreprise ? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="altProjetEntreprise" value="NON" data-section="4" required> NON</label>
+            <label class="radio-item"><input type="radio" name="altProjetEntreprise" value="OUI"> OUI</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">RQTH & Situation médicale</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>Reconnaissance RQTH ? <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="rqth" value="OUI" data-section="4" required> OUI</label>
+            <label class="radio-item"><input type="radio" name="rqth" value="NON"> NON</label>
+          </div>
+        </div>
+        <div class="field" id="rqthDetailsWrap" style="display:none">
+          <label>Si NON à la RQTH — Droits attachés ?</label>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+            <label class="radio-item"><input type="checkbox" name="altEquivalenceJeunes"> Équivalence jeunes</label>
+            <label class="radio-item"><input type="checkbox" name="altExtensionBOE"> Extension BOE</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Disposition médicale particulière</label>
+          <input type="text" name="dispMedicale" data-section="4" placeholder="Si applicable (allergies, adaptation…)">
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <div class="sub-title">Parcours scolaire</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>Statut avant ce contrat <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="statutAvant" value="Étudiant(e)" data-section="4" required> Étudiant(e)</label>
+            <label class="radio-item"><input type="radio" name="statutAvant" value="Alternant(e)"> Alternant(e)</label>
+            <label class="radio-item"><input type="radio" name="statutAvant" value="Salarié(e)"> Salarié(e)</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Si ancien contrat d'alternance : numéro CERFA</label>
+          <input type="text" name="ancienCerfa" data-section="4" placeholder="Numéro de l'ancien contrat (si applicable)">
+        </div>
+        <div class="field">
+          <label>Dernière classe / année suivie <span class="req">*</span></label>
+          <input type="text" name="altDerniereClasse" data-section="4" required placeholder="Ex : Terminale STD2A, BTS 1ère année…">
+        </div>
+        <div class="field">
+          <label>NOM du dernier diplôme ou titre préparé <span class="req">*</span></label>
+          <input type="text" name="altDiplomePrepare" data-section="4" required placeholder="Ex : BTS Design Graphique – non validé">
+        </div>
+        <div class="field">
+          <label>Intitulé précis du dernier diplôme préparé <span class="req">*</span></label>
+          <input type="text" name="altDiplomePrecis" data-section="4" required placeholder="Intitulé exact (comme sur le relevé de notes)">
+        </div>
+        <div class="field">
+          <label>Diplôme ou titre le plus élevé obtenu <span class="req">*</span></label>
+          <input type="text" name="altDiplomeObtenu" data-section="4" required placeholder="Ex : Baccalauréat STD2A, DNSEP…">
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section" id="repLegalSection">
+      <div class="sub-title">Représentant légal <span style="font-size:12px;font-weight:400;color:var(--grey)">(obligatoire si mineur(e) non émancipé(e))</span></div>
+      <div id="repLegalAlert" style="display:none;background:var(--orange-bg);border-left:3px solid var(--orange);padding:10px 14px;font-size:13px;font-weight:600;color:var(--orange);margin-bottom:16px;border-radius:4px">Vous êtes mineur(e) — le représentant légal doit être renseigné et signer le CERFA.</div>
+      <div class="fields-grid">
+        <div class="field">
+          <label>NOM et Prénom du représentant légal <span id="repLegalReq"></span></label>
+          <input type="text" name="repLegalNom" data-section="4" placeholder="NOM Prénom (père, mère, tuteur légal…)">
+        </div>
+        <div class="field field-full">
+          <label>Adresse du représentant légal</label>
+          <input type="text" name="repLegalAdresse" data-section="4" placeholder="N° voie, rue, code postal, ville (si différente)">
+        </div>
+        <div class="field">
+          <label>E-mail du représentant légal</label>
+          <input type="email" name="repLegalMail" data-section="4" placeholder="email@exemple.fr">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 5 — INFORMATIONS CONTRACTUELLES (lecture seule)
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">5</div>
+    <div class="section-title">Informations Contractuelles</div>
+    <span class="section-status todo" id="s5status">Entreprise</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb5">
+    <div class="enterprise-zone-notice">
+      Ces informations sont renseignées par votre entreprise d'accueil.
+    </div>
+    <div class="fields-grid three">
+      <div class="field"><label>Date de conclusion</label><input type="date" name="dateConclusionContrat" data-section="5" disabled></div>
+      <div class="field"><label>Date de début</label><input type="date" name="dateDebut" data-section="5" disabled></div>
+      <div class="field"><label>Date de début pratique</label><input type="date" name="dateDebutPratique" data-section="5" disabled></div>
+      <div class="field"><label>Date de fin</label><input type="date" name="dateFin" data-section="5" disabled></div>
+      <div class="field"><label>Durée hebdomadaire (h)</label><input type="number" name="dureeHebdo" data-section="5" disabled></div>
+      <div class="field">
+        <label>Type de dérogation</label>
+        <select name="typeDerogation" data-section="5" disabled>
+          <option value="">— Aucune —</option>
+          <option value="1">Dérogation durée – RQTH</option><option value="2">Dérogation durée – 2ème contrat</option>
+          <option value="3">Dérogation âge – 35 ans</option><option value="4">Dérogation âge – RQTH</option><option value="5">Autre</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:16px" class="fields-grid">
+      <div class="field">
+        <label>Machines dangereuses</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="machinesDangereuses" value="NON" data-section="5" disabled> NON</label>
+          <label class="radio-item"><input type="radio" name="machinesDangereuses" value="OUI" disabled> OUI</label>
+        </div>
+      </div>
+      <div class="field"><label>Salaire brut mensuel à l'embauche</label><input type="text" name="salaireEmbaucheBrut" data-section="5" disabled placeholder="—"></div>
+    </div>
+    <div class="fields-grid three" style="margin-top:12px">
+      <div class="field"><label>Nourriture (€/repas)</label><input type="text" name="avantageNourriture" data-section="5" disabled placeholder="—"></div>
+      <div class="field"><label>Logement (€/mois)</label><input type="text" name="avantageLogement" data-section="5" disabled placeholder="—"></div>
+      <div class="field"><label>Autre avantage</label><input type="text" name="avantageAutre" data-section="5" disabled placeholder="—"></div>
+    </div>
+    <div class="fields-grid" style="margin-top:12px">
+      <div class="field"><label>Fait à (lieu de signature)</label><input type="text" name="faitA" data-section="5" disabled placeholder="—"></div>
+      <div class="field"><label>% SMIC</label><input type="text" name="pctSmic" data-section="5" disabled placeholder="—"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 6 — MISSIONS (lecture seule)
+════════════════════════════════════════════════ -->
+<div class="form-section">
+  <div class="section-head" onclick="toggleSection(this)">
+    <div class="section-num">6</div>
+    <div class="section-title">Missions attribuées à l'Alternant(e)</div>
+    <span class="section-status todo" id="s6status">Entreprise</span>
+    <span class="section-chevron">▾</span>
+  </div>
+  <div class="section-body hidden" id="sb6">
+    <div class="enterprise-zone-notice">
+      Ces missions sont définies par votre entreprise d'accueil.
+    </div>
+    <div class="missions-list" id="missionsList">
+      <div class="mission-row"><input type="text" name="mission[]" data-section="6" disabled placeholder="—"></div>
+      <div class="mission-row"><input type="text" name="mission[]" data-section="6" disabled placeholder="—"></div>
+      <div class="mission-row"><input type="text" name="mission[]" data-section="6" disabled placeholder="—"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     ACTIONS
+════════════════════════════════════════════════ -->
+<div class="actions">
+  <button type="button" class="btn-save" id="btnSave" onclick="saveFDR()">Enregistrer mes informations</button>
+</div>
+<div class="success-alert" id="saveSuccessAlert" style="margin-top:16px"></div>
+
+</form>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════ UTILS ═══════════ */
+const $ = id => document.getElementById(id);
+const STORE_KEY = 'supphoto_fdr_v3';
+
+function showToast(msg, type='success'){
+  const t=$('toast'); t.textContent=msg; t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+/* ═══════════ TOGGLE SECTIONS ═══════════ */
+function toggleSection(head){
+  const body = head.nextElementSibling;
+  head.classList.toggle('collapsed');
+  body.classList.toggle('hidden');
+}
+
+/* ═══════════ FIELD BINDING ═══════════ */
+function bindField(el){
+  if(el.disabled) return;
+  el.addEventListener('input', ()=>{ markFilled(el); updateProgress(); });
+  el.addEventListener('change', ()=>{ markFilled(el); updateProgress(); });
+  markFilled(el);
+}
+function markFilled(el){
+  if(el.disabled) return;
+  const v = el.value.trim();
+  el.classList.toggle('filled', v.length > 0);
+  if(el.required && v.length===0) el.classList.add('error'); else el.classList.remove('error');
+}
+
+function bindAll(){
+  document.querySelectorAll('input:not([disabled]),select:not([disabled]),textarea:not([disabled])').forEach(bindField);
+}
+
+/* ═══════════ COMPLETION LOGIC ═══════════ */
+const REQUIRED_S4 = ['altNom','altPrenom','altPoste','altDdn','altLieuNaissance','altDepNaissance','altSecu','altRegimeSocial','altAdresse','altTel','altMail','altDiplomeObtenu','altDiplomePrepare','altDiplomePrecis','altDerniereClasse','nationalite','rqth','altSexe','altSportifHN','altProjetEntreprise','statutAvant'];
+const RADIO_FIELDS_S4 = new Set(['nationalite','rqth','statutAvant','altSexe','altSportifHN','altProjetEntreprise']);
+
+function getS4Completion(){
+  let done=0, total=REQUIRED_S4.length;
+  REQUIRED_S4.forEach(f=>{
+    if(RADIO_FIELDS_S4.has(f)){
+      if(document.querySelector(`input[name="${f}"]:checked`)) done++;
+    } else {
+      const el=document.querySelector(`[name="${f}"]`);
+      if(el && el.value.trim()) done++;
+    }
+  });
+  return {done,total,pct:Math.round(done/total*100)};
+}
+
+function updateProgress(){
+  const {done,total,pct} = getS4Completion();
+  $('progressFill').style.width=pct+'%';
+  $('progressText').textContent=pct+'%';
+
+  const s4st=$('s4status'), cp4=$('cp4');
+  if(pct===100){
+    if(s4st){ s4st.className='section-status done'; s4st.textContent='Complété'; }
+    if(cp4){ cp4.className='cp-item done'; cp4.querySelector('.cp-icon').textContent='✓'; }
+    const sa=$('successAlert');
+    if(sa) sa.style.display='block';
+  } else {
+    if(s4st){ s4st.className='section-status todo'; s4st.textContent=pct>0?pct+'%':'À compléter'; }
+    if(cp4){ cp4.className='cp-item todo'; cp4.querySelector('.cp-icon').textContent='○'; }
+    const sa=$('successAlert');
+    if(sa) sa.style.display='none';
+  }
+
+  const altBadge=$('altPctBadge');
+  if(altBadge){
+    altBadge.textContent=pct+'%';
+    altBadge.className='pct-badge '+(pct===100?'green':pct>0?'purple':'grey');
+  }
+}
+
+/* ═══════════ MINEUR + RQTH TOGGLES ═══════════ */
+function calcAge(ddn, ref){
+  const d=new Date(ddn), r=new Date(ref);
+  let age=r.getFullYear()-d.getFullYear();
+  const m=r.getMonth()-d.getMonth();
+  if(m<0||(m===0&&r.getDate()<d.getDate())) age--;
+  return age;
+}
+
+function checkMineur(){
+  const ddn=document.querySelector('[name="altDdn"]')?.value;
+  const deb=new Date().toISOString().split('T')[0];
+  const alert=$('repLegalAlert'), req=$('repLegalReq');
+  if(!ddn||!alert) return;
+  const age=calcAge(ddn,deb);
+  if(age<18){
+    alert.style.display='block';
+    if(req) req.innerHTML='<span class="req">*</span>';
+  } else {
+    alert.style.display='none';
+    if(req) req.innerHTML='';
+  }
+}
+function updateRQTHDetails(){
+  const val=document.querySelector('input[name="rqth"]:checked')?.value;
+  const wrap=$('rqthDetailsWrap');
+  if(wrap) wrap.style.display=(val==='NON')?'block':'none';
+}
+document.querySelectorAll('input[name="rqth"]').forEach(r=>r.addEventListener('change',updateRQTHDetails));
+document.querySelector('[name="altDdn"]')?.addEventListener('change',checkMineur);
+
+/* ═══════════ COLLECT SECTION 4 DATA ONLY ═══════════ */
+const S4_RADIO_NAMES = ['nationalite','rqth','statutAvant','altSexe','altSportifHN','altProjetEntreprise'];
+
+function collectSection4Data(){
+  const data={};
+  // Text/select/textarea fields in section 4 (not disabled)
+  document.querySelectorAll('[data-section="4"]:not([disabled]):not([type=radio]):not([type=checkbox])').forEach(el=>{
+    if(el.name) data[el.name]=el.value;
+  });
+  // Non-section-4 fields that are in section 4 by name convention
+  ['altNomUsage','ancienCerfa','dispMedicale','repLegalNom','repLegalAdresse','repLegalMail'].forEach(n=>{
+    const el=document.querySelector(`[name="${n}"]`);
+    if(el && !el.disabled) data[n]=el.value;
+  });
+  // Radios
+  S4_RADIO_NAMES.forEach(n=>{
+    const el=document.querySelector(`input[name="${n}"]:checked`);
+    data[n]=el?el.value:'';
+  });
+  // Checkboxes
+  ['altEquivalenceJeunes','altExtensionBOE'].forEach(n=>{
+    const el=document.querySelector(`input[name="${n}"]`);
+    data[n]=el?el.checked:false;
+  });
+  return data;
+}
+
+/* ═══════════ APPLY DATA ═══════════ */
+const ALL_RADIO_NAMES = ['nationalite','rqth','statutAvant','typeContrat','typeEmployeur','altSexe','altSportifHN','altProjetEntreprise','machinesDangereuses'];
+
+function applyData(data){
+  Object.entries(data).forEach(([k,v])=>{
+    if(k==='missions') return;
+    if(ALL_RADIO_NAMES.includes(k)) return;
+    const el=document.querySelector(`[name="${k}"]`);
+    if(el && el.type!=='checkbox'){ el.value=v||''; markFilled(el); }
+    if(el && el.type==='checkbox'){ el.checked=!!v; }
+  });
+  // Radios
+  ALL_RADIO_NAMES.forEach(n=>{
+    if(data[n]){
+      const el=document.querySelector(`input[name="${n}"][value="${data[n]}"]`);
+      if(el) el.checked=true;
+    }
+  });
+  // Missions (read-only display)
+  if(data.missions && data.missions.length){
+    const list=$('missionsList');
+    if(list){
+      list.innerHTML='';
+      data.missions.forEach(m=>{
+        const row=document.createElement('div'); row.className='mission-row';
+        const inp=document.createElement('input');
+        inp.type='text'; inp.name='mission[]'; inp.setAttribute('data-section','6');
+        inp.disabled=true; inp.value=m;
+        row.appendChild(inp);
+        list.appendChild(row);
+      });
+    }
+  }
+}
+
+/* ═══════════ SAVE ═══════════ */
+async function saveFDR(){
+  const data=collectSection4Data();
+  // Also save to localStorage for compatibility
+  const existing=JSON.parse(localStorage.getItem(STORE_KEY)||'{}');
+  const merged={...existing,...data};
+  localStorage.setItem(STORE_KEY, JSON.stringify(merged));
+
+  try {
+    await API.put('/api/etudiant/dossier/fdr', data);
+    updateProgress();
+    const pct=getS4Completion().pct;
+    const sAlert=$('saveSuccessAlert');
+    if(pct===100){
+      showToast('Vos informations sont complètes !','success');
+      if(sAlert){ sAlert.textContent='Section 4 complète à 100% ! L\'entreprise peut maintenant générer le CERFA.'; sAlert.style.display='block'; }
+    } else {
+      showToast('Informations sauvegardées ('+pct+'% complété)','success');
+      if(sAlert){ sAlert.style.display='none'; }
+    }
+  } catch(e){
+    showToast('Erreur de sauvegarde : '+e.message,'error');
+  }
+}
+
+/* ═══════════ LOAD FROM API ═══════════ */
+async function loadFDR(){
+  try{
+    const fdr=await API.get('/api/etudiant/dossier/fdr');
+    if(fdr && Object.keys(fdr).length>0){
+      applyData(fdr);
+      // Also update enterprise fields display (read-only) from API data
+      updateEnterpriseDisplay(fdr);
+    } else {
+      // Try localStorage fallback
+      const saved=localStorage.getItem(STORE_KEY);
+      if(saved){ try{ applyData(JSON.parse(saved)); }catch(e){} }
+    }
+    updateProgress();
+    checkMineur();
+    updateRQTHDetails();
+  } catch(e){
+    // Fallback to localStorage
+    const saved=localStorage.getItem(STORE_KEY);
+    if(saved){ try{ applyData(JSON.parse(saved)); }catch(e2){} }
+    updateProgress();
+  }
+}
+
+function updateEnterpriseDisplay(fdr){
+  // Compute enterprise completion from loaded FDR data
+  const ENT_REQUIRED = [
+    'typeEmployeur','formeJuridique','raisonSociale','representantNom','representantFonction',
+    'adresseSiege','telEntreprise','mailEntreprise','siret','codeNaf','codeIdcc','nbSalaries',
+    'convCollective','activitePrincipale','caisseRetraite','opcoNom',
+    'presentationEntreprise','secteurActivite','presentationService','orgService',
+    'tuteurNom','tuteurPrenom','tuteurFonction','tuteurDdn','tuteurSecu','tuteurTel','tuteurMail','tuteurDiplome','tuteurNiveau',
+    'typeContrat','dateConclusionContrat','dateDebut','dateDebutPratique','dateFin','dureeHebdo','pctSmic','salaireEmbaucheBrut','machinesDangereuses','faitA'
+  ];
+  const ENT_RADIO = new Set(['typeEmployeur','machinesDangereuses','typeContrat']);
+  let done=0;
+  ENT_REQUIRED.forEach(f=>{
+    if(ENT_RADIO.has(f)){ if(fdr[f]) done++; }
+    else { if(fdr[f] && String(fdr[f]).trim()) done++; }
+  });
+  // Missions
+  if(fdr.missions && fdr.missions.length>=1) done++;
+  const total=ENT_REQUIRED.length+1;
+  const pct=Math.round(done/total*100);
+  const entBadge=$('entPctBadge');
+  if(entBadge){
+    entBadge.textContent=pct+'%';
+    entBadge.className='pct-badge '+(pct===100?'green':pct>0?'orange':'grey');
+  }
+}
+
+/* ═══════════ INIT ═══════════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  bindAll();
+  loadFDR();
+  document.querySelectorAll('input:not([disabled]),select:not([disabled]),textarea:not([disabled])').forEach(el=>{
+    el.addEventListener('input',()=>{ markFilled(el); updateProgress(); });
+    el.addEventListener('change',()=>{ markFilled(el); updateProgress(); });
+  });
+});
+</script>
+
+<script>
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+if (!API.requireRole('etudiant')) { throw new Error('Non autorisé'); }
+</script>
+</body>
+</html>
