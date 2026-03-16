@@ -73,24 +73,40 @@ router.get('/alternants/:id/dossier', async (req, res, next) => {
     if (!await checkAlternant(entId, req.params.id)) return res.status(403).json({ error: 'Accès refusé' });
 
     const { rows: [e] } = await pool.query(
-      `SELECT e.id, e.nom, e.prenom, d.fdr_json, d.cerfa_json, d.statut
+      `SELECT e.id, e.nom, e.prenom, e.mail, e.tel,
+              d.fdr_json, d.cerfa_json, d.statut
        FROM etudiants e LEFT JOIN dossiers d ON d.etudiant_id = e.id
        WHERE e.id = $1`, [req.params.id]
     );
-    res.json(e || {});
+    if (!e) return res.status(404).json({ error: 'Alternant introuvable' });
+
+    // Injecter nom/prénom dans le fdr_json pour que le CERFA les reçoive
+    let fdr = {};
+    try { fdr = e.fdr_json ? JSON.parse(e.fdr_json) : {}; } catch (_) {}
+    if (!fdr.altNom)    fdr.altNom    = (e.nom    || '').toUpperCase();
+    if (!fdr.altPrenom) fdr.altPrenom = e.prenom  || '';
+    if (!fdr.altMail)   fdr.altMail   = e.mail    || '';
+    if (!fdr.altTel)    fdr.altTel    = e.tel     || '';
+
+    res.json({ ...e, fdr_json: JSON.stringify(fdr) });
   } catch (e) { next(e); }
 });
 
-// PUT /api/entreprise/alternants/:id/fdr
+// PUT /api/entreprise/alternants/:id/fdr  — MERGE (ne pas écraser les champs étudiant)
 router.put('/alternants/:id/fdr', async (req, res, next) => {
   try {
     const entId = await getEntrepriseId(req.user.id);
     if (!entId) return res.status(404).json({ error: 'Entreprise introuvable' });
     if (!await checkAlternant(entId, req.params.id)) return res.status(403).json({ error: 'Accès refusé' });
 
+    const { rows: [dossier] } = await pool.query('SELECT fdr_json FROM dossiers WHERE etudiant_id = $1', [req.params.id]);
+    let existing = {};
+    try { existing = (dossier && dossier.fdr_json) ? JSON.parse(dossier.fdr_json) : {}; } catch (_) {}
+
+    const merged = { ...existing, ...req.body };
     await pool.query(
       'UPDATE dossiers SET fdr_json=$1, updated_at=CURRENT_TIMESTAMP WHERE etudiant_id=$2',
-      [JSON.stringify(req.body), req.params.id]
+      [JSON.stringify(merged), req.params.id]
     );
     res.json({ ok: true });
   } catch (e) { next(e); }

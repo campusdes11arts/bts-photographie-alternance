@@ -128,6 +128,14 @@
         <h3>Identité</h3>
         <div class="fields-grid">
           <div class="field">
+            <label for="altNom">NOM de naissance <span style="color:#f87171">*</span></label>
+            <input type="text" id="altNom" name="altNom" placeholder="NOM (majuscules)">
+          </div>
+          <div class="field">
+            <label for="altPrenom">Prénom <span style="color:#f87171">*</span></label>
+            <input type="text" id="altPrenom" name="altPrenom" placeholder="Prénom selon état civil">
+          </div>
+          <div class="field">
             <label for="altNomUsage">Nom d'usage</label>
             <input type="text" id="altNomUsage" name="altNomUsage" placeholder="Nom d'usage si différent du nom de naissance">
           </div>
@@ -330,10 +338,14 @@
       const initials = (prenom[0] || '') + (nom[0] || '');
       document.getElementById('avatarInitials').textContent = initials.toUpperCase() || '?';
 
+      // Pré-remplir altNom/altPrenom depuis le dossier s'ils ne sont pas encore dans la FDR
+      if (!fdr.altNom)    fdr.altNom    = (dossierData.nom    || '').toUpperCase();
+      if (!fdr.altPrenom) fdr.altPrenom = dossierData.prenom  || '';
+      if (!fdr.altMail)   fdr.altMail   = dossierData.mail    || '';
+      if (!fdr.altTel)    fdr.altTel    = dossierData.tel     || '';
+
       // Pré-remplir le formulaire avec les données existantes de la FDR
-      if (fdr && Object.keys(fdr).length > 0) {
-        prefillForm(fdr);
-      }
+      prefillForm(fdr);
     }).catch(err => {
       console.error(err);
       document.getElementById('identityName').textContent = 'Erreur de chargement';
