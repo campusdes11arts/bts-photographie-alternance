@@ -50,6 +50,21 @@
     .tag-del:hover { background: #7f1d1d55; }
     .btn.danger { background: #7f1d1d; }
     .btn.danger:hover { background: #991b1b; }
+    .ent-block { background: #1a1a24; border: 1px solid #2a2a3a; border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+    .ent-header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #2a2a3a; }
+    .ent-header-left { display: flex; flex-direction: column; gap: 2px; }
+    .ent-name { font-size: 15px; font-weight: 700; color: #fff; }
+    .ent-meta { font-size: 12px; color: #666; }
+    .ent-header-right { display: flex; gap: 6px; }
+    .alt-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid #1e1e2a; flex-wrap: wrap; gap: 10px; }
+    .alt-row:last-child { border-bottom: none; }
+    .alt-info { display: flex; flex-direction: column; gap: 3px; }
+    .alt-name { font-size: 14px; font-weight: 600; color: #e0e0e0; }
+    .alt-details { font-size: 12px; color: #666; }
+    .alt-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .btn-link { display: inline-block; background: #1e1e2e; border: 1px solid #3a3a5a; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #a78bfa; text-decoration: none; white-space: nowrap; }
+    .btn-link:hover { background: #2a2a3a; }
+    .no-alt { padding: 14px 20px; font-size: 13px; color: #555; font-style: italic; }
   </style>
 </head>
 <body>
@@ -94,26 +109,13 @@
     </table>
 
     <!-- ENTREPRISES -->
-    <h3 class="section-title">🏢 Entreprises</h3>
+    <h3 class="section-title">🏢 Entreprises & Alternants</h3>
     <div class="actions">
       <button class="btn secondary" onclick="openModal('entreprise')">+ Ajouter une entreprise</button>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Raison sociale</th>
-          <th>Email</th>
-          <th>SIRET</th>
-          <th>Tuteur</th>
-          <th>Conformité</th>
-          <th>Alternants</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-entreprises">
-        <tr><td colspan="5" style="color:#555;text-align:center;padding:32px">Chargement…</td></tr>
-      </tbody>
-    </table>
+    <div id="ent-container">
+      <p style="color:#555;text-align:center;padding:32px">Chargement…</p>
+    </div>
   </main>
 
   <!-- Modal lier étudiant à entreprise (depuis entreprise) -->
@@ -255,27 +257,51 @@
         </tr>
       `).join('') : '<tr><td colspan="6" style="color:#555;text-align:center;padding:32px">Aucun étudiant</td></tr>';
 
-      // Tableau entreprises
-      const tbodyEnt = document.getElementById('tbody-entreprises');
-      tbodyEnt.innerHTML = ents.length ? ents.map(en => {
-        const alternants = etudiants.filter(e => e.entreprise_id === en.id);
-        return `
-        <tr>
-          <td><strong>${en.raison_sociale}</strong></td>
-          <td style="color:#888">${en.email || '—'}</td>
-          <td style="color:#666">${en.siret || '—'}</td>
-          <td>${en.tuteur_prenom ? en.tuteur_prenom + ' ' + en.tuteur_nom : '—'}</td>
-          <td>${en.score_conformite != null ? en.score_conformite + '/100' : '—'}</td>
-          <td>
-            ${alternants.map(a => `<span style="font-size:12px;color:#a78bfa">${a.prenom} ${a.nom}</span>`).join(', ') || '<span style="color:#555">Aucun</span>'}
-            <span class="tag-lier" onclick="openLierEtudiant(${en.id})">+ Lier</span>
-          </td>
-          <td style="white-space:nowrap">
-            <span class="tag-edit" onclick="openEditEntreprise(${en.id})">✏ Modifier</span>
-            <span class="tag-del" onclick="deleteEntreprise(${en.id}, '${en.raison_sociale.replace(/'/g,"\\'")}')">🗑 Supprimer</span>
-          </td>
-        </tr>`;
-      }).join('') : '<tr><td colspan="6" style="color:#555;text-align:center;padding:32px">Aucune entreprise</td></tr>';
+      // Blocs entreprises avec un dashboard par alternant
+      const container = document.getElementById('ent-container');
+      if (!ents.length) {
+        container.innerHTML = '<p style="color:#555;text-align:center;padding:32px">Aucune entreprise</p>';
+      } else {
+        container.innerHTML = ents.map(en => {
+          const alts = etudiants.filter(e => e.entreprise_id === en.id);
+          const safeNom = en.raison_sociale.replace(/'/g, "\\'");
+          return `
+          <div class="ent-block">
+            <div class="ent-header">
+              <div class="ent-header-left">
+                <span class="ent-name">🏢 ${en.raison_sociale}</span>
+                <span class="ent-meta">${en.email || '—'} &nbsp;·&nbsp; SIRET : ${en.siret || '—'} &nbsp;·&nbsp; Tuteur : ${en.tuteur_prenom ? en.tuteur_prenom + ' ' + en.tuteur_nom : '—'} &nbsp;·&nbsp; Conformité : ${en.score_conformite != null ? en.score_conformite + '/100' : '—'}</span>
+              </div>
+              <div class="ent-header-right">
+                <span class="tag-lier" onclick="openLierEtudiant(${en.id})">+ Lier un alternant</span>
+                <span class="tag-edit" onclick="openEditEntreprise(${en.id})">✏ Modifier</span>
+                <span class="tag-del" onclick="deleteEntreprise(${en.id}, '${safeNom}')">🗑 Supprimer</span>
+              </div>
+            </div>
+            ${alts.length === 0
+              ? '<div class="no-alt">Aucun alternant lié à cette entreprise.</div>'
+              : alts.map(a => `
+              <div class="alt-row">
+                <div class="alt-info">
+                  <span class="alt-name">🎓 ${a.prenom} ${a.nom}</span>
+                  <span class="alt-details">
+                    ${a.type_contrat || '—'} &nbsp;·&nbsp; ${a.date_debut || '—'} → ${a.date_fin || '—'} &nbsp;·&nbsp; Promo : ${a.annee_promo || '—'}
+                    &nbsp;·&nbsp; Maj : ${a.updated_at ? a.updated_at.slice(0,10) : '—'}
+                  </span>
+                </div>
+                <div class="alt-actions">
+                  <span class="badge ${a.statut || 'en_cours'}">${a.statut || 'en_cours'}</span>
+                  <a class="btn-link" href="#">📋 Conformité</a>
+                  <a class="btn-link" href="#">📄 FDR</a>
+                  <a class="btn-link" href="#">📃 CERFA</a>
+                  <a class="btn-link" href="#">🗓 Visites</a>
+                  <span class="tag-lier" onclick="openLier(${a.id})">↔ Changer entreprise</span>
+                </div>
+              </div>`).join('')
+            }
+          </div>`;
+        }).join('');
+      }
     }
 
     function openModal(type) { document.getElementById('modal-' + type).classList.add('open'); }

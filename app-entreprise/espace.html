@@ -34,15 +34,8 @@
     <button class="logout-btn" onclick="API.logout()">Déconnexion</button>
   </nav>
 
-  <!-- Navigation rapide -->
-  <div style="background:#111118;border-bottom:1px solid #2a2a3a;padding:12px 24px;display:flex;gap:10px;flex-wrap:wrap">
-    <a href="/entreprise/grille-conformite.html" style="background:#1a1a24;border:1px solid #2a2a3a;border-radius:8px;padding:8px 16px;color:#a78bfa;text-decoration:none;font-size:13px;font-weight:500">📋 Grille conformité</a>
-    <a href="/entreprise/fdr.html" style="background:#1a1a24;border:1px solid #2a2a3a;border-radius:8px;padding:8px 16px;color:#a78bfa;text-decoration:none;font-size:13px;font-weight:500">📄 FDR Contrat</a>
-    <a href="/entreprise/cerfa.html" style="background:#1a1a24;border:1px solid #2a2a3a;border-radius:8px;padding:8px 16px;color:#a78bfa;text-decoration:none;font-size:13px;font-weight:500">📃 CERFA</a>
-    <a href="/entreprise/visites.html" style="background:#1a1a24;border:1px solid #2a2a3a;border-radius:8px;padding:8px 16px;color:#a78bfa;text-decoration:none;font-size:13px;font-weight:500">🗓 Visites</a>
-  </div>
 
-  <main id="main">
+<main id="main">
     <p style="color:#555;text-align:center;margin-top:60px">Chargement…</p>
   </main>
 
@@ -86,9 +79,10 @@
                   <td style="color:#888">${a.date_debut || '—'} → ${a.date_fin || '—'}</td>
                   <td><span class="badge ${a.statut || 'en_cours'}">${a.statut || 'en_cours'}</span></td>
                   <td>
+                    <a class="btn-link" href="/entreprise/grille-conformite.html">📋 Conformité</a>
                     <a class="btn-link" href="/entreprise/fdr.html?alternant=${a.id}">📄 FDR</a>
                     <a class="btn-link" href="/entreprise/cerfa.html?alternant=${a.id}">📃 CERFA</a>
-                    <a class="btn-link" href="/entreprise/visites.html">🗓 Visites</a>
+                    <a class="btn-link" href="/entreprise/visites.html?alternant=${a.id}">🗓 Visites</a>
                   </td>
                 </tr>
               `).join('')}
