@@ -141,20 +141,9 @@
 
   <script src="/entreprise/api.js"></script>
   <script>
-    // Si déjà connecté, rediriger
-    const user = API.currentUser();
-    if (user && API.token()) {
-      redirect(user.role);
-    }
-
-    function redirect(role) {
-      const dest = {
-        admin:      '/entreprise/espace.html',
-        etudiant:   '/entreprise/espace.html',
-        entreprise: '/entreprise/espace.html'
-      };
-      window.location.href = dest[role] || '/';
-    }
+    // Nettoyer tout token résiduel pour éviter les boucles
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
 
     document.getElementById('form').addEventListener('submit', async e => {
       e.preventDefault();
@@ -169,7 +158,8 @@
           document.getElementById('email').value
         );
         if (data.error) throw new Error(data.error);
-        redirect(data.user.role);
+        if (data.user.role !== 'entreprise') throw new Error('Accès réservé aux entreprises');
+        window.location.href = '/entreprise/espace.html';
       } catch (ex) {
         err.textContent = ex.message || 'Email introuvable';
         err.style.display = 'block';
