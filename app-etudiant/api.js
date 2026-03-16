@@ -13,7 +13,9 @@ const API = {
       if (res.status === 401) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        window.location.href = '/etudiant/login.html';
+        if (!window.location.pathname.endsWith('/login.html')) {
+          window.location.href = '/etudiant/login.html';
+        }
         return;
       }
       const data = await res.json();

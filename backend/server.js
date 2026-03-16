@@ -23,13 +23,19 @@ app.use('/admin',      express.static(path.join(__dirname, 'dashboard')));
 app.get('/admin/{*splat}', (req, res) =>
   res.sendFile(path.join(__dirname, 'dashboard', 'login.html')));
 
-app.use('/etudiant',   express.static(path.join(ROOT, 'app-etudiant')));
-app.get('/etudiant/{*splat}', (req, res) =>
-  res.sendFile(path.join(ROOT, 'app-etudiant', 'login.html')));
+const noCache = { setHeaders: (res, p) => { if (p.endsWith('.html')) res.set('Cache-Control', 'no-store, must-revalidate'); } };
 
-app.use('/entreprise', express.static(path.join(ROOT, 'app-entreprise')));
-app.get('/entreprise/{*splat}', (req, res) =>
-  res.sendFile(path.join(ROOT, 'app-entreprise', 'login.html')));
+app.use('/etudiant',   express.static(path.join(ROOT, 'app-etudiant'), noCache));
+app.get('/etudiant/{*splat}', (req, res) => {
+  res.set('Cache-Control', 'no-store, must-revalidate');
+  res.sendFile(path.join(ROOT, 'app-etudiant', 'login.html'));
+});
+
+app.use('/entreprise', express.static(path.join(ROOT, 'app-entreprise'), noCache));
+app.get('/entreprise/{*splat}', (req, res) => {
+  res.set('Cache-Control', 'no-store, must-revalidate');
+  res.sendFile(path.join(ROOT, 'app-entreprise', 'login.html'));
+});
 
 app.get('/', (req, res) => res.redirect('/admin/login.html'));
 
